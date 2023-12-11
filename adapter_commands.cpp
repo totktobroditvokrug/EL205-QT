@@ -99,7 +99,7 @@ QStringList handleUartParsing(
                          //  QString standartFrame = handleStandartCAN(standartArrayID, lengthDataCAN, standartArrayDATA);
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX);
 
-                            qDebug() << handleRegData(idBody, standartArrayDATA, regDataArray, regNum, regNumList[regNum]);
+                            handleRegData(idBody, standartArrayDATA, regDataArray, regNum, regNumList[regNum]);
 
                             if(checkStandart) parsingDataList.append(standartFrame);  // выводим при чекбоксе
                         }

@@ -28,7 +28,6 @@ HEADERS += \
     registers.h
 
 FORMS += \
-    displaingregisters.ui \
     mainwindow.ui
 
 # Default rules for deployment.

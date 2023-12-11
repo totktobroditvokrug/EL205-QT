@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         tempVector[i] = value;
     }
-
+    a=0;
     regNumList = tempVector;  // инициализация списка регистров
 //    registerFields regDataArray[IREG_INV_ALL_END_REGISTERS];  // объявление полей регистров с их значениями
 
@@ -42,6 +42,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
+
+    timerRegDisplay = new QTimer;
+    connect(timer, SIGNAL(timeout()), this, SLOT(regDisplay()));
 
     ui->setupUi(this);
 
@@ -67,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_baudRate->addItem(QStringLiteral("38400"), QSerialPort::Baud38400);
     ui->comboBox_baudRate->addItem(QStringLiteral("115200"), QSerialPort::Baud115200);
     ui->comboBox_baudRate->addItem(tr("Custom"));
+    ui->comboBox_baudRate->setCurrentIndex(3);
 
         // Устанавливаем биты данных
     ui->comboBox_dataBits->addItem(QStringLiteral("5"), QSerialPort::Data5);
@@ -366,6 +370,19 @@ void MainWindow::readStream()
        // qDebug() << "не  вышли по return, неполное сообщение";
 }
 
+void MainWindow::regDisplay() // вывод значений регистров
+{
+
+    ui->textEdit_regDisplay->clear();
+    qDebug() << "regDisplay: " << QString::number(a, 10);
+    a++;
+
+    for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++){ // if(regDataArray[i].displayed)
+       ui->textEdit_regDisplay->append("test" + QString::number(i, 10));
+    }
+
+}
+
 
 void MainWindow::on_pushButton_sendMessage_clicked() // записать произвольную команду в сериалпорт
 {
@@ -381,7 +398,10 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     // подключили сигнал timeout, к слоту нажатия на кнопку
     // connect(timer, SIGNAL(timeout()), this, SLOT(on_pushButton_readOnce_clicked()));
     // запускаем со значением вызывать раз в 300мс
-    timer->start((ui->lineEdit_freqSampl->text().toInt()));
+    timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
+
+    timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров
+
     ui->pushButton_stopRead->setEnabled(true);
     ui->pushButton_startRead->setEnabled(false);
 }
@@ -487,7 +507,7 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
     ui->listWidget_regNum->clear();
     regNumList = RegnumClass::regnumArray();
 
-    for (int i = 0; i <= 255; i++) {
+    for (int i = 0; i < IREG_INV_ALL_END_REGISTERS; i++) {
         // regnumList[i] = "test: " + QString::number(i, 10);
        QListWidgetItem *item = new QListWidgetItem;
       // item->setData(i);
@@ -536,9 +556,17 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
 
 void MainWindow::on_listWidget_regNum_itemClicked(QListWidgetItem *item)
 {
+    QStringList separateNum = item->text().split(":", QString::SkipEmptyParts);
+    quint8 index = quint8(separateNum[0].toInt());
+    qDebug() << "separateNum: " << separateNum[0] << "int= " << QString::number(index, 10);
     if(item->checkState() == Qt::Checked){
         item->setForeground(Qt::red);
+        regDataArray[index].displayed = true;
         ui->textEdit_selectedRegNum->append(item->text());
+    }
+    else{
+       item->setForeground(Qt::black);
+       regDataArray[index].displayed = false;
     }
 }
 

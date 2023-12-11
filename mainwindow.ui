@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_registerWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -715,17 +715,14 @@
        <attribute name="title">
         <string>Register Widget</string>
        </attribute>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QTextEdit" name="textEdit_regDisplay">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>550</y>
-          <width>121</width>
-          <height>28</height>
+          <x>30</x>
+          <y>20</y>
+          <width>901</width>
+          <height>581</height>
          </rect>
-        </property>
-        <property name="text">
-         <string>Select item</string>
         </property>
        </widget>
       </widget>

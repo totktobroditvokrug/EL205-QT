@@ -40,7 +40,9 @@ private slots:
 
     void writeSerialPort(QString dataWriteString);
     QByteArray readSerialPort();
+
     void readStream();
+    void regDisplay();
 
     void on_pushButton_setConfigAdapter_clicked();
 
@@ -70,8 +72,9 @@ private:
     Ui::MainWindow *ui;
     QSerialPort *serial;
     QTimer *timer;
+    QTimer *timerRegDisplay;
     QVector<QString> regNumList;
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS];
-//    QString regDataArray[10];
+    int a;
 };
 #endif // MAINWINDOW_H
