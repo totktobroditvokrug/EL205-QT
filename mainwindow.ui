@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1055</width>
+    <height>717</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QTabWidget" name="tabWidget_registerWidget">
+      <property name="currentIndex">
+       <number>2</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>CAN_ADAPTER</string>
+       </attribute>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>140</y>
+          <width>221</width>
+          <height>221</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>настройки COM-порта</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="2" column="2" alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_parityOk">
+           <property name="text">
+            <string>ok</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2" alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_dataOk">
+           <property name="text">
+            <string>ok</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2" alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_flowOk">
+           <property name="text">
+            <string>ok</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>port name</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" rowspan="6">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QComboBox" name="comboBox_serialPort"/>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_baudRate">
+             <property name="minimumSize">
+              <size>
+               <width>83</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_parity">
+             <property name="minimumSize">
+              <size>
+               <width>83</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_dataBits">
+             <property name="minimumSize">
+              <size>
+               <width>83</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_stopBit">
+             <property name="minimumSize">
+              <size>
+               <width>83</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_flowBit">
+             <property name="minimumSize">
+              <size>
+               <width>83</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="4" column="2" alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_stopOk">
+           <property name="text">
+            <string>ok</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_flowBit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>85</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>flow bit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_baudRate">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>85</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>baud rate</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_baudOk">
+           <property name="text">
+            <string>ok</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_dataBits">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>85</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>data bits</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_stopBit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>85</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>stop bit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_parity">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>85</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>parity</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_nameOk">
+           <property name="text">
+            <string>ok</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QTextEdit" name="textEdit_sendMessage">
+        <property name="geometry">
+         <rect>
+          <x>150</x>
+          <y>400</y>
+          <width>181</width>
+          <height>31</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_searchListPort">
+        <property name="geometry">
+         <rect>
+          <x>8</x>
+          <y>110</y>
+          <width>231</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить список портов</string>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="listWidget_portInfo">
+        <property name="geometry">
+         <rect>
+          <x>8</x>
+          <y>10</y>
+          <width>331</width>
+          <height>91</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_sendMessage">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>400</y>
+          <width>131</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Send message</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_disconnect">
+        <property name="geometry">
+         <rect>
+          <x>128</x>
+          <y>360</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>disconnect</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_connect">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>360</y>
+          <width>91</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>connect</string>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="txtOutput">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>440</y>
+          <width>321</width>
+          <height>191</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>10</y>
+          <width>461</width>
+          <height>241</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Настройки CAN-адаптера</string>
+        </property>
+        <widget class="QWidget" name="gridLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>431</width>
+           <height>171</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="5" column="2">
+           <widget class="QComboBox" name="comboBox_4"/>
+          </item>
+          <item row="4" column="2">
+           <widget class="QComboBox" name="comboBox_3"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="comboBox_canFreq">
+            <property name="minimumSize">
+             <size>
+              <width>66</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QComboBox" name="comboBox_readAllCan"/>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Читать все</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineEdit_canFreq"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_canFreq">
+            <property name="text">
+             <string>Частота CAN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLineEdit" name="lineEdit_readAllCan"/>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLineEdit" name="lineEdit_canFreq_3"/>
+          </item>
+          <item row="5" column="3">
+           <widget class="QLineEdit" name="lineEdit_canFreq_4"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QPushButton" name="pushButton_setConfigAdapter">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>200</y>
+           <width>411</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>set config adapter</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>ALL_DATA</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton_stopRead">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>580</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Stop read</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_clear">
+        <property name="geometry">
+         <rect>
+          <x>322</x>
+          <y>580</y>
+          <width>141</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_readOnce">
+        <property name="geometry">
+         <rect>
+          <x>210</x>
+          <y>580</y>
+          <width>101</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Read it once</string>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="textEdit_dataRead">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>461</width>
+          <height>571</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_startRead">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>580</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start read</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_volumeTextRead">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>20</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Число отображаемых строк</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_volumeTextRead">
+        <property name="geometry">
+         <rect>
+          <x>700</x>
+          <y>20</y>
+          <width>113</width>
+          <height>22</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_canStandart">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>60</y>
+          <width>131</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>CAN standart</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_canExtended">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>90</y>
+          <width>151</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>CAN extended</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_adapterAnswer">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>120</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>adapter answer</string>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_settingsTiming">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>430</y>
+          <width>351</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Контроль пакетов</string>
+        </property>
+        <widget class="QLineEdit" name="lineEdit_availableByte">
+         <property name="geometry">
+          <rect>
+           <x>182</x>
+           <y>40</y>
+           <width>141</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_3">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>40</y>
+           <width>101</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>принято байт</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>80</y>
+           <width>161</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Частота опроса, мс</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_freqSampl">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>80</y>
+           <width>113</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>500</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_testLine">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>130</y>
+           <width>113</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_7">
+         <property name="geometry">
+          <rect>
+           <x>110</x>
+           <y>130</y>
+           <width>55</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Test</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Register List</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton_genRegFromEnum">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>171</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Generate from enum</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_readRegFromFile">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>171</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Read from file</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_saveRegToFile">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>110</y>
+          <width>171</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save to file</string>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="listWidget_regNum">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>20</y>
+          <width>401</width>
+          <height>571</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="textEdit_selectedRegNum">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>20</y>
+          <width>391</width>
+          <height>531</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_loadToDisplay">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>560</y>
+          <width>171</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Load</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Register Widget</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>550</y>
+          <width>121</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Select item</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1055</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuCAN_Adapter">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen_register_map"/>
+    <addaction name="actionCreate_register_map"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuCAN_Adapter"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 85, 0)</string>
+   </property>
+  </widget>
+  <action name="actionOpen_register_map">
+   <property name="text">
+    <string>Open register map</string>
+   </property>
+  </action>
+  <action name="actionCreate_register_map">
+   <property name="text">
+    <string>Create register map</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
