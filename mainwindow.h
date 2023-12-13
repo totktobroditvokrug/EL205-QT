@@ -75,6 +75,5 @@ private:
     QTimer *timerRegDisplay;
     QVector<QString> regNumList;
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS];
-    int a;
 };
 #endif // MAINWINDOW_H

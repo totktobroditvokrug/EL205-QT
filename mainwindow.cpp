@@ -27,10 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     QVector<QString> tempVector(IREG_INV_ALL_END_REGISTERS);
     for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++) {
         QString value = "unknown";
-
         tempVector[i] = value;
     }
-    a=0;
     regNumList = tempVector;  // инициализация списка регистров
 //    registerFields regDataArray[IREG_INV_ALL_END_REGISTERS];  // объявление полей регистров с их значениями
 
@@ -370,17 +368,16 @@ void MainWindow::readStream()
        // qDebug() << "не  вышли по return, неполное сообщение";
 }
 
-void MainWindow::regDisplay() // вывод значений регистров
+
+//------------------Dывод значений регистров на дисплей-----------------
+void MainWindow::regDisplay() //
 {
-
-    ui->textEdit_regDisplay->clear();
-    qDebug() << "regDisplay: " << QString::number(a, 10);
-    a++;
-
-    for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++){ // if(regDataArray[i].displayed)
-       ui->textEdit_regDisplay->append("test" + QString::number(i, 10));
+    ui->textEdit_regDisplay->clear(); // временная заглушка для вывода данных. Заменить на генерацию item
+    for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++){
+        if(regDataArray[i].displayed){
+            ui->textEdit_regDisplay->append(regNumList.at(i) + "= " + QString::fromUtf8(regDataArray[i].regData7.toHex(' ')));
+        }
     }
-
 }
 
 
@@ -395,9 +392,6 @@ void MainWindow::on_pushButton_sendMessage_clicked() // записать про�
 
 void MainWindow::on_pushButton_startRead_clicked() // запуск цикличного чтения потока данных
 {
-    // подключили сигнал timeout, к слоту нажатия на кнопку
-    // connect(timer, SIGNAL(timeout()), this, SLOT(on_pushButton_readOnce_clicked()));
-    // запускаем со значением вызывать раз в 300мс
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
 
     timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров
