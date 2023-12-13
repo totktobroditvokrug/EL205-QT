@@ -50,18 +50,18 @@ QVector<QString> RegnumClass::regnumArray()
 //--------------- добавление в поле значения регистра из адаптера -------------
 QString handleRegData(
         quint8 idBody,
+        quint8 idHdr,
         QByteArray standartArrayDATA,
         registerFields *regDataArray,
         quint8 regNum,
         QString regName
 ){
     regDataArray[regNum].regData7 = standartArrayDATA.mid(1, 7);
-    regDataArray[regNum].idBody = idBody;
-    QString data= "handleRegData. i=" + QString::number(regNum, 10) + " :" + regName +
-            " : " + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
-            " idBody: " + QString::number(regDataArray[regNum].idBody, 16);
-
-
+    regDataArray[regNum].id.Body = idBody;
+    regDataArray[regNum].id.Hdr = idHdr;
+    QString data= "handleRegData. ID=" + QString::number(regDataArray[regNum].id.Whole, 16) +
+            " data=" + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
+            " i= "  +QString::number(regNum, 10) + " :" + regName;
     return (data);
 };
 

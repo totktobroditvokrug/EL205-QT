@@ -487,7 +487,14 @@ private:
 
 struct registerFields{
     QByteArray regData7{7, Qt::Uninitialized}; // поле данных
-    quint8 idBody;                              // идентификатор измерений.регистров.установки регистров
+    union{
+        quint16 Whole;
+        struct {
+            quint8 Body;
+            quint8 Hdr;
+        };
+    } id;
+                                  // идентификатор измерений.регистров.установки регистров
     bool displayed = false;
 //    /* для измерений */
 //    struct {
@@ -538,6 +545,6 @@ struct registerFields{
 //    } reg_set;
 };
 
-QString handleRegData(quint8 idBody, QByteArray standartArrayDATA, registerFields *regDataArray, quint8 regNum, QString regName);
+QString handleRegData(quint8 idBody, quint8 idHdr, QByteArray standartArrayDATA, registerFields *regDataArray, quint8 regNum, QString regName);
 
 #endif // IFACE_H

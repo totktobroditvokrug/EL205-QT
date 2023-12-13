@@ -375,7 +375,8 @@ void MainWindow::regDisplay() //
     ui->textEdit_regDisplay->clear(); // временная заглушка для вывода данных. Заменить на генерацию item
     for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++){
         if(regDataArray[i].displayed){
-            ui->textEdit_regDisplay->append(regNumList.at(i) + "= " + QString::fromUtf8(regDataArray[i].regData7.toHex(' ')));
+            ui->textEdit_regDisplay->append("id=" + QString::number(regDataArray[i].id.Whole, 16) + " : "
+                                            + regNumList.at(i) + "= " + QString::fromUtf8(regDataArray[i].regData7.toHex(' ')));
         }
     }
 }

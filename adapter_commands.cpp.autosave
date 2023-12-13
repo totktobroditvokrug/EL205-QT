@@ -102,8 +102,9 @@ QStringList handleUartParsing(
                           // qDebug() << "Стандартное CAN сообщение №"; // QString::number(quint8(dataRead[i+21]), 10);
                          //  QString standartFrame = handleStandartCAN(standartArrayID, lengthDataCAN, standartArrayDATA);
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX);
-
-                            qDebug() << handleRegData(idBody, idHdr, standartArrayDATA, regDataArray, regNum, regNumList[regNum]);
+                            
+                            //------------ заполняем поля стандартного фрэйма ----------
+                            handleRegData(idBody, idHdr, standartArrayDATA, regDataArray, regNum, regNumList[regNum]);
 
                             if(checkStandart) parsingDataList.append(standartFrame);  // выводим при чекбоксе
                         }
