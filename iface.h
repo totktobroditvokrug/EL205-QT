@@ -9,6 +9,42 @@
 #include <QList>
 #include "registers.h"
 
+// Установка регистра
+#define REGISTER_SET_ID    10
+//Передача содержимого регистра
+#define REGISTER_SHOW_ID  20
+// передача масштабов к регистру
+#define REGISTER_SHOW_SCALES_ID 30
+// запрос содержимого регистра
+#define REGISTER_REQUEST_ID 40
+// измерения
+#define SAMPLE_ID 100
+
+//--------- флаги регистров ---------
+#define IREGF_SCALE_PRESENT	(1 << 0)
+#define IREGF_ZERO_PRESENT	(1 << 1)
+#define IREGF_MAXVAL_PRESENT	(1 << 2)
+/* масштаб, ноль или максимум есть */
+#define IREGF_SCALES_PRESENT \
+    (IREGF_SCALE_PRESENT | IREGF_ZERO_PRESENT | IREGF_MAXVAL_PRESENT)
+
+/* минимум есть (иначе минимум - ноль) */
+#define IREGF_MIN_PRESENT	(1 << 3)
+/* максимум есть ( иначе максимум - 1000 ) */
+#define IREGF_MAX_PRESENT	(1 << 4)
+/* Есть минимум и максимум */
+#define IREGF_MINMAX_PRESENT	(IREGF_MIN_PRESENT | IREGF_MAX_PRESENT)
+
+
+/* Маска представлена */
+#define IREGF_MASK_PRESENT	(1 << 5)
+
+/* Данный регистр содержит статус */
+#define IREGF_STATUS		(1 << 6)
+
+/* регистр не может быть изменен (чисто информационный) */
+#define IREGF_READONLY		(1 << 7)
+
 class RegnumClass : public QObject
 {
  Q_OBJECT
@@ -486,7 +522,19 @@ private:
 
 
 struct registerFields{
+    QString displayString;
     QByteArray regData7{7, Qt::Uninitialized}; // поле данных
+    QByteArray regScales7{7, Qt::Uninitialized}; // поле масштабов
+    quint8 flagReg; //  флаги регистров побитные
+
+    union{          // шкала регистра
+       quint16 Reg16;
+       struct {
+           quint8 UpperByte;
+           quint8 LowerByte;
+       };
+    } scale;
+
     union{
         quint16 Whole;
         struct {

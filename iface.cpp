@@ -57,12 +57,43 @@ void handleAllStandartDataCan(
 //        QString regName , заменить на вектор строк
         QVector<QString> regNumList
 ){
+    //__________ Общие поля стандартного CAN____________
     quint8 regNum = quint8(standartArrayDATA[0]);
-    QString regName = regNumList[regNum];
-    regDataArray[regNum].regData7 = standartArrayDATA.mid(1, 7);
+
     regDataArray[regNum].id.Body = idBody;
     regDataArray[regNum].id.Hdr = idHdr;
-    QString data= "handleRegData. ID=" + QString::number(regDataArray[regNum].id.Whole, 16) +
+    quint16 idWhole = regDataArray[regNum].id.Whole;
+    //__________________________________________________
+
+    QString regName;
+
+    switch (idWhole) {  // проверяем пришедшие данные на принадлежность к SHOW, SCALES или SAMPLE
+        case REGISTER_SHOW_ID: { // если пришел show регистр
+            regName = regNumList[regNum]; // у него будет имя из загруженного regNumList
+            regDataArray[regNum].regData7 = standartArrayDATA.mid(1, 7); // и поле данных
+            regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regData7[0]); // заполняем поле флагов
+            // формируем строку дисплея регистра
+            regDataArray[regNum].displayString = regName + " data: " + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' '));
+            if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){ // если есть шкала
+                regDataArray[regNum].scale.UpperByte = quint8(regDataArray[regNum].regData7[1]);
+                regDataArray[regNum].scale.LowerByte = quint8(regDataArray[regNum].regData7[2]);
+                quint16 scaleReg16 = regDataArray[regNum].scale.Reg16;
+                regDataArray[regNum].displayString.append(" scale: " +  QString::number(scaleReg16, 16));
+            }
+
+//            regDataArray[regNum].displayString.append(" flag: " + QString::number(regDataArray[regNum].flagReg, 16) + " bin: " +
+//                                                      QString::number(regDataArray[regNum].flagReg, 2));
+            break;
+         }
+         case REGISTER_SHOW_SCALES_ID: { // если пришел scales регистр
+            regDataArray[regNum].regScales7 = standartArrayDATA.mid(1, 7); // и поле масштабов
+          //  regDataArray[regNum].displayString.append(" scale: " + QString::fromUtf8(regDataArray[regNum].regScales7.toHex(' ')));
+            break;
+         }
+    }
+
+
+    QString data= "handleRegData. ID=" + QString::number(idWhole, 16) +
             " data=" + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
             " i= "  +QString::number(regNum, 10) + " :" + regName;
 };
