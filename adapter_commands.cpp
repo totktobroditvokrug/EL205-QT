@@ -55,8 +55,8 @@ QStringList handleUartParsing(
     bool checkStandart,
     bool checkExtended,
     bool checkAnswer,
-    QVector<QString> regNumList,
-    registerFields *regDataArray
+    QVector<QString> regNumList,  // имена регистров, взятые из enum или из файла
+    registerFields *regDataArray  // эти поля регистров надо заполнить (данные, масштабы)
 ) {
 
   //  qDebug() << "handleUartParsing ";
@@ -95,7 +95,7 @@ QStringList handleUartParsing(
                         canMessage.id_hdr = idHdr;
                         canMessage.data = standartArrayDATA;
                         canMessage.dataLen = lengthDataCAN;
-                        quint8 regNum = quint8(standartArrayDATA[0]);
+
                         //----- проверка формата CAN (расширенный/стандартный)
                         if(!(quint8(dataRead.at(i+11)) & AD_COM_EXT_CAN_FLAG)) // если стандартное сообщение
                         {
@@ -103,7 +103,8 @@ QStringList handleUartParsing(
                          //  QString standartFrame = handleStandartCAN(standartArrayID, lengthDataCAN, standartArrayDATA);
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX);
 
-                            qDebug() << handleRegData(idBody, idHdr, standartArrayDATA, regDataArray, regNum, regNumList[regNum]);
+                            //------------ заполняем поля стандартного фрэйма ----------
+                           handleAllStandartDataCan(idBody, idHdr, standartArrayDATA, regDataArray, regNumList);
 
                             if(checkStandart) parsingDataList.append(standartFrame);  // выводим при чекбоксе
                         }

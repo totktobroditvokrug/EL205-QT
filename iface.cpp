@@ -47,22 +47,24 @@ QVector<QString> RegnumClass::regnumArray()
 }
 
 
-//--------------- добавление в поле значения регистра из адаптера -------------
-QString handleRegData(
+//-----------------Все данные стандартного CAN из парсинга uart-----------
+void handleAllStandartDataCan(
         quint8 idBody,
         quint8 idHdr,
         QByteArray standartArrayDATA,
         registerFields *regDataArray,
-        quint8 regNum,
-        QString regName
+//        quint8 regNum, заменить на standartArrayDATA[0]
+//        QString regName , заменить на вектор строк
+        QVector<QString> regNumList
 ){
+    quint8 regNum = quint8(standartArrayDATA[0]);
+    QString regName = regNumList[regNum];
     regDataArray[regNum].regData7 = standartArrayDATA.mid(1, 7);
     regDataArray[regNum].id.Body = idBody;
     regDataArray[regNum].id.Hdr = idHdr;
     QString data= "handleRegData. ID=" + QString::number(regDataArray[regNum].id.Whole, 16) +
             " data=" + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
             " i= "  +QString::number(regNum, 10) + " :" + regName;
-    return (data);
 };
 
 

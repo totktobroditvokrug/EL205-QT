@@ -545,6 +545,14 @@ struct registerFields{
 //    } reg_set;
 };
 
-QString handleRegData(quint8 idBody, quint8 idHdr, QByteArray standartArrayDATA, registerFields *regDataArray, quint8 regNum, QString regName);
+//-----------------Все данные стандартного CAN из парсинга uart-----------
+void handleAllStandartDataCan(quint8 idBody,
+                      quint8 idHdr,
+                      QByteArray standartArrayDATA,
+                      registerFields *regDataArray,
+                      // quint8 regNum,
+                      // QString regName
+                       QVector<QString> regNumList
+                      );
 
 #endif // IFACE_H
