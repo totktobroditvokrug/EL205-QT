@@ -527,14 +527,6 @@ struct registerFields{
     QByteArray regScales7{7, Qt::Uninitialized}; // поле масштабов
     quint8 flagReg; //  флаги регистров побитные
 
-    union{          // шкала регистра
-       quint16 Reg16;
-       struct {
-           quint8 UpperByte;
-           quint8 LowerByte;
-       };
-    } scale;
-
     union{
         quint16 Whole;
         struct {
@@ -542,6 +534,30 @@ struct registerFields{
             quint8 Hdr;
         };
     } id;
+
+    union{          // шкала регистра
+       quint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } scale;
+
+    union{          // минимальное значение регистра
+       quint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } min;
+
+    union{          // максимальное значение регистра
+       quint16 Reg16;
+       struct {
+           quint8 UpperByte;
+           quint8 LowerByte;
+       };
+    } max;
                                   // идентификатор измерений.регистров.установки регистров
     bool displayed = false;
 //    /* для измерений */

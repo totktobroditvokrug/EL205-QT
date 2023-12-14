@@ -74,11 +74,15 @@ void handleAllStandartDataCan(
             regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regData7[0]); // заполняем поле флагов
             // формируем строку дисплея регистра
             regDataArray[regNum].displayString = regName + " data: " + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' '));
-            if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){ // если есть шкала
-                regDataArray[regNum].scale.UpperByte = quint8(regDataArray[regNum].regData7[1]);
-                regDataArray[regNum].scale.LowerByte = quint8(regDataArray[regNum].regData7[2]);
-                quint16 scaleReg16 = regDataArray[regNum].scale.Reg16;
-                regDataArray[regNum].displayString.append(" scale: " +  QString::number(scaleReg16, 16));
+            if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){
+                regDataArray[regNum].displayString.append(" scale: " +  QString::number(quint16(regDataArray[regNum].scale.Reg16), 16));
+            }
+
+            if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){   // если есть минимум
+                regDataArray[regNum].min.UpperByte = quint8(regDataArray[regNum].regData7[4]);
+                regDataArray[regNum].min.LowerByte = quint8(regDataArray[regNum].regData7[3]);
+                quint16 minReg16 = regDataArray[regNum].min.Reg16;
+                regDataArray[regNum].displayString.append(" min: " +  QString::number(minReg16, 16));
             }
 
 //            regDataArray[regNum].displayString.append(" flag: " + QString::number(regDataArray[regNum].flagReg, 16) + " bin: " +
@@ -87,6 +91,12 @@ void handleAllStandartDataCan(
          }
          case REGISTER_SHOW_SCALES_ID: { // если пришел scales регистр
             regDataArray[regNum].regScales7 = standartArrayDATA.mid(1, 7); // и поле масштабов
+            regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regScales7[0]);
+            if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){ // если есть шкала
+                regDataArray[regNum].scale.UpperByte = quint8(regDataArray[regNum].regScales7[2]);
+                regDataArray[regNum].scale.LowerByte = quint8(regDataArray[regNum].regScales7[1]);
+               // quint16 scaleReg16 = regDataArray[regNum].scale.Reg16;
+            }
           //  regDataArray[regNum].displayString.append(" scale: " + QString::fromUtf8(regDataArray[regNum].regScales7.toHex(' ')));
             break;
          }
