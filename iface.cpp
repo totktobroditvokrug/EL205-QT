@@ -49,28 +49,29 @@ QVector<QString> RegnumClass::regnumArray()
 
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(
-        quint8 idBody,
-        quint8 idHdr,
-        QByteArray standartArrayDATA,
+//        quint8 idBody, // ID регистра будет склеиваться в int16
+//        quint8 idHdr,  //
+//        QByteArray standartArrayDATA, // пачка данных из CAN-standart
+        QByteArray arrayDataFromCAN,
         registerFields *regDataArray,
-//        quint8 regNum, заменить на standartArrayDATA[0]
-//        QString regName , заменить на вектор строк
-        QVector<QString> regNumList
+        QVector<QString> regNumList     // таблица названия регистров 256 значений
 ){
     //__________ Общие поля стандартного CAN____________
-    quint8 regNum = quint8(standartArrayDATA[0]);
+    quint8 firstByteDATA = quint8(arrayDataFromCAN[6]);
 
-    regDataArray[regNum].id.Body = idBody;
-    regDataArray[regNum].id.Hdr = idHdr;
-    quint16 idWhole = regDataArray[regNum].id.Whole;
+    //__________ Склеиваем два байта ID CAN____________
+    regDataArray[firstByteDATA].id.Body = quint8(arrayDataFromCAN[0]);
+    regDataArray[firstByteDATA].id.Hdr = quint8(arrayDataFromCAN[1]);
+    quint16 idWhole = regDataArray[firstByteDATA].id.Whole;
     //__________________________________________________
 
     QString regName;
+    quint8 regNum = quint8(arrayDataFromCAN[6]);
 
     switch (idWhole) {  // проверяем пришедшие данные на принадлежность к SHOW, SCALES или SAMPLE
         case REGISTER_SHOW_ID: { // если пришел show регистр
             regName = regNumList[regNum]; // у него будет имя из загруженного regNumList
-            regDataArray[regNum].regData7 = standartArrayDATA.mid(1, 7); // и поле данных
+            regDataArray[regNum].regData7 = arrayDataFromCAN.mid(7, 7); // и поле данных !!!!! проверить
             regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regData7[0]); // заполняем поле флагов
             // формируем строку дисплея регистра
             regDataArray[regNum].displayString = regName + " data: " + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' '));
@@ -90,7 +91,7 @@ void handleAllStandartDataCan(
             break;
          }
          case REGISTER_SHOW_SCALES_ID: { // если пришел scales регистр
-            regDataArray[regNum].regScales7 = standartArrayDATA.mid(1, 7); // и поле масштабов
+            regDataArray[regNum].regScales7 = arrayDataFromCAN.mid(7, 7); // и поле масштабов
             regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regScales7[0]);
             if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){ // если есть шкала
                 regDataArray[regNum].scale.UpperByte = quint8(regDataArray[regNum].regScales7[2]);

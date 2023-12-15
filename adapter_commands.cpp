@@ -80,6 +80,9 @@ QStringList handleUartParsing(
                     else // если длина сообщения достаточная, заполняем поля ID, DATA и проверяем формат
                     {
                         // добавить проверку контрольной суммы!!!
+                        //-------- 4 байта ID_CAN, флаги, количество байт данных, 8 байт данных (с 7 по 20 позиции)
+                        QByteArray arrayDataFromCAN = dataRead.mid((i+7), 14);
+
                         QByteArray standartArrayID = dataRead.mid((i+7), 2); // ID сообщения
 
                         quint8 idBody = quint8(dataRead[i+7]);  // тело идентификатора
@@ -104,7 +107,7 @@ QStringList handleUartParsing(
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX);
 
                             //------------ заполняем поля стандартного фрэйма ----------
-                           handleAllStandartDataCan(idBody, idHdr, standartArrayDATA, regDataArray, regNumList);
+                           handleAllStandartDataCan(arrayDataFromCAN, regDataArray, regNumList);
 
                             if(checkStandart) parsingDataList.append(standartFrame);  // выводим при чекбоксе
                         }
