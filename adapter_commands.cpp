@@ -48,9 +48,8 @@ quint8 calcCRC(QByteArray addCheckSum)
 //-------------- Обработка CAN посылки для адаптера EL205-1 --------
 QString handleCAN(formatCanMessage canMessage, QString prefix)
 {
-    QString str = (QString::number(canMessage.numberSerialMessage, 10) + prefix + " ID_hdr:" +
-                   QString::number(canMessage.id_hdr, 16) +
-                   " ID_body:" + QString::number(canMessage.id_body, 16) + " length: " +
+    QString str = (QString::number(canMessage.numberSerialMessage, 10) + prefix + " ID: " +
+                   QString::number(canMessage.id16, 16).rightJustified(4, '0') + " length: " +
                    QString::number(canMessage.dataLen, 10) +
                    " DATA:" + QString::fromUtf8(canMessage.data.toHex(' ')));
     return (str);
@@ -75,8 +74,6 @@ QStringList handleUartParsing(
     QVector<QString> regNumList,  // имена регистров, взятые из enum или из файла
     registerFields *regDataArray  // эти поля регистров надо заполнить (данные, масштабы)
 ) {
-
-  //  qDebug() << "handleUartParsing ";
     formatCanMessage canMessage;
     QStringList parsingDataList;
     parsingDataList.clear();
@@ -96,13 +93,19 @@ QStringList handleUartParsing(
                     }
                     else // если длина сообщения достаточная, заполняем поля ID, DATA и проверяем формат
                     {
-                        // добавить проверку контрольной суммы!!!
-                        QByteArray arrayDataForCRC = dataRead.mid((i+2), 20);
-
+                        // подсчет контрольной суммы
+                        QByteArray arrayDataForCRC = dataRead.mid((i+2), 20); // посылка без двух стартовых байт и CRC
+                        quint8 CRC = quint8(dataRead[i+22]);  // CRC из посылки
+                        QString checkCRC = "crc-FALSE";
+                        bool CRC_OK = false;
+                        if(calcCRC(arrayDataForCRC) == CRC){
+                            CRC_OK = true;
+                            checkCRC= "crc-OK";
+                        }
                         //-------- 4 байта ID_CAN, флаги, количество байт данных, 8 байт данных (с 7 по 20 позиции)
 
                         QByteArray arrayDataFromCAN = dataRead.mid((i+7), 14);
-                        QByteArray standartArrayID = dataRead.mid((i+7), 2); // ID сообщения
+                        QByteArray standartArrayID = dataRead.mid((i+7), 4); // ID сообщения 4 байта
 
                         quint8 idBody = quint8(dataRead[i+7]);  // тело идентификатора
                         quint8 idHdr = quint8(dataRead[i+8]);   // заголовок идентификатора
@@ -111,7 +114,7 @@ QStringList handleUartParsing(
 
                         QByteArray standartArrayDATA = dataRead.mid((i+13), 8);
                         quint8 numberSerialMessage = quint8(dataRead[i+21]);  // номер сообщения
-                        quint8 CRC = quint8(dataRead[i+22]);  // CRC
+
 
                         canMessage.numberSerialMessage = numberSerialMessage;
                         canMessage.id_body = idBody;
@@ -119,8 +122,7 @@ QStringList handleUartParsing(
                         canMessage.data = standartArrayDATA;
                         canMessage.dataLen = lengthDataCAN;
 
-                        QString checkCRC = "crc-FALSE";
-                        if(calcCRC(arrayDataForCRC) == CRC) checkCRC= "crc-OK";
+
 
                         //----- проверка формата CAN (расширенный/стандартный)
                         if(!(quint8(dataRead.at(i+11)) & AD_COM_EXT_CAN_FLAG)) // если стандартное сообщение

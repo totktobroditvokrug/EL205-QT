@@ -70,20 +70,29 @@ void handleAllStandartDataCan(
 
     switch (idWhole) {  // проверяем пришедшие данные на принадлежность к SHOW, SCALES или SAMPLE
         case REGISTER_SHOW_ID: { // если пришел show регистр
-            regName = regNumList[regNum]; // у него будет имя из загруженного regNumList
+            regName = regNumList[regNum].leftJustified(30, ' '); // у него будет имя из загруженного regNumList
             regDataArray[regNum].regData7 = arrayDataFromCAN.mid(7, 7); // и поле данных !!!!! проверить
             regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regData7[0]); // заполняем поле флагов
             // формируем строку дисплея регистра
             regDataArray[regNum].displayString = regName + " data: " + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' '));
-            if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){
-                regDataArray[regNum].displayString.append(" scale: " +  QString::number(quint16(regDataArray[regNum].scale.Reg16), 16));
+
+            if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){  // если есть шкала масштаба
+                regDataArray[regNum].displayString.append(" scale: " +
+                                    QString::number(quint16(regDataArray[regNum].scale.Reg16), 16).rightJustified(4, '0'));
             }
 
             if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){   // если есть минимум
                 regDataArray[regNum].min.UpperByte = quint8(regDataArray[regNum].regData7[4]);
                 regDataArray[regNum].min.LowerByte = quint8(regDataArray[regNum].regData7[3]);
                 quint16 minReg16 = regDataArray[regNum].min.Reg16;
-                regDataArray[regNum].displayString.append(" min: " +  QString::number(minReg16, 16));
+                regDataArray[regNum].displayString.append(" min: " +  QString::number(minReg16, 16).rightJustified(4, '0'));
+            }
+
+            if(regDataArray[regNum].flagReg & IREGF_MAX_PRESENT){   // если есть максимум
+                regDataArray[regNum].max.UpperByte = quint8(regDataArray[regNum].regData7[6]);
+                regDataArray[regNum].max.LowerByte = quint8(regDataArray[regNum].regData7[5]);
+                quint16 maxReg16 = regDataArray[regNum].max.Reg16;
+                regDataArray[regNum].displayString.append(" max: " +  QString::number(maxReg16, 16).rightJustified(4, '0'));
             }
 
 //            regDataArray[regNum].displayString.append(" flag: " + QString::number(regDataArray[regNum].flagReg, 16) + " bin: " +
@@ -91,7 +100,7 @@ void handleAllStandartDataCan(
             break;
          }
          case REGISTER_SHOW_SCALES_ID: { // если пришел scales регистр
-            regDataArray[regNum].regScales7 = arrayDataFromCAN.mid(7, 7); // и поле масштабов
+            regDataArray[regNum].regScales7 = arrayDataFromCAN.mid(7, 7); // заполняем поле масштабов
             regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regScales7[0]);
             if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){ // если есть шкала
                 regDataArray[regNum].scale.UpperByte = quint8(regDataArray[regNum].regScales7[2]);
@@ -104,7 +113,7 @@ void handleAllStandartDataCan(
     }
 
 
-    QString data= "handleRegData. ID=" + QString::number(idWhole, 16) +
+    QString data= "handleRegData. ID=" + QString::number(idWhole, 16).rightJustified(4, '0') +
             " data=" + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
             " i= "  +QString::number(regNum, 10) + " :" + regName;
 };
