@@ -22,6 +22,7 @@ static QString EXT_PREFIX = " -extCAN-"; //
 const quint8 AD_COM_ID_FIRST_BYTE = 0x87;  // первый байт пакета
 
 const quint8 AD_COM_LENGTH_CAN = 22;  // длина пакета с CAN сообщением
+const quint8 AD_COM_LENGTH_MIN = 15;  // длина пакета с минимальным CAN сообщением
 const quint8 AD_COM_LENGTH_ANS = 9;  // длина пакета с ответом на настройки без длины посылки. Длина в третьем байте
 const quint8 AD_COM_LENGTH_ERR_N = 2;  // длина пакета с сообщением  об ошибках
 

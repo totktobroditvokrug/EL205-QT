@@ -48,7 +48,7 @@ quint8 calcCRC(QByteArray addCheckSum)
 //-------------- Обработка CAN посылки для адаптера EL205-1 --------
 QString handleCAN(formatCanMessage canMessage, QString prefix)
 {
-    QString str = (QString::number(canMessage.numberSerialMessage, 10) + prefix + " ID: " +
+    QString str = (QString::number(canMessage.numberSerialMessage, 10).rightJustified(3, '_') + prefix + " ID: " +
                    QString::number(canMessage.id16, 16).rightJustified(4, '0') + " length: " +
                    QString::number(canMessage.dataLen, 10) +
                    " DATA:" + QString::fromUtf8(canMessage.data.toHex(' ')));
@@ -76,6 +76,11 @@ QStringList handleUartParsing(
 ) {
     formatCanMessage canMessage;
     QStringList parsingDataList;
+    quint8 dataLength;
+    QByteArray arrayDataForCRC; // посылка без двух стартовых байт и CRC
+    quint8 CRC;  // CRC из посылки
+    QString checkCRC = "crc-FALSE";
+    bool CRC_OK = false;
     parsingDataList.clear();
     for (int i=0; i<=(dataRead.size()-2); i++)
     {
@@ -84,27 +89,39 @@ QStringList handleUartParsing(
             //qDebug() << "пришел стартовый байт_";
             switch (quint8(dataRead.at(i+1))) { // проверяем второй байт после стартового
                 case AD_COM_ID_CAN_1 :{  // это CAN сообщение
-                    if ((i+AD_COM_LENGTH_CAN-1)>dataRead.size()) // проверка длины полей сообщения
-                    {
-                      // qDebug() << "Неполное CAN сообщение";
-                      // ui->textEdit_dataRead->append("-- Неполное CAN сообщение --");
-                       parsingDataList.append("-- Неполное CAN сообщение --");
-                       return (parsingDataList); // добавить склейку неполных сообщений!!!
+                    if ((i+AD_COM_LENGTH_MIN-1) > dataRead.size()){ // проверка по минимальной длине
+                        parsingDataList.append("-- Неполное CAN сообщение --");
+                        return (parsingDataList); // добавить склейку неполных сообщений!!!
                     }
-                    else // если длина сообщения достаточная, заполняем поля ID, DATA и проверяем формат
-                    {
-                        // подсчет контрольной суммы
-                        QByteArray arrayDataForCRC = dataRead.mid((i+2), 20); // посылка без двух стартовых байт и CRC
-                        quint8 CRC = quint8(dataRead[i+22]);  // CRC из посылки
-                        QString checkCRC = "crc-FALSE";
-                        bool CRC_OK = false;
+                    else {
+                        dataLength = quint8(dataRead[i+12]);
+                        // проверка длины полей сообщения c учетом прочитанной длины
+                        if ((i+AD_COM_LENGTH_CAN-1+dataLength-8) > dataRead.size())
+                        {
+                          // qDebug() << "Неполное CAN сообщение";
+                          // ui->textEdit_dataRead->append("-- Неполное CAN сообщение --");
+                           parsingDataList.append("-- Неполное CAN сообщение --");
+                           return (parsingDataList); // добавить склейку неполных сообщений!!!
+                        }
+
+                        //---------- подсчет контрольной суммы -------------
+                        arrayDataForCRC = dataRead.mid((i+2), (12 + dataLength)); // посылка без двух стартовых байт и CRC
+                        CRC = quint8(dataRead[i + 14 + dataLength]);  // CRC из посылки
                         if(calcCRC(arrayDataForCRC) == CRC){
                             CRC_OK = true;
                             checkCRC= "crc-OK";
                         }
-                        //-------- 4 байта ID_CAN, флаги, количество байт данных, 8 байт данных (с 7 по 20 позиции)
+                        else {
+                            parsingDataList.append("-- Ошибка контрольной суммы --");
+                            return (parsingDataList);
+                        }
+                    }
 
-                        QByteArray arrayDataFromCAN = dataRead.mid((i+7), 14);
+
+                    //-------- если длина сообщения достаточная, заполняем поля ID, DATA и проверяем формат
+                    //-------- 4 байта ID_CAN, флаги, количество байт данных, 8 байт данных (с 7 по 20 позиции)
+
+                        QByteArray arrayDataFromCAN = dataRead.mid((i+7), 14); // 4 ID, 1 Flags, 1 Length, 8 DATA
                         QByteArray standartArrayID = dataRead.mid((i+7), 4); // ID сообщения 4 байта
 
                         quint8 idBody = quint8(dataRead[i+7]);  // тело идентификатора
@@ -142,7 +159,7 @@ QStringList handleUartParsing(
                             QString extendedFrame = handleCAN(canMessage, EXT_PREFIX + checkCRC);
                             if(checkExtended) parsingDataList.append(extendedFrame);  // выводим при чекбоксе
                         }
-                     }
+
                     i=i+dataRead[i+2]+2; // перевод счетчика байт на начало следующего пакета минус 1
                    // qDebug() << "следующие два байта" << QString::number(quint8(dataRead[i+1]), 16)<< QString::number(quint8(dataRead[i+2]), 16);
                 } break;
