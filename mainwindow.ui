@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_registerWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -724,6 +724,51 @@
           <height>581</height>
          </rect>
         </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Register Table</string>
+       </attribute>
+       <widget class="QTableWidget" name="tableRegister">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>1011</width>
+          <height>511</height>
+         </rect>
+        </property>
+        <column>
+         <property name="text">
+          <string>№</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>min</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>max</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>scale</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>data</string>
+         </property>
+        </column>
        </widget>
       </widget>
      </widget>

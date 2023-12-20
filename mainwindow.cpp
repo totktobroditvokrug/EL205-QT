@@ -17,6 +17,9 @@
 #include <QListWidgetItem>
 #include <QTimer>
 
+#include <QTableWidget>
+#include <QTableWidgetItem>
+
 #include<QDebug>
 
 
@@ -49,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_volumeTextRead->setText("50");
     ui->textEdit_dataRead->document()->setMaximumBlockCount(50); //
     serial = new QSerialPort;
+
+    // ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     //struct can_message * structSerialData; // адрес массива структур кэн сообщений
 
@@ -553,12 +558,23 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
 void MainWindow::on_listWidget_regNum_itemClicked(QListWidgetItem *item)
 {
     QStringList separateNum = item->text().split(":", QString::SkipEmptyParts);
-    quint8 index = quint8(separateNum[0].toInt());
+    quint8 index = quint8(separateNum[0].toInt()); // номер до :
+    QString regName = separateNum[1].simplified();              // строка после :
     qDebug() << "separateNum: " << separateNum[0] << "int= " << QString::number(index, 10);
     if(item->checkState() == Qt::Checked){
         item->setForeground(Qt::red);
         regDataArray[index].displayed = true;
         ui->textEdit_selectedRegNum->append(item->text());
+
+        qDebug() << "table test: " << item->text();
+        QTableWidgetItem *nameReg = new QTableWidgetItem(regName);
+
+        ui->tableRegister->insertRow(ui->tableRegister->rowCount());
+        ui->tableRegister->setItem(ui->tableRegister->rowCount()-1, 1, nameReg);
+        ui->tableRegister->setItem(ui->tableRegister->rowCount()-1, 0, new QTableWidgetItem(QString::number(index, 10)));
+     //   ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    //    nameReg->setText(item->text());
+    //    ui->tableRegister->setItem(index, 1, nameReg);
     }
     else{
        item->setForeground(Qt::black);
