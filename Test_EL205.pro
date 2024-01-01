@@ -19,7 +19,10 @@ SOURCES += \
     adapter_commands.cpp \
     iface.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    tab_all_data.cpp \
+    tab_can_adapter.cpp \
+    tab_register_list.cpp
 
 HEADERS += \
     adapter_commands.h \

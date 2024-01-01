@@ -2,9 +2,28 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
+
+#include <QTextStream>
+#include <QMessageBox>
+
+#include <QFileDialog>
+#include <iostream>
+
+#include <QList>
+#include <QStringList>
 #include <QListWidgetItem>
+
+#include <QTimer>
+
+#include <QTableWidget>
+#include <QTableWidgetItem>
+
+#include<QDebug>
+
+#include "adapter_commands.h"
 #include <iface.h>
 
 QT_BEGIN_NAMESPACE
@@ -20,6 +39,9 @@ public:
     ~MainWindow();
 
 private slots:
+
+    void initTabCan();
+
     void on_pushButton_searchListPort_clicked();
 
     void on_pushButton_connect_clicked();

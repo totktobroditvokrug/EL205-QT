@@ -4,6 +4,8 @@
 #include <QList>
 #include <QStringList>
 
+
+
 //-------------- Добавление контрольной суммы для адаптера EL205-1 -------------
 QByteArray AddCRC(QString textCommand, int indexStartByte)
 {
