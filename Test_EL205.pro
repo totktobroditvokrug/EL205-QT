@@ -20,9 +20,11 @@ SOURCES += \
     iface.cpp \
     main.cpp \
     mainwindow.cpp \
+    menu.cpp \
     tab_all_data.cpp \
     tab_can_adapter.cpp \
-    tab_register_list.cpp
+    tab_register_list.cpp \
+    tab_register_widget.cpp
 
 HEADERS += \
     adapter_commands.h \

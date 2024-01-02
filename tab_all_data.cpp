@@ -28,7 +28,7 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
 {
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
 
-    timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров
+    timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров ВРЕМЕННО!!!
 
     ui->pushButton_stopRead->setEnabled(true);
     ui->pushButton_startRead->setEnabled(false);
@@ -52,12 +52,13 @@ void MainWindow::on_pushButton_clear_clicked() // очистить поле вы
     ui->textEdit_dataRead->clear();
 }
 
+//------- изменить максимальный размер блока для вывода выбранных посылок
 void MainWindow::on_lineEdit_volumeTextRead_editingFinished()
 {
-     // qDebug() << "Число строк:" << ui->lineEdit_volumeTextRead->text().toInt();
       ui->textEdit_dataRead->document()->setMaximumBlockCount(ui->lineEdit_volumeTextRead->text().toInt());
 }
 
+//------- изменить частоту опроса CAN-адаптера
 void MainWindow::on_lineEdit_freqSampl_editingFinished()
 {
     timer->setInterval((ui->lineEdit_freqSampl->text().toInt()));

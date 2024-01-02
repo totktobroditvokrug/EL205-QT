@@ -186,7 +186,7 @@ void MainWindow::on_pushButton_connect_clicked()
     }
 
 
-    // Установить управление потоком ____________________switch(ui->ParityBox->currentIndex())
+    // Установить управление потоком
 
     qDebug() << "setFlowControl: " << ui->comboBox_flowBit->currentIndex();
 
@@ -321,5 +321,5 @@ void MainWindow::on_pushButton_sendMessage_clicked() // записать про�
 {
     QString dataWriteString = ui->textEdit_sendMessage->toPlainText();
     writeSerialPort(dataWriteString);
-    ui->txtOutput->append(readSerialPort());
+    ui->txtOutput->append(readSerialPort()); // провериь, что без последующего чтения идет запись и убрать!!!!
 }

@@ -642,7 +642,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>20</y>
+          <y>550</y>
           <width>171</width>
           <height>28</height>
          </rect>
@@ -654,8 +654,8 @@
        <widget class="QPushButton" name="pushButton_readRegFromFile">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>80</y>
+          <x>830</x>
+          <y>550</y>
           <width>171</width>
           <height>28</height>
          </rect>
@@ -667,8 +667,8 @@
        <widget class="QPushButton" name="pushButton_saveRegToFile">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>110</y>
+          <x>550</x>
+          <y>550</y>
           <width>171</width>
           <height>28</height>
          </rect>
@@ -680,19 +680,19 @@
        <widget class="QListWidget" name="listWidget_regNum">
         <property name="geometry">
          <rect>
-          <x>200</x>
-          <y>20</y>
-          <width>401</width>
-          <height>571</height>
+          <x>10</x>
+          <y>10</y>
+          <width>461</width>
+          <height>531</height>
          </rect>
         </property>
        </widget>
        <widget class="QTextEdit" name="textEdit_selectedRegNum">
         <property name="geometry">
          <rect>
-          <x>620</x>
-          <y>20</y>
-          <width>391</width>
+          <x>540</x>
+          <y>10</y>
+          <width>471</width>
           <height>531</height>
          </rect>
         </property>
@@ -700,8 +700,8 @@
        <widget class="QPushButton" name="pushButton_loadToDisplay">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>560</y>
+          <x>300</x>
+          <y>550</y>
           <width>171</width>
           <height>28</height>
          </rect>

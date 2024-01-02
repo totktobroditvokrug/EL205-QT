@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
+// генерация списка регистров из перечисления в проекте инвертора
 void MainWindow::on_pushButton_genRegFromEnum_clicked()
 {
     ui->listWidget_regNum->clear();
@@ -27,8 +29,8 @@ void MainWindow::on_pushButton_saveRegToFile_clicked()
      // Открываем файл, создаем, если его не существует
     if((file.open(QIODevice::ReadWrite | QIODevice::Text))){
         QTextStream stream(&file);
-//        s << (RegnumClass::regnumList()).join("\n");
-//        stream << ui->textEdit_listRegnum->toPlainText();
+        stream << ui->textEdit_selectedRegNum->toPlainText();
+        file.close();
     }
     else ui->statusbar->showMessage("Ошибка: error opening output file");
 }
@@ -43,11 +45,22 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
         QTextStream stream(&file);
 //        s << (RegnumClass::regnumList()).join("\n");
-        QString readStr;
-        stream >> readStr;
-//        QDebug(QString::fromStdString(readStr);
-//        ui->textEdit_listRegnum->clear();
-//        ui->textEdit_listRegnum->setText(str);
+        QString readStr = stream.readAll();
+
+        ui->textEdit_selectedRegNum->clear();
+        ui->textEdit_selectedRegNum->setText(readStr);
+
+        // заполняем данными из файла виджет с checkButton
+        ui->listWidget_regNum->clear();
+        QStringList stringArray = readStr.split("\n");
+        int length = stringArray.size();
+        for (int i = 0; i < length; i++) {
+           QListWidgetItem *item = new QListWidgetItem;
+           item->setText(stringArray.at(i));
+           item->setCheckState(Qt::Unchecked);
+           ui->listWidget_regNum->addItem(item);
+           file.close();
+        }
     }
     else ui->statusbar->showMessage("Ошибка: error opening output file");
 }
