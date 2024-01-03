@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_registerWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -654,7 +654,7 @@
        <widget class="QPushButton" name="pushButton_readRegFromFile">
         <property name="geometry">
          <rect>
-          <x>830</x>
+          <x>840</x>
           <y>550</y>
           <width>171</width>
           <height>28</height>
@@ -667,7 +667,7 @@
        <widget class="QPushButton" name="pushButton_saveRegToFile">
         <property name="geometry">
          <rect>
-          <x>550</x>
+          <x>540</x>
           <y>550</y>
           <width>171</width>
           <height>28</height>
@@ -697,7 +697,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_loadToDisplay">
+       <widget class="QPushButton" name="pushButton_selectAll">
         <property name="geometry">
          <rect>
           <x>300</x>
@@ -707,7 +707,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Load</string>
+         <string>Select all</string>
         </property>
        </widget>
       </widget>
@@ -736,7 +736,7 @@
           <x>10</x>
           <y>10</y>
           <width>1011</width>
-          <height>511</height>
+          <height>621</height>
          </rect>
         </property>
        </widget>

@@ -14,7 +14,6 @@ void MainWindow::readStream()
     {
         if ((serial->bytesAvailable())>8) // если пришло достаточное количество байт, то читаем
         {
-          //  qDebug() << "bytesAvailable " << QString::number(serial->bytesAvailable(), 10);
             ui->lineEdit_availableByte->setText(QString::number(serial->bytesAvailable(), 10));
             dataRead = serial->readAll();
             ui->textEdit_dataRead->setText(handleUartParsing(dataRead, checkStandart, checkExtended, checkAnswer, regNumList, regDataArray).join("\n"));

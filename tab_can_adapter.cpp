@@ -260,7 +260,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
     ui->label_flowOk->setText("-");
 }
 
-void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index)
+void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index) // выбор частоты CAN шины
 {
     switch (index) {
         case 0: {
@@ -276,13 +276,13 @@ void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_pushButton_setConfigAdapter_clicked()
+void MainWindow::on_pushButton_setConfigAdapter_clicked() // конфигурация адаптера по комбобоксам
 {
     QString dataWriteString = ui->lineEdit_canFreq->text() + ui->lineEdit_readAllCan->text();
     writeSerialPort(dataWriteString);
 }
 
-void MainWindow::on_comboBox_readAllCan_currentIndexChanged(int index)
+void MainWindow::on_comboBox_readAllCan_currentIndexChanged(int index) // выбор фильтра CAN шины
 {
     switch (index) {
         case 0: {

@@ -39,68 +39,59 @@ public:
     ~MainWindow();
 
 private slots:
-
-    void initTabCan();
-
+    // настройка адаптера
+    void initTabCan(); // уставки по умолчанию, активация кнопок
     void on_pushButton_searchListPort_clicked();
-
     void on_pushButton_connect_clicked();
-
     void on_pushButton_disconnect_clicked();
-
     void on_pushButton_sendMessage_clicked();
 
-    void on_pushButton_startRead_clicked();
-
-    void on_pushButton_readOnce_clicked();
-
+    // чтение данных из CAN
+    void on_pushButton_startRead_clicked(); // опрос в цикле таймера
+    void on_pushButton_readOnce_clicked();  // единичный опрос
     void on_pushButton_stopRead_clicked();
-
     void on_pushButton_clear_clicked();
+    void on_comboBox_canFreq_currentIndexChanged(int index); // частота опроса CAN шины
+    void on_comboBox_readAllCan_currentIndexChanged(int index); // выбор фильтра CAN шины
+    void on_pushButton_setConfigAdapter_clicked(); // конфигурация адаптера по комбобоксам
 
-    void on_comboBox_canFreq_currentIndexChanged(int index);
-
+    // получение данных от CAN адаптера
     void writeSerialPort(QString dataWriteString);
     QByteArray readSerialPort();
+    void readStream(); // Чтение потока из serialport
+    void on_lineEdit_volumeTextRead_editingFinished(); //максимальный размер блока для вывода выбранных посылок
+    void on_lineEdit_freqSampl_editingFinished(); // частота опроса CAN-адаптера
 
-    void readStream();
-    void regDisplay();
+    // элементы меню
+    void on_actionQuit_triggered(); // выход из приложения
 
-    void on_pushButton_setConfigAdapter_clicked();
-
-    void on_comboBox_readAllCan_currentIndexChanged(int index);
-
-    void on_lineEdit_volumeTextRead_editingFinished();
-
-    void on_lineEdit_freqSampl_editingFinished();
-
-    void on_actionQuit_triggered();
-
-    void on_actionOpen_register_map_triggered();
-
+    void on_actionOpen_register_map_triggered(); // тестовые элементы, можно убрать
     void on_actionCreate_register_map_triggered();
 
-    void on_pushButton_genRegFromEnum_clicked();
-
+    // загрузка списка регистров
+    void on_pushButton_genRegFromEnum_clicked(); // сгенерировать из enum
     void on_pushButton_saveRegToFile_clicked();
-
     void on_pushButton_readRegFromFile_clicked();
-
     void on_listWidget_regNum_itemClicked(QListWidgetItem *item);
+    void on_pushButton_selectAll_clicked(); // установить или снять все check списка
 
-    void on_pushButton_loadToDisplay_clicked();
+    // вывод значений регистров в отдельной вкладке
+    void regDisplay();
 
     // работа с таблицей регистров
     void createRegistersTable();
     void addRowRegistersTable(int index, QString regName);
     void deleteRowRegistersTable(int index);
 
+
+
 private:
     Ui::MainWindow *ui;
+
     QSerialPort *serial;
-    QTimer *timer;
-    QTimer *timerRegDisplay;
-    QVector<QString> regNumList;
-    registerFields regDataArray[IREG_INV_ALL_END_REGISTERS];
+    QTimer *timer;  // таймер опроса CAN адаптера
+    QTimer *timerRegDisplay; // таймер вывода регистров на дисплей
+    QVector<QString> regNumList; // формирование списка регистров
+    registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
 };
 #endif // MAINWINDOW_H

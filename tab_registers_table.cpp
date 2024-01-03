@@ -11,6 +11,7 @@ void MainWindow::createRegistersTable()
             << "max"
             << "scale"
             << "data";
+    // добавить архив для data
 
     ui->tableRegister->setColumnCount(6); // Указываем число колонок
     ui->tableRegister->setShowGrid(true); // Включаем сетку
@@ -36,12 +37,12 @@ void MainWindow::addRowRegistersTable(int index, QString regName)
 
 void MainWindow::deleteRowRegistersTable(int index)
 {
-    int currentIndex;
+    int currentRegNum; // номер регистра в таблице
     for(int i = 0; i <= ui->tableRegister->rowCount(); i++){
         QTableWidgetItem *item = ui->tableRegister->item(i, 0); // проверка столбца с номерами регистров
         if (!!item) { // если ячейка не NULL
-           currentIndex = item->text().toInt();
-           if(currentIndex == index) ui->tableRegister->removeRow(i);
+           currentRegNum = item->text().toInt();
+           if(currentRegNum == index) ui->tableRegister->removeRow(i);
         }
     }
 }
