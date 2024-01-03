@@ -41,7 +41,7 @@ const quint8 AD_COM_EXT_CAN_FLAG = 0x20;  // флаг расширенного C
 
 
 struct formatCanMessage {
-    union {
+    union { // переделать под 4 байта!!!
         quint16 id16; // 16-ти битный идентификатор. Будет адресом массива всех данных
         struct {         // идентификатор в двух 8-ми битных полях
           quint8 id_body;

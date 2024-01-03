@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     serial = new QSerialPort;
 
     initTabCan(); // установить активность кнопок
+    createRegistersTable();
 }
 
 MainWindow::~MainWindow()

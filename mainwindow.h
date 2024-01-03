@@ -90,6 +90,11 @@ private slots:
 
     void on_pushButton_loadToDisplay_clicked();
 
+    // работа с таблицей регистров
+    void createRegistersTable();
+    void addRowRegistersTable(int index, QString regName);
+    void deleteRowRegistersTable(int index);
+
 private:
     Ui::MainWindow *ui;
     QSerialPort *serial;

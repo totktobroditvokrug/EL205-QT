@@ -611,9 +611,6 @@ struct registerFields{
 
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(
-//        quint8 idBody,
-//        quint8 idHdr,
-//        QByteArray standartArrayDATA,
         QByteArray arrayDataFromCAN,
         registerFields *regDataArray,
         QVector<QString> regNumList

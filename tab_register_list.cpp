@@ -65,30 +65,25 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
     else ui->statusbar->showMessage("Ошибка: error opening output file");
 }
 
+//------- выбор регистров для вывода на экран
 void MainWindow::on_listWidget_regNum_itemClicked(QListWidgetItem *item)
 {
     QStringList separateNum = item->text().split(":", QString::SkipEmptyParts);
     quint8 index = quint8(separateNum[0].toInt()); // номер до :
     QString regName = separateNum[1].simplified();              // строка после :
-    qDebug() << "separateNum: " << separateNum[0] << "int= " << QString::number(index, 10);
+    // qDebug() << "separateNum: " << separateNum[0] << "int= " << QString::number(index, 10);
     if(item->checkState() == Qt::Checked){
         item->setForeground(Qt::red);
         regDataArray[index].displayed = true;
         ui->textEdit_selectedRegNum->append(item->text());
 
-        qDebug() << "table test: " << item->text();
-        QTableWidgetItem *nameReg = new QTableWidgetItem(regName);
-
-        ui->tableRegister->insertRow(ui->tableRegister->rowCount());
-        ui->tableRegister->setItem(ui->tableRegister->rowCount()-1, 1, nameReg);
-        ui->tableRegister->setItem(ui->tableRegister->rowCount()-1, 0, new QTableWidgetItem(QString::number(index, 10)));
-     //   ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    //    nameReg->setText(item->text());
-    //    ui->tableRegister->setItem(index, 1, nameReg);
+       // qDebug() << "table test: " << item->text();
+        addRowRegistersTable(index, regName);
     }
     else{
        item->setForeground(Qt::black);
        regDataArray[index].displayed = false;
+       deleteRowRegistersTable(index);
     }
 }
 

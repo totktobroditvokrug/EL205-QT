@@ -24,7 +24,8 @@ SOURCES += \
     tab_all_data.cpp \
     tab_can_adapter.cpp \
     tab_register_list.cpp \
-    tab_register_widget.cpp
+    tab_register_widget.cpp \
+    tab_registers_table.cpp
 
 HEADERS += \
     adapter_commands.h \
