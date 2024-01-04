@@ -73,7 +73,10 @@ private slots:
     void on_pushButton_saveRegToFile_clicked();
     void on_pushButton_readRegFromFile_clicked();
     void on_listWidget_regNum_itemClicked(QListWidgetItem *item);
-    void on_pushButton_selectAll_clicked(); // установить или снять все check списка
+    void on_pushButton_selectAll_clicked(); // установить все check списка
+    void on_pushButton_resetAll_clicked(); // снять все check списка
+    void addItemFromlistwidget(QListWidgetItem *item, quint8 index, QString regName);
+    void deleteItemFromlistwidget(QListWidgetItem *item, quint8 index);
 
     // вывод значений регистров в отдельной вкладке
     void regDisplay();
@@ -82,6 +85,8 @@ private slots:
     void createRegistersTable();
     void addRowRegistersTable(int index, QString regName);
     void deleteRowRegistersTable(int index);
+
+
 
 
 

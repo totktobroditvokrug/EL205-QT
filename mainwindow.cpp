@@ -35,5 +35,3 @@ MainWindow::~MainWindow()
 
     delete ui;
 }
-
-

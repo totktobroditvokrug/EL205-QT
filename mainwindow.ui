@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_registerWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -654,8 +654,8 @@
        <widget class="QPushButton" name="pushButton_readRegFromFile">
         <property name="geometry">
          <rect>
-          <x>840</x>
-          <y>550</y>
+          <x>10</x>
+          <y>580</y>
           <width>171</width>
           <height>28</height>
          </rect>
@@ -708,6 +708,19 @@
         </property>
         <property name="text">
          <string>Select all</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_resetAll">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>580</y>
+          <width>171</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Reset all</string>
         </property>
        </widget>
       </widget>
