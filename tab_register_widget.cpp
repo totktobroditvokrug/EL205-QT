@@ -4,6 +4,7 @@
 //------------------Вывод значений регистров на дисплей-----------------
 void MainWindow::regDisplay() //
 {
+    // временный вывод в окно виджета
     ui->textEdit_regDisplay->clear(); // временная заглушка для вывода данных. Заменить на генерацию item
     for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++){
         if(regDataArray[i].displayed){

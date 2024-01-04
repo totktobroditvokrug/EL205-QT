@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
 
-    timerRegDisplay = new QTimer;
-    connect(timer, SIGNAL(timeout()), this, SLOT(regDisplay()));
+//    timerRegDisplay = new QTimer;
+//    connect(timer, SIGNAL(timeout()), this, SLOT(regDisplay()));
 
     ui->setupUi(this);
 

@@ -535,16 +535,32 @@ struct registerFields{
         };
     } id;
 
+    union{          // значение регистра
+       qint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } value;
+
     union{          // шкала регистра
-       quint16 Reg16;
+       qint16 Reg16;
        struct {
            quint8 LowerByte;
            quint8 UpperByte;
        };
     } scale;
 
+    union{          // максимальное значение переменной
+       qint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } maxValue;
+
     union{          // минимальное значение регистра
-       quint16 Reg16;
+       qint16 Reg16;
        struct {
            quint8 LowerByte;
            quint8 UpperByte;
@@ -552,10 +568,10 @@ struct registerFields{
     } min;
 
     union{          // максимальное значение регистра
-       quint16 Reg16;
+       qint16 Reg16;
        struct {
-           quint8 UpperByte;
            quint8 LowerByte;
+           quint8 UpperByte;
        };
     } max;
                                   // идентификатор измерений.регистров.установки регистров

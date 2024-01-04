@@ -85,6 +85,7 @@ private slots:
     void createRegistersTable();
     void addRowRegistersTable(int index, QString regName);
     void deleteRowRegistersTable(int index);
+    void regDisplayTable();
 
 
 
@@ -95,7 +96,7 @@ private:
 
     QSerialPort *serial;
     QTimer *timer;  // таймер опроса CAN адаптера
-    QTimer *timerRegDisplay; // таймер вывода регистров на дисплей
+ //   QTimer *timerRegDisplay; // таймер вывода регистров на дисплей
     QVector<QString> regNumList; // формирование списка регистров
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
 };

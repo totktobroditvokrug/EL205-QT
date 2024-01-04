@@ -10,10 +10,12 @@ void MainWindow::createRegistersTable()
             << "min"
             << "max"
             << "scale"
-            << "data";
+            << "maxValue"
+            << "value"
+            << "scaledValue";
     // добавить архив для data
 
-    ui->tableRegister->setColumnCount(6); // Указываем число колонок
+    ui->tableRegister->setColumnCount(8); // Указываем число колонок
     ui->tableRegister->setShowGrid(true); // Включаем сетку
     // Разрешаем выделение только одного элемента
     ui->tableRegister->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -37,12 +39,64 @@ void MainWindow::addRowRegistersTable(int index, QString regName)
 
 void MainWindow::deleteRowRegistersTable(int index)
 {
-    int currentRegNum; // номер регистра в таблице
+    int regNum; // номер регистра в таблице
     for(int i = 0; i <= ui->tableRegister->rowCount(); i++){
         QTableWidgetItem *item = ui->tableRegister->item(i, 0); // проверка столбца с номерами регистров
         if (!!item) { // если ячейка не NULL
-           currentRegNum = item->text().toInt();
-           if(currentRegNum == index) ui->tableRegister->removeRow(i);
+           regNum = item->text().toInt();
+           if(regNum == index) ui->tableRegister->removeRow(i);
+        }
+    }
+}
+
+//------------------Вывод значений регистров в таблицу-----------------
+void MainWindow::regDisplayTable()
+{
+    for(int i = 0; i <= ui->tableRegister->rowCount(); i++){
+        QTableWidgetItem *currentRegNum = ui->tableRegister->item(i, 0); // номер регистра
+        if (!!currentRegNum) { // если ячейка не NULL
+            int regNum = currentRegNum->text().toInt();
+            qint16 valueInt = regDataArray[regNum].value.Reg16;
+
+            QString min = "-";
+            QString max = "-";
+            QString scaleValue = "-";
+            QString maxValue = "-";
+            QString value = QString::number(valueInt, 10); //
+            QString scaledValue = "-";
+
+            if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){
+               min = QString::number(regDataArray[regNum].min.Reg16, 10);
+            }
+            if(regDataArray[regNum].flagReg & IREGF_MAX_PRESENT){
+               max = QString::number(regDataArray[regNum].max.Reg16, 10);
+            }
+            if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){
+               scaleValue = QString::number(regDataArray[regNum].scale.Reg16, 10);
+            }
+            if(regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT){
+               maxValue = QString::number(regDataArray[regNum].maxValue.Reg16, 10);
+            }
+
+            //------ расчет значение при наличии шкалы
+            if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
+               qint32 scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
+               scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
+            }
+
+            QTableWidgetItem *currentRegMin = new QTableWidgetItem(min);
+            QTableWidgetItem *currentRegMax = new QTableWidgetItem(max);
+            QTableWidgetItem *currentRegScale = new QTableWidgetItem(scaleValue);
+            QTableWidgetItem *currentRegMaxValue = new QTableWidgetItem(maxValue);
+            QTableWidgetItem *currentRegData = new QTableWidgetItem(value);
+            QTableWidgetItem *currentRegScaledValue = new QTableWidgetItem(scaledValue);
+
+            ui->tableRegister->setItem(i, 2, currentRegMin);
+            ui->tableRegister->setItem(i, 3, currentRegMax);
+            ui->tableRegister->setItem(i, 4, currentRegScale);
+            ui->tableRegister->setItem(i, 5, currentRegMaxValue);
+            ui->tableRegister->setItem(i, 6, currentRegData);
+            ui->tableRegister->setItem(i, 7, currentRegScaledValue);
         }
     }
 }

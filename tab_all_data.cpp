@@ -16,18 +16,30 @@ void MainWindow::readStream()
         {
             ui->lineEdit_availableByte->setText(QString::number(serial->bytesAvailable(), 10));
             dataRead = serial->readAll();
-            ui->textEdit_dataRead->setText(handleUartParsing(dataRead, checkStandart, checkExtended, checkAnswer, regNumList, regDataArray).join("\n"));
+            ui->textEdit_dataRead->setText(handleUartParsing(dataRead,
+                                                             checkStandart,
+                                                             checkExtended,
+                                                             checkAnswer,
+                                                             regNumList,
+                                                             regDataArray).join("\n"));
+
+
+            regDisplay(); // как только прошел парсинг- выдаем данные
+            regDisplayTable();
+
+
             return;  // обработали валидное количество байт. Выходим из функции запроса
         }
     }
        // qDebug() << "не  вышли по return, неполное сообщение";
+
 }
 
 void MainWindow::on_pushButton_startRead_clicked() // запуск цикличного чтения потока данных
 {
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
 
-    timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров ВРЕМЕННО!!!
+   // timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров ВРЕМЕННО!!!
 
     ui->pushButton_stopRead->setEnabled(true);
     ui->pushButton_startRead->setEnabled(false);
