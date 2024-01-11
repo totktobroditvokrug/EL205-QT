@@ -37,12 +37,20 @@ void MainWindow::readStream()
 
 void MainWindow::on_pushButton_startRead_clicked() // запуск цикличного чтения потока данных
 {
+    // запретить менять настройки CAN
+    ui->comboBox_canFreq->setEnabled(false);
+    ui->comboBox_readAllCan->setEnabled(false);
+    ui->pushButton_setConfigAdapter->setEnabled(false);
+    // разрешенные кнопки
+    ui->pushButton_stopRead->setEnabled(true);
+    ui->pushButton_startRead->setEnabled(false);
+    ui->pushButton_disconnect->setEnabled(false);
+
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
 
    // timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров ВРЕМЕННО!!!
 
-    ui->pushButton_stopRead->setEnabled(true);
-    ui->pushButton_startRead->setEnabled(false);
+
 }
 
 void MainWindow::on_pushButton_readOnce_clicked()
@@ -53,8 +61,14 @@ void MainWindow::on_pushButton_readOnce_clicked()
 void MainWindow::on_pushButton_stopRead_clicked()
 {
     timer->stop();
+    // разрешить менять настройки CAN
+    ui->comboBox_canFreq->setEnabled(true);
+    ui->comboBox_readAllCan->setEnabled(true);
+    ui->pushButton_setConfigAdapter->setEnabled(true);
+    // разрешенные кнопки
     ui->pushButton_stopRead->setEnabled(false);
     ui->pushButton_startRead->setEnabled(true);
+    ui->pushButton_disconnect->setEnabled(true);
 
 }
 

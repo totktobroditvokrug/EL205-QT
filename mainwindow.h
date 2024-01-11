@@ -53,7 +53,9 @@ private slots:
     void on_pushButton_clear_clicked();
     void on_comboBox_canFreq_currentIndexChanged(int index); // частота опроса CAN шины
     void on_comboBox_readAllCan_currentIndexChanged(int index); // выбор фильтра CAN шины
-    void on_pushButton_setConfigAdapter_clicked(); // конфигурация адаптера по комбобоксам
+//    void writeConfigAdapter(QString configString); //
+//    void on_pushButton_setConfigAdapter_clicked(); // конфигурация адаптера по комбобоксам
+    void init_setConfigAdapter(); // инициализация адаптера по умолчанию
 
     // получение данных от CAN адаптера
     void writeSerialPort(QString dataWriteString);

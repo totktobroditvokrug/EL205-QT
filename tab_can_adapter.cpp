@@ -85,16 +85,20 @@ void MainWindow::initTabCan(){
     ui->comboBox_canFreq->addItem(tr("125 kb/s"), 0);
     ui->comboBox_canFreq->addItem(tr("250 kb/s"), 1);
     ui->comboBox_canFreq->addItem(tr("500 kb/s"), 2);
+    ui->comboBox_canFreq->setCurrentIndex(1);
 
     ui->comboBox_readAllCan->addItem(tr("All"), 0);
     ui->comboBox_readAllCan->addItem(tr("Mask"), 1);
 
     ui->pushButton_disconnect->setEnabled(false);
     ui->pushButton_sendMessage->setEnabled(false);
+
     ui->pushButton_readOnce->setEnabled(false);
     ui->pushButton_stopRead->setEnabled(false);
     ui->pushButton_startRead->setEnabled(false);
+
     ui->comboBox_canFreq->setEnabled(false);
+    ui->comboBox_readAllCan->setEnabled(false);
 }
 
 
@@ -224,7 +228,10 @@ void MainWindow::on_pushButton_connect_clicked()
     ui->pushButton_startRead->setEnabled(true);
 
     ui->comboBox_canFreq->setEnabled(true);
+    ui->comboBox_readAllCan->setEnabled(true);
     ui->pushButton_setConfigAdapter->setEnabled(true);
+
+    init_setConfigAdapter();  // инициализация адаптера по частоте CAN и фильтру сообщений
 }
 
 void MainWindow::on_pushButton_disconnect_clicked()
@@ -250,6 +257,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
 
     ui->pushButton_setConfigAdapter->setEnabled(false);
     ui->comboBox_canFreq->setEnabled(false);
+    ui->comboBox_readAllCan->setEnabled(false);
 
     ui->label_nameOk->setText("-");
     ui->label_baudOk->setText("-");
@@ -260,40 +268,6 @@ void MainWindow::on_pushButton_disconnect_clicked()
     ui->label_flowOk->setText("-");
 }
 
-void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index) // выбор частоты CAN шины
-{
-    switch (index) {
-        case 0: {
-           ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_125, 2).toHex());
-        } break;
-        case 1: {
-           ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_250, 2).toHex());
-        } break;
-        case 2: {
-           ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_500, 2).toHex());
-        } break;
-        default: ui->lineEdit_canFreq->setText("не установлена частота CAN");
-    }
-}
-
-void MainWindow::on_pushButton_setConfigAdapter_clicked() // конфигурация адаптера по комбобоксам
-{
-    QString dataWriteString = ui->lineEdit_canFreq->text() + ui->lineEdit_readAllCan->text();
-    writeSerialPort(dataWriteString);
-}
-
-void MainWindow::on_comboBox_readAllCan_currentIndexChanged(int index) // выбор фильтра CAN шины
-{
-    switch (index) {
-        case 0: {
-           ui->lineEdit_readAllCan->setText(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
-        } break;
-        case 1: {
-           ui->lineEdit_readAllCan->setText(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
-        } break;
-        default: ui->lineEdit_readAllCan->setText("не выставлен режим фильтра");
-    }
-}
 
 //------------------ Запись в serialport ------------------
 void MainWindow::writeSerialPort(QString dataWriteString)
@@ -322,4 +296,59 @@ void MainWindow::on_pushButton_sendMessage_clicked() // записать про�
     QString dataWriteString = ui->textEdit_sendMessage->toPlainText();
     writeSerialPort(dataWriteString);
     ui->txtOutput->append(readSerialPort()); // провериь, что без последующего чтения идет запись и убрать!!!!
+}
+
+//-------------- настройка режима работы адаптера ----------
+
+void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index) // выбор частоты CAN шины
+{
+    switch (index) {
+        case 0: {
+         //  ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_125, 2).toHex());
+           writeSerialPort(AddCRC(AD_COM_SET_FREQ_CAN_125, 2).toHex());
+        } break;
+        case 1: {
+         //  ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_250, 2).toHex());
+           writeSerialPort(AddCRC(AD_COM_SET_FREQ_CAN_250, 2).toHex());
+        } break;
+        case 2: {
+         //  ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_500, 2).toHex());
+           writeSerialPort(AddCRC(AD_COM_SET_FREQ_CAN_500, 2).toHex());
+        } break;
+       // default: ui->lineEdit_canFreq->setText("не установлена частота CAN");
+    }
+}
+
+
+//void MainWindow::writeConfigAdapter(QString configString)
+//{
+//    writeSerialPort(configString);
+//}
+
+void MainWindow::on_comboBox_readAllCan_currentIndexChanged(int index) // выбор фильтра CAN шины
+{
+    switch (index) {
+        case 0: {
+         //  ui->lineEdit_readAllCan->setText(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
+           writeSerialPort(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
+        } break;
+        case 1: {
+         //  ui->lineEdit_readAllCan->setText(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
+           writeSerialPort(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
+        } break;
+       // default: ui->lineEdit_readAllCan->setText("не выставлен режим фильтра");
+    }
+
+}
+
+//void MainWindow::on_pushButton_setConfigAdapter_clicked() // конфигурация адаптера по комбобоксам
+//{
+//    QString dataWriteString = ui->lineEdit_canFreq->text() + ui->lineEdit_readAllCan->text();
+//    writeSerialPort(dataWriteString);
+//}
+
+void MainWindow::init_setConfigAdapter()
+{
+    QString dataWriteString = AddCRC(AD_COM_SET_FREQ_CAN_250, 2).toHex() + AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex();
+    writeSerialPort(dataWriteString);
 }
