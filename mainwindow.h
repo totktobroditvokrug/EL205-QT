@@ -44,7 +44,7 @@ private slots:
     void on_pushButton_searchListPort_clicked();
     void on_pushButton_connect_clicked();
     void on_pushButton_disconnect_clicked();
-    void on_pushButton_sendMessage_clicked();
+//    void on_pushButton_sendMessage_clicked();
 
     // чтение данных из CAN
     void on_pushButton_startRead_clicked(); // опрос в цикле таймера
@@ -92,6 +92,14 @@ private slots:
 
 
 
+
+    void on_pushButton_sendCommand_clicked();
+
+    void on_pushButton_startInv_clicked();
+
+    void on_pushButton_stopInv_clicked();
+
+    void on_pushButton_alarmInv_clicked();
 
 private:
     Ui::MainWindow *ui;

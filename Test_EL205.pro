@@ -23,6 +23,7 @@ SOURCES += \
     menu.cpp \
     tab_all_data.cpp \
     tab_can_adapter.cpp \
+    tab_control.cpp \
     tab_register_list.cpp \
     tab_register_widget.cpp \
     tab_registers_table.cpp
@@ -30,6 +31,7 @@ SOURCES += \
 HEADERS += \
     adapter_commands.h \
     iface.h \
+    invertor.h \
     mainwindow.h \
     registers.h
 

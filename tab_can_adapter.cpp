@@ -91,7 +91,7 @@ void MainWindow::initTabCan(){
     ui->comboBox_readAllCan->addItem(tr("Mask"), 1);
 
     ui->pushButton_disconnect->setEnabled(false);
-    ui->pushButton_sendMessage->setEnabled(false);
+//    ui->pushButton_sendMessage->setEnabled(false);
 
     ui->pushButton_readOnce->setEnabled(false);
     ui->pushButton_stopRead->setEnabled(false);
@@ -222,7 +222,7 @@ void MainWindow::on_pushButton_connect_clicked()
     ui->statusbar->showMessage("Serial port is OPEN");
 
     ui->pushButton_disconnect->setEnabled(true);
-    ui->pushButton_sendMessage->setEnabled(true);
+//    ui->pushButton_sendMessage->setEnabled(true);
     ui->pushButton_readOnce->setEnabled(true);
     ui->pushButton_stopRead->setEnabled(true);
     ui->pushButton_startRead->setEnabled(true);
@@ -240,7 +240,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
     serial->close();
     qDebug()<<"Serial port is CLOSE: ";
     ui->statusbar->showMessage("Serial port is CLOSE");
-    ui->txtOutput->clear();
+//    ui->txtOutput->clear();
 
     ui->comboBox_baudRate->setEnabled(true);
     ui->comboBox_dataBits->setEnabled(true);
@@ -249,7 +249,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
     ui->comboBox_serialPort->setEnabled(true);
     ui->comboBox_stopBit->setEnabled(true);
 
-    ui->pushButton_sendMessage->setEnabled(false);
+//   ui->pushButton_sendMessage->setEnabled(false);
     ui->pushButton_readOnce->setEnabled(false);
     ui->pushButton_stopRead->setEnabled(false);
     ui->pushButton_startRead->setEnabled(false);
@@ -291,12 +291,12 @@ QByteArray MainWindow::readSerialPort()
     return text;
 }
 
-void MainWindow::on_pushButton_sendMessage_clicked() // записать произвольную команду в сериалпорт
-{
-    QString dataWriteString = ui->textEdit_sendMessage->toPlainText();
-    writeSerialPort(dataWriteString);
-    ui->txtOutput->append(readSerialPort()); // провериь, что без последующего чтения идет запись и убрать!!!!
-}
+//void MainWindow::on_pushButton_sendMessage_clicked() // записать произвольную команду в сериалпорт
+//{
+//    QString dataWriteString = ui->textEdit_sendMessage->toPlainText();
+//    writeSerialPort(dataWriteString);
+//    ui->txtOutput->append(readSerialPort()); // провериь, что без последующего чтения идет запись и убрать!!!!
+//}
 
 //-------------- настройка режима работы адаптера ----------
 

@@ -7,11 +7,16 @@
 #include <QList>
 #include <QStringList>
 
+
+static QString AD_COM_SET_HEAD = "1C05"; // два стартовых байта посылки из ПК в адаптер
+
 static QString AD_COM_SET_FREQ_CAN_125 = "1C05068046037800"; // 00 - 125 кб/с без CRC
 static QString AD_COM_SET_FREQ_CAN_250 = "1C05068046037801"; // 01 - 250 кб/с без CRC
 static QString AD_COM_SET_FREQ_CAN_500 = "1C05068046037802"; // 02 - 500 кб/с без CRC
 
-static QString AD_COM_SET_READ_ALL_CAN = "1C05068046057900"; // 02 - 500 кб/с без CRC
+static QString AD_COM_SET_READ_ALL_CAN = "1C05068046057900"; // читать все сообщения
+
+
 
 static QByteArray AD_COM_ID_CAN = QByteArray::fromHex("875a");
 

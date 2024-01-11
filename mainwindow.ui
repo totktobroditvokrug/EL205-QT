@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1052</width>
-    <height>741</height>
+    <width>1043</width>
+    <height>777</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,17 +18,164 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_registerWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tab_2">
        <attribute name="title">
-        <string>CAN_ADAPTER</string>
+        <string>ALL_DATA</string>
        </attribute>
+       <widget class="QGroupBox" name="groupBox_settingsTiming">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>430</y>
+          <width>361</width>
+          <height>241</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Контроль пакетов</string>
+        </property>
+        <widget class="QLineEdit" name="lineEdit_availableByte">
+         <property name="geometry">
+          <rect>
+           <x>192</x>
+           <y>150</y>
+           <width>141</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_3">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>150</y>
+           <width>101</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>принято байт</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>180</y>
+           <width>161</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Частота опроса, мс</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_freqSampl">
+         <property name="geometry">
+          <rect>
+           <x>220</x>
+           <y>180</y>
+           <width>113</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>500</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_testLine">
+         <property name="geometry">
+          <rect>
+           <x>220</x>
+           <y>210</y>
+           <width>113</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_7">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>210</y>
+           <width>55</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Test</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBox_adapterAnswer">
+         <property name="geometry">
+          <rect>
+           <x>18</x>
+           <y>120</y>
+           <width>161</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>adapter answer</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBox_canExtended">
+         <property name="geometry">
+          <rect>
+           <x>18</x>
+           <y>90</y>
+           <width>151</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>CAN extended</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_volumeTextRead">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>211</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Число отображаемых строк</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBox_canStandart">
+         <property name="geometry">
+          <rect>
+           <x>18</x>
+           <y>60</y>
+           <width>131</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>CAN standart</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_volumeTextRead">
+         <property name="geometry">
+          <rect>
+           <x>192</x>
+           <y>30</y>
+           <width>151</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
        <widget class="QGroupBox" name="groupBox">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>140</y>
+          <x>12</x>
+          <y>180</y>
           <width>221</width>
           <height>221</height>
          </rect>
@@ -240,22 +387,25 @@
          </item>
         </layout>
        </widget>
-       <widget class="QTextEdit" name="textEdit_sendMessage">
+       <widget class="QPushButton" name="pushButton_disconnect">
         <property name="geometry">
          <rect>
-          <x>150</x>
-          <y>400</y>
+          <x>250</x>
+          <y>250</y>
           <width>181</width>
-          <height>31</height>
+          <height>28</height>
          </rect>
+        </property>
+        <property name="text">
+         <string>disconnect</string>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButton_searchListPort">
         <property name="geometry">
          <rect>
-          <x>8</x>
-          <y>110</y>
-          <width>231</width>
+          <x>250</x>
+          <y>180</y>
+          <width>181</width>
           <height>28</height>
          </rect>
         </property>
@@ -266,69 +416,20 @@
        <widget class="QListWidget" name="listWidget_portInfo">
         <property name="geometry">
          <rect>
-          <x>8</x>
+          <x>10</x>
           <y>10</y>
-          <width>331</width>
-          <height>91</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_sendMessage">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>400</y>
-          <width>131</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Send message</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_disconnect">
-        <property name="geometry">
-         <rect>
-          <x>128</x>
-          <y>360</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>disconnect</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_connect">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>360</y>
-          <width>91</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>connect</string>
-        </property>
-       </widget>
-       <widget class="QTextEdit" name="txtOutput">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>440</y>
-          <width>321</width>
-          <height>191</height>
+          <width>421</width>
+          <height>161</height>
          </rect>
         </property>
        </widget>
        <widget class="QGroupBox" name="groupBox_2">
         <property name="geometry">
          <rect>
-          <x>380</x>
-          <y>10</y>
-          <width>461</width>
-          <height>241</height>
+          <x>250</x>
+          <y>300</y>
+          <width>191</width>
+          <height>131</height>
          </rect>
         </property>
         <property name="title">
@@ -339,16 +440,17 @@
           <rect>
            <x>10</x>
            <y>20</y>
-           <width>431</width>
-           <height>171</height>
+           <width>171</width>
+           <height>71</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="5" column="2">
-           <widget class="QComboBox" name="comboBox_4"/>
-          </item>
-          <item row="4" column="2">
-           <widget class="QComboBox" name="comboBox_3"/>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Читать все</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="2">
            <widget class="QComboBox" name="comboBox_canFreq">
@@ -360,33 +462,6 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QComboBox" name="comboBox_readAllCan"/>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Читать все</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit_canFreq"/>
-          </item>
           <item row="1" column="1">
            <widget class="QLabel" name="label_canFreq">
             <property name="text">
@@ -394,23 +469,17 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="3">
-           <widget class="QLineEdit" name="lineEdit_readAllCan"/>
-          </item>
-          <item row="4" column="3">
-           <widget class="QLineEdit" name="lineEdit_canFreq_3"/>
-          </item>
-          <item row="5" column="3">
-           <widget class="QLineEdit" name="lineEdit_canFreq_4"/>
+          <item row="3" column="2">
+           <widget class="QComboBox" name="comboBox_readAllCan"/>
           </item>
          </layout>
         </widget>
         <widget class="QPushButton" name="pushButton_setConfigAdapter">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>200</y>
-           <width>411</width>
+           <x>10</x>
+           <y>100</y>
+           <width>171</width>
            <height>28</height>
           </rect>
          </property>
@@ -419,16 +488,34 @@
          </property>
         </widget>
        </widget>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>ALL_DATA</string>
-       </attribute>
+       <widget class="QPushButton" name="pushButton_connect">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>220</y>
+          <width>181</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>connect</string>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="textEdit_dataRead">
+        <property name="geometry">
+         <rect>
+          <x>450</x>
+          <y>10</y>
+          <width>541</width>
+          <height>621</height>
+         </rect>
+        </property>
+       </widget>
        <widget class="QPushButton" name="pushButton_stopRead">
         <property name="geometry">
          <rect>
-          <x>100</x>
-          <y>580</y>
+          <x>550</x>
+          <y>640</y>
           <width>93</width>
           <height>28</height>
          </rect>
@@ -437,11 +524,24 @@
          <string>Stop read</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="pushButton_startRead">
+        <property name="geometry">
+         <rect>
+          <x>450</x>
+          <y>640</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start read</string>
+        </property>
+       </widget>
        <widget class="QPushButton" name="pushButton_clear">
         <property name="geometry">
          <rect>
-          <x>322</x>
-          <y>580</y>
+          <x>772</x>
+          <y>640</y>
           <width>141</width>
           <height>28</height>
          </rect>
@@ -453,8 +553,8 @@
        <widget class="QPushButton" name="pushButton_readOnce">
         <property name="geometry">
          <rect>
-          <x>210</x>
-          <y>580</y>
+          <x>660</x>
+          <y>640</y>
           <width>101</width>
           <height>28</height>
          </rect>
@@ -462,176 +562,6 @@
         <property name="text">
          <string>Read it once</string>
         </property>
-       </widget>
-       <widget class="QTextEdit" name="textEdit_dataRead">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>461</width>
-          <height>571</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_startRead">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>580</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Start read</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_volumeTextRead">
-        <property name="geometry">
-         <rect>
-          <x>480</x>
-          <y>20</y>
-          <width>211</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Число отображаемых строк</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_volumeTextRead">
-        <property name="geometry">
-         <rect>
-          <x>700</x>
-          <y>20</y>
-          <width>113</width>
-          <height>22</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="checkBox_canStandart">
-        <property name="geometry">
-         <rect>
-          <x>490</x>
-          <y>60</y>
-          <width>131</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>CAN standart</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="checkBox_canExtended">
-        <property name="geometry">
-         <rect>
-          <x>490</x>
-          <y>90</y>
-          <width>151</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>CAN extended</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="checkBox_adapterAnswer">
-        <property name="geometry">
-         <rect>
-          <x>490</x>
-          <y>120</y>
-          <width>161</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>adapter answer</string>
-        </property>
-       </widget>
-       <widget class="QGroupBox" name="groupBox_settingsTiming">
-        <property name="geometry">
-         <rect>
-          <x>470</x>
-          <y>430</y>
-          <width>351</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <property name="title">
-         <string>Контроль пакетов</string>
-        </property>
-        <widget class="QLineEdit" name="lineEdit_availableByte">
-         <property name="geometry">
-          <rect>
-           <x>182</x>
-           <y>40</y>
-           <width>141</width>
-           <height>22</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_3">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>40</y>
-           <width>101</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>принято байт</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_6">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>80</y>
-           <width>161</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Частота опроса, мс</string>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="lineEdit_freqSampl">
-         <property name="geometry">
-          <rect>
-           <x>210</x>
-           <y>80</y>
-           <width>113</width>
-           <height>22</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>500</string>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="lineEdit_testLine">
-         <property name="geometry">
-          <rect>
-           <x>210</x>
-           <y>130</y>
-           <width>113</width>
-           <height>22</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_7">
-         <property name="geometry">
-          <rect>
-           <x>110</x>
-           <y>130</y>
-           <width>55</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Test</string>
-         </property>
-        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
@@ -756,10 +686,95 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_6">
+      <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Страница</string>
+        <string>Control</string>
        </attribute>
+       <widget class="QLineEdit" name="lineEdit_testCommand">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>40</y>
+          <width>231</width>
+          <height>22</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>70</y>
+          <width>141</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>введите команду</string>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="textEdit_commandCRC">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>270</y>
+          <width>231</width>
+          <height>131</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_sendCommand">
+        <property name="geometry">
+         <rect>
+          <x>152</x>
+          <y>70</y>
+          <width>111</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Send command</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_startInv">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>130</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_stopInv">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>170</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Stop</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_alarmInv">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>210</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Alarm</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -770,7 +785,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1052</width>
+     <width>1043</width>
      <height>26</height>
     </rect>
    </property>
