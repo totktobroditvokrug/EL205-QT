@@ -101,6 +101,8 @@ private slots:
 
     void on_pushButton_alarmInv_clicked();
 
+    void on_tableRegister_cellClicked(int row, int column);
+
 private:
     Ui::MainWindow *ui;
 
