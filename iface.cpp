@@ -122,6 +122,9 @@ void handleAllStandartDataCan(
     QString data= "handleRegData. ID=" + QString::number(idWhole, 16).rightJustified(4, '0') +
             " data=" + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
             " i= "  +QString::number(regNum, 10) + " :" + regName;
+
+    //---- обновим данные и по приходу шкалы и по приходу новых данных регистра
+    regDataArray[regNum].flagNewData = true; // флаг получения нового значения
 };
 
 

@@ -526,6 +526,7 @@ struct registerFields{
     QByteArray regData7{7, Qt::Uninitialized}; // поле данных
     QByteArray regScales7{7, Qt::Uninitialized}; // поле масштабов
     quint8 flagReg; //  флаги регистров побитные
+    bool flagNewData = false; // флаг получения обновленного значения
 
     union{
         quint16 Whole;
