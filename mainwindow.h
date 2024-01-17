@@ -89,9 +89,8 @@ private slots:
     void deleteRowRegistersTable(int index);
     void regDisplayTable();
 
-
-
-
+    QString glueString(quint16 data, quint8 registerInv);
+    QString glueAdapterHeader();
 
     void on_pushButton_sendCommand_clicked();
 
@@ -101,7 +100,9 @@ private slots:
 
     void on_pushButton_alarmInv_clicked();
 
-    void on_tableRegister_cellClicked(int row, int column);
+    void on_tableRegister_cellChanged(int row, int column);
+
+    void on_tableRegister_cellDoubleClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;

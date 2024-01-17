@@ -27,6 +27,7 @@ void MainWindow::createRegistersTable()
 //    ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     // Растягиваем последнюю колонку на всё доступное пространство
  //   ui->tableRegister->horizontalHeader()->setStretchLastSection(true);
+    ui->tableRegister->blockSignals(true);
 }
 
 void MainWindow::addRowRegistersTable(int regNum, QString regName)
@@ -78,14 +79,37 @@ void MainWindow::addRowRegistersTable(int regNum, QString regName)
 
 
 // контроль выбранной ячейки
-static int selectedRow = 0;
-static int selectedColumn = 0;
+static int selectedRow = 300;
+static int selectedColumn = 300;
 
-void MainWindow::on_tableRegister_cellClicked(int row, int column)
+void MainWindow::on_tableRegister_cellDoubleClicked(int row, int column)
 {
     selectedRow = row;
     selectedColumn = column;
     qDebug() << "выбранная ячейка: " << selectedRow << " : " << selectedColumn;
+}
+
+void MainWindow::on_tableRegister_cellChanged(int row, int column)
+{
+ //   ui->tableRegister->blockSignals(true); // заблокировать фоновые события
+    if((row == selectedRow) && (column == selectedColumn)){
+        if((!!(ui->tableRegister->item(1, column))) && (!!(ui->tableRegister->item(row, column)))){
+            ui->tableRegister->item(row, column)->setForeground(Qt::green);
+            quint16 regData = ui->tableRegister->item(row, column)->text().toUShort();
+            quint8 regNumber = quint8(ui->tableRegister->item(row, 0)->text().toUInt());
+            qDebug() << "cellChanged ячейки №: "  << regNumber
+                     << "; new value=" << regData;
+
+            QString commandString = AddCRC((glueAdapterHeader() + glueString(regData, regNumber)), 2).toHex();
+            ui->textEdit_commandCRC->append(commandString);
+            writeSerialPort(commandString);
+           selectedRow = 300;
+           selectedColumn = 300;
+           regDataArray[regNumber].flagNewData = false;
+        }
+
+    }
+
 }
 
 void MainWindow::deleteRowRegistersTable(int index)
@@ -105,8 +129,8 @@ void MainWindow::deleteRowRegistersTable(int index)
 //------------------Вывод значений регистров в таблицу-----------------
 void MainWindow::regDisplayTable()
 {
+    if( ui->tableRegister->signalsBlocked()) ui->tableRegister->blockSignals(false);
     for(int i = 0; i <= ui->tableRegister->rowCount(); i++){
-
 
         QTableWidgetItem *currentRegNum = ui->tableRegister->item(i, 0); // номер регистра из нулевого столбца
 
@@ -114,7 +138,7 @@ void MainWindow::regDisplayTable()
             int regNum = currentRegNum->text().toInt();
             qint16 valueInt = regDataArray[regNum].value.Reg16;
             if(regDataArray[regNum].flagNewData){ // если получили новое значение
-                qDebug() << "у регистра №" << regNum << " обновилось значение";
+             //   qDebug() << "у регистра №" << regNum << " обновилось значение";
                 regDataArray[regNum].flagNewData = false; // сброс флага
 
                 QString min = "-";
@@ -164,6 +188,7 @@ void MainWindow::regDisplayTable()
     //                    ui->tableRegister->item(i, 6)->setText(ui->tableRegister->item(i, 6)->text());
 
                        qDebug() << "ячейку currentRegData можно редактировать";
+                     //  connect(ui->tableRegister, SIGNAL(cellChanged(i, 6)), SLOT(tableRegister_cellChanged(i, 6)));
                     }
                     else {
                         ui->tableRegister->item(i, 6)->setText(value);

@@ -13,10 +13,10 @@ void MainWindow::on_pushButton_sendCommand_clicked()
     ui->textEdit_commandCRC->append(AddCRC((AD_COM_SET_HEAD + commandString), 2).toHex()); // провериь, что без последующего чтения идет запись и убрать!!!!
 }
 
-QString glueString(quint16 data){
+QString MainWindow::glueString(quint16 data, quint8 registerInv){
     QString writeHeader = QString::number(REGISTER_WRITE_ID, 16).rightJustified(4, '0')
             + QString::number(IREG_INV_LEN, 16).rightJustified(2, '0')
-            + QString::number(IREG_INV_CONTROL, 16).rightJustified(2, '0')
+            + QString::number(registerInv, 16).rightJustified(2, '0')
             + QString::number(data, 16).rightJustified(4, '0');
     qDebug() << "формируем команду управления: " <<  writeHeader;
     return writeHeader;
@@ -26,7 +26,7 @@ QString glueString(quint16 data){
 
 // формируем заголовок стандартной CAN посылки в адаптер
 static quint8 numberMessage = 0;
-QString glueAdapterHeader(){
+QString MainWindow::glueAdapterHeader(){
 
     QString writeADHeader = AD_COM_SET_HEAD
             + QString::number(ADAPT_REG_SET_LEN, 16).rightJustified(2, '0')   // длина ПОСЫЛКИ
@@ -42,21 +42,21 @@ QString glueAdapterHeader(){
 
 void MainWindow::on_pushButton_startInv_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_START)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_START, IREG_INV_CONTROL)), 2).toHex();
     ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
 
 void MainWindow::on_pushButton_stopInv_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_STOP)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_STOP, IREG_INV_CONTROL)), 2).toHex();
     ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
 
 void MainWindow::on_pushButton_alarmInv_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_ALARM)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_ALARM, IREG_INV_CONTROL)), 2).toHex();
     ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
