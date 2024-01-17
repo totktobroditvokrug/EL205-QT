@@ -1,6 +1,27 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+// функция смены младший-старший байт
+
+quint16 changeHiLowBytes(quint16 dataIn){
+    struct twoBytes{
+        union{          // значение регистра
+           quint16 Reg16;
+           struct {
+               quint8 LowerByte;
+               quint8 UpperByte;
+           };
+        } value;
+    };
+    twoBytes direct;
+    twoBytes reverse;
+    direct.value.Reg16 = dataIn;
+    reverse.value.LowerByte = direct.value.UpperByte;
+    reverse.value.UpperByte = direct.value.LowerByte;
+    quint16 dataOut = reverse.value.Reg16;
+    return dataOut;
+}
+
 void MainWindow::createRegistersTable()
 {
     qDebug() << "создать таблицу регистров";
@@ -91,11 +112,12 @@ void MainWindow::on_tableRegister_cellDoubleClicked(int row, int column)
 
 void MainWindow::on_tableRegister_cellChanged(int row, int column)
 {
- //   ui->tableRegister->blockSignals(true); // заблокировать фоновые события
+
     if((row == selectedRow) && (column == selectedColumn)){
         if((!!(ui->tableRegister->item(1, column))) && (!!(ui->tableRegister->item(row, column)))){
             ui->tableRegister->item(row, column)->setForeground(Qt::green);
-            quint16 regData = ui->tableRegister->item(row, column)->text().toUShort();
+            QString newValueString = ui->tableRegister->item(row, column)->text();
+            quint16 regData = changeHiLowBytes(newValueString.toUShort());
             quint8 regNumber = quint8(ui->tableRegister->item(row, 0)->text().toUInt());
             qDebug() << "cellChanged ячейки №: "  << regNumber
                      << "; new value=" << regData;
@@ -106,6 +128,8 @@ void MainWindow::on_tableRegister_cellChanged(int row, int column)
            selectedRow = 300;
            selectedColumn = 300;
            regDataArray[regNumber].flagNewData = false;
+           ui->tableRegister->item(row, column)->setText(newValueString);
+            ui->tableRegister->blockSignals(true); // заблокировать фоновые события
         }
 
     }
