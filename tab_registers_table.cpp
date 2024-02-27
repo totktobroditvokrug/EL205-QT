@@ -3,13 +3,13 @@
 
 // функция смены младший-старший байт
 
-quint16 changeHiLowBytes(quint16 dataIn){
+qint16 changeHiLowBytes(qint16 dataIn){
     struct twoBytes{
         union{          // значение регистра
-           quint16 Reg16;
+           qint16 Reg16;
            struct {
-               quint8 LowerByte;
-               quint8 UpperByte;
+               qint8 LowerByte;
+               qint8 UpperByte;
            };
         } value;
     };
@@ -18,7 +18,7 @@ quint16 changeHiLowBytes(quint16 dataIn){
     direct.value.Reg16 = dataIn;
     reverse.value.LowerByte = direct.value.UpperByte;
     reverse.value.UpperByte = direct.value.LowerByte;
-    quint16 dataOut = reverse.value.Reg16;
+    qint16 dataOut = reverse.value.Reg16;
     return dataOut;
 }
 
@@ -107,7 +107,7 @@ void MainWindow::on_tableRegister_cellDoubleClicked(int row, int column)
 {
     selectedRow = row;
     selectedColumn = column;
-    qDebug() << "выбранная ячейка: " << selectedRow << " : " << selectedColumn;
+   // qDebug() << "выбранная ячейка: " << selectedRow << " : " << selectedColumn;
 }
 
 void MainWindow::on_tableRegister_cellChanged(int row, int column)
@@ -117,10 +117,13 @@ void MainWindow::on_tableRegister_cellChanged(int row, int column)
         if((!!(ui->tableRegister->item(1, column))) && (!!(ui->tableRegister->item(row, column)))){
             ui->tableRegister->item(row, column)->setForeground(Qt::green);
             QString newValueString = ui->tableRegister->item(row, column)->text();
-            quint16 regData = changeHiLowBytes(newValueString.toUShort());
+            qint16 regDataPrimary = newValueString.toShort();
+//            qDebug() << "выбранная ячейка HEX:" <<  QString::number(regDataPrimary, 16).rightJustified(4, '0') << " BIN: " << QString::number(regDataPrimary, 2).rightJustified(16, '0');
+            qint16 regData = changeHiLowBytes(regDataPrimary);
+//            qDebug() << "смена байт HEX:" <<  QString::number(regData, 16).rightJustified(4, '0') << " BIN: " << QString::number(regData, 2).rightJustified(16, '0');
             quint8 regNumber = quint8(ui->tableRegister->item(row, 0)->text().toUInt());
-            qDebug() << "cellChanged ячейки №: "  << regNumber
-                     << "; new value=" << regData;
+//            qDebug() << "cellChanged ячейки №: "  << regNumber
+//                     << "; new value=" << QString::number(changeHiLowBytes(regData), 10);
 
             QString commandString = AddCRC((glueAdapterHeader() + glueString(regData, regNumber)), 2).toHex();
             ui->textEdit_commandCRC->append(commandString);
@@ -160,11 +163,20 @@ void MainWindow::regDisplayTable()
 
         if (!!currentRegNum) { // если ячейка не NULL
             int regNum = currentRegNum->text().toInt();
-            qint16 valueInt = regDataArray[regNum].value.Reg16;
-            if(regDataArray[regNum].flagNewData){ // если получили новое значение
-             //   qDebug() << "у регистра №" << regNum << " обновилось значение";
+
+            if((regNum <= 0) & (regNum >= 255)) qDebug() << "невалидный номер регистра. regNum=" << regNum;
+
+            if(!!regDataArray[regNum].flagNewData){ // если получили новое значение
+              //  qDebug() << "у регистра №" << regNum << " обновилось значение";
                 regDataArray[regNum].flagNewData = false; // сброс флага
 
+                //---- заполняем данные только если был флаг прихода нового значения регистра и данные валидны
+                qint16 valueInt = 0;
+                if(!!regDataArray[regNum].value.Reg16){
+
+                    valueInt = regDataArray[regNum].value.Reg16;
+                  //  qDebug() << "данные валидны: valueInt=" << valueInt;
+                }
                 QString min = "-";
                 QString max = "-";
                 QString scaleValue = "-";
@@ -172,66 +184,79 @@ void MainWindow::regDisplayTable()
                 QString value = QString::number(valueInt, 10); //
                 QString scaledValue = "-";
 
-                if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){
-                   min = QString::number(regDataArray[regNum].min.Reg16, 10);
-                }
-                if(regDataArray[regNum].flagReg & IREGF_MAX_PRESENT){
-                   max = QString::number(regDataArray[regNum].max.Reg16, 10);
-                }
-                if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){
-                   scaleValue = QString::number(regDataArray[regNum].scale.Reg16, 10);
-                }
-                if(regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT){
-                   maxValue = QString::number(regDataArray[regNum].maxValue.Reg16, 10);
-                }
 
-                //------ расчет значение при наличии шкалы
-                if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
-                   qint32 scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
-                   scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
-                }
-
-                ui->tableRegister->item(i, 2)->setText(min);
-                ui->tableRegister->item(i, 3)->setText(max);
-                ui->tableRegister->item(i, 4)->setText(scaleValue);
-                ui->tableRegister->item(i, 5)->setText(maxValue);
-
-                //------ определить, можно ли редактировать регистр
-                if(!(regDataArray[regNum].flagReg & IREGF_READONLY)){
-                    ui->tableRegister->item(i, 6)->setForeground(Qt::blue);
-                    ui->tableRegister->item(i, 7)->setForeground(Qt::blue);
-    //                ui->tableRegister->item(i, 6)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
-    //                ui->tableRegister->item(i, 7)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
-                   // qDebug() << "регистр можно редактировать";
-                    // если  ячейка редактируется, не меняем ее
-
-                    if((i == selectedRow) && (selectedColumn == 6)){
-    //                    if(ui->tableRegister->item(i, 6)->isSelected()){
-    //                        qDebug() << "ячейка currentRegData isSelected()";
-    //                    }
-    //                    ui->tableRegister->item(i, 6)->setText(ui->tableRegister->item(i, 6)->text());
-
-                       qDebug() << "ячейку currentRegData можно редактировать";
-                     //  connect(ui->tableRegister, SIGNAL(cellChanged(i, 6)), SLOT(tableRegister_cellChanged(i, 6)));
+                if(!!regDataArray[regNum].flagReg){
+                   // qDebug() << "флаг регистров валиден: " << regDataArray[regNum].flagReg;
+                    if(regDataArray[regNum].flagReg){
+                        min = QString::number(regDataArray[regNum].min.Reg16, 10);
                     }
-                    else {
+
+                    if(regDataArray[regNum].flagReg & IREGF_MAX_PRESENT){
+                       max = QString::number(regDataArray[regNum].max.Reg16, 10);
+                    }
+                    if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){
+                       scaleValue = QString::number(regDataArray[regNum].scale.Reg16, 10);
+                    }
+                    if(regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT){
+                       maxValue = QString::number(regDataArray[regNum].maxValue.Reg16, 10);
+                    }
+
+                    //------ расчет значение при наличии шкалы
+                    qint32 scaledValueInt = 0;
+                    if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
+                       if((regDataArray[regNum].scale.Reg16 == 0) || (regDataArray[regNum].maxValue.Reg16 == 0)){
+                         //  qDebug() << "деление на ноль";
+                           scaledValue = "Error";
+                       }
+                       else{
+                           scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
+                           scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
+                       }
+
+                    }
+
+                    ui->tableRegister->item(i, 2)->setText(min);
+                    ui->tableRegister->item(i, 3)->setText(max);
+                    ui->tableRegister->item(i, 4)->setText(scaleValue);
+                    ui->tableRegister->item(i, 5)->setText(maxValue);
+
+                    //------ определить, можно ли редактировать регистр
+                    if(!(regDataArray[regNum].flagReg & IREGF_READONLY)){
+                        ui->tableRegister->item(i, 6)->setForeground(Qt::blue);
+                        ui->tableRegister->item(i, 7)->setForeground(Qt::blue);
+        //                ui->tableRegister->item(i, 6)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+        //                ui->tableRegister->item(i, 7)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+                       // qDebug() << "регистр можно редактировать";
+                        // если  ячейка редактируется, не меняем ее
+
+                        if((i == selectedRow) && (selectedColumn == 6)){
+        //                    if(ui->tableRegister->item(i, 6)->isSelected()){
+        //                        qDebug() << "ячейка currentRegData isSelected()";
+        //                    }
+        //                    ui->tableRegister->item(i, 6)->setText(ui->tableRegister->item(i, 6)->text());
+
+                       //    qDebug() << "ячейку currentRegData можно редактировать";
+                         //  connect(ui->tableRegister, SIGNAL(cellChanged(i, 6)), SLOT(tableRegister_cellChanged(i, 6)));
+                        }
+                        else {
+                            ui->tableRegister->item(i, 6)->setText(value);
+                           // qDebug() << "ячейку currentRegData перезаписали";
+                        }
+
+                        if((i == selectedRow) &&  (selectedColumn == 7)){
+
+                          //  qDebug() << "ячейку currentRegScaledValue можно редактировать";
+                        }
+                        else ui->tableRegister->item(i, 7)->setText(scaledValue);
+                    }
+                    else{
+                        ui->tableRegister->item(i, 6)->setFlags(Qt::NoItemFlags);
+                        ui->tableRegister->item(i, 7)->setFlags(Qt::NoItemFlags);
+                        ui->tableRegister->item(i, 6)->setForeground(Qt::red);
+                        ui->tableRegister->item(i, 7)->setForeground(Qt::red);
                         ui->tableRegister->item(i, 6)->setText(value);
-                       // qDebug() << "ячейку currentRegData перезаписали";
+                        ui->tableRegister->item(i, 7)->setText(scaledValue);
                     }
-
-                    if((i == selectedRow) &&  (selectedColumn == 7)){
-
-                        qDebug() << "ячейку currentRegScaledValue можно редактировать";
-                    }
-                    else ui->tableRegister->item(i, 7)->setText(scaledValue);
-                }
-                else{
-                    ui->tableRegister->item(i, 6)->setFlags(Qt::NoItemFlags);
-                    ui->tableRegister->item(i, 7)->setFlags(Qt::NoItemFlags);
-                    ui->tableRegister->item(i, 6)->setForeground(Qt::red);
-                    ui->tableRegister->item(i, 7)->setForeground(Qt::red);
-                    ui->tableRegister->item(i, 6)->setText(value);
-                    ui->tableRegister->item(i, 7)->setText(scaledValue);
                 }
             }
         }

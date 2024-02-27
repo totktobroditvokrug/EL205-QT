@@ -13,12 +13,12 @@ void MainWindow::on_pushButton_sendCommand_clicked()
     ui->textEdit_commandCRC->append(AddCRC((AD_COM_SET_HEAD + commandString), 2).toHex()); // провериь, что без последующего чтения идет запись и убрать!!!!
 }
 
-QString MainWindow::glueString(quint16 data, quint8 registerInv){
+QString MainWindow::glueString(quint16 data, quint8 registerInv){ // !!!! без quint не оттрабатывает отрицательные значения !!!!!!
     QString writeHeader = QString::number(REGISTER_WRITE_ID, 16).rightJustified(4, '0')
             + QString::number(IREG_INV_LEN, 16).rightJustified(2, '0')
             + QString::number(registerInv, 16).rightJustified(2, '0')
             + QString::number(data, 16).rightJustified(4, '0');
-    qDebug() << "формируем команду управления: " <<  writeHeader;
+   // qDebug() << "формируем команду управления: " <<  writeHeader;
     return writeHeader;
 }
 
@@ -32,7 +32,7 @@ QString MainWindow::glueAdapterHeader(){
             + QString::number(ADAPT_REG_SET_LEN, 16).rightJustified(2, '0')   // длина ПОСЫЛКИ
             + QString::number(ADAPT_TYPE_STD_CAN, 16).rightJustified(2, '0')  // признак стандартного CAN
             + QString::number(numberMessage, 16).rightJustified(2, '0');
-    qDebug() << "формируем заголовок записи в адаптер: " <<  writeADHeader;
+  //  qDebug() << "формируем заголовок записи в адаптер: " <<  writeADHeader;
 
     numberMessage++;
     if (numberMessage > 250) numberMessage = 0;

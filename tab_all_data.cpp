@@ -24,7 +24,7 @@ void MainWindow::readStream()
                                                              regDataArray).join("\n"));
 
 
-            regDisplay(); // как только прошел парсинг- выдаем данные
+            // regDisplay(); // как только прошел парсинг- выдаем данные
             regDisplayTable();
 
 
