@@ -170,13 +170,9 @@ void MainWindow::regDisplayTable()
               //  qDebug() << "у регистра №" << regNum << " обновилось значение";
                 regDataArray[regNum].flagNewData = false; // сброс флага
 
-                //---- заполняем данные только если был флаг прихода нового значения регистра и данные валидны
-                qint16 valueInt = 0;
-                if(!!regDataArray[regNum].value.Reg16){
+                //---- заполняем данные только если был флаг прихода нового значения регистра
+                qint16 valueInt = regDataArray[regNum].value.Reg16;
 
-                    valueInt = regDataArray[regNum].value.Reg16;
-                  //  qDebug() << "данные валидны: valueInt=" << valueInt;
-                }
                 QString min = "-";
                 QString max = "-";
                 QString scaleValue = "-";
@@ -185,8 +181,6 @@ void MainWindow::regDisplayTable()
                 QString scaledValue = "-";
 
 
-                if(!!regDataArray[regNum].flagReg){
-                   // qDebug() << "флаг регистров валиден: " << regDataArray[regNum].flagReg;
                     if(regDataArray[regNum].flagReg){
                         min = QString::number(regDataArray[regNum].min.Reg16, 10);
                     }
@@ -257,7 +251,7 @@ void MainWindow::regDisplayTable()
                         ui->tableRegister->item(i, 6)->setText(value);
                         ui->tableRegister->item(i, 7)->setText(scaledValue);
                     }
-                }
+
             }
         }
     }
