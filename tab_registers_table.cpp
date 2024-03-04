@@ -125,7 +125,7 @@ void MainWindow::on_tableRegister_cellChanged(int row, int column)
 //            qDebug() << "cellChanged ячейки №: "  << regNumber
 //                     << "; new value=" << QString::number(changeHiLowBytes(regData), 10);
 
-            QString commandString = AddCRC((glueAdapterHeader() + glueString(regData, regNumber)), 2).toHex();
+            QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(regData), regNumber)), 2).toHex();
             ui->textEdit_commandCRC->append(commandString);
             writeSerialPort(commandString);
            selectedRow = 300;
@@ -168,7 +168,10 @@ void MainWindow::regDisplayTable()
 
             if(!!regDataArray[regNum].flagNewData){ // если получили новое значение
               //  qDebug() << "у регистра №" << regNum << " обновилось значение";
-                regDataArray[regNum].flagNewData = false; // сброс флага
+
+              //  regDataArray[regNum].flagNewData = false; // сброс флага
+
+
 
                 //---- заполняем данные только если был флаг прихода нового значения регистра
                 qint16 valueInt = regDataArray[regNum].value.Reg16;
