@@ -54,7 +54,7 @@ private slots:
     void on_comboBox_canFreq_currentIndexChanged(int index); // частота опроса CAN шины
     void on_comboBox_readAllCan_currentIndexChanged(int index); // выбор фильтра CAN шины
 //    void writeConfigAdapter(QString configString); //
-//    void on_pushButton_setConfigAdapter_clicked(); // конфигурация адаптера по комбобоксам
+    void on_pushButton_setConfigAdapter_clicked(); // конфигурация адаптера по комбобоксам
     void init_setConfigAdapter(); // инициализация адаптера по умолчанию
 
     // получение данных от CAN адаптера
@@ -80,9 +80,6 @@ private slots:
     void addItemFromlistwidget(QListWidgetItem *item, quint8 index, QString regName);
     void deleteItemFromlistwidget(QListWidgetItem *item, quint8 index);
 
-    // вывод значений регистров в отдельной вкладке
-    void regDisplay();
-
     // работа с таблицей регистров
     void createRegistersTable();
     void addRowRegistersTable(int index, QString regName);
@@ -104,6 +101,10 @@ private slots:
 
     void on_tableRegister_cellDoubleClicked(int row, int column);
 
+    void on_pushButton_saveTable_clicked();
+
+    void on_pushButton_loadTable_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -112,5 +113,6 @@ private:
  //   QTimer *timerRegDisplay; // таймер вывода регистров на дисплей
     QVector<QString> regNumList; // формирование списка регистров
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
+    QStringList adapterAnswerList; // ошибки адаптера и дежурные ответы
 };
 #endif // MAINWINDOW_H

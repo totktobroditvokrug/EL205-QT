@@ -38,6 +38,7 @@ void MainWindow::on_pushButton_searchListPort_clicked() // список дост
 }
 
 void MainWindow::initTabCan(){
+    qDebug() << "инициализация комбо-боксов и кнопок;";
     // Сбросить биты контроля состояния порта
     ui->label_nameOk->setText("-");
     ui->label_baudOk->setText("-");
@@ -104,6 +105,10 @@ void MainWindow::initTabCan(){
 
 void MainWindow::on_pushButton_connect_clicked()
 {
+    qDebug() << "попытка соединиться с портом. Предварительный сброс;";
+
+    serial->close(); // усли порт был открыт, закрываем его
+
     ui->pushButton_connect->setEnabled(false);
 
     ui->comboBox_baudRate->setEnabled(false);
@@ -273,7 +278,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
 void MainWindow::writeSerialPort(QString dataWriteString)
 {
     QByteArray dataWriteIn = QByteArray::fromHex(dataWriteString.toUtf8()); // данные из строки textEdit_sendMessage
-//    qDebug() << "функция записи: " << dataWriteString;
+    qDebug() << "функция записи: " << dataWriteString;
     serial->write(dataWriteIn);
     serial->waitForBytesWritten();
 }
@@ -281,27 +286,22 @@ void MainWindow::writeSerialPort(QString dataWriteString)
 //------------------ Чтение из serialport -----------------
 QByteArray MainWindow::readSerialPort()
 {
+    qDebug() << "запуск чтения порта";
     QByteArray dataRead;
     while (serial->waitForReadyRead(30)) {
         dataRead = serial->readAll();
     }
 
     QByteArray text = dataRead.toHex();
-//    qDebug() << "приняли: " << dataRead.toHex('/');
+    qDebug() << "приняли";
     return text;
 }
 
-//void MainWindow::on_pushButton_sendMessage_clicked() // записать произвольную команду в сериалпорт
-//{
-//    QString dataWriteString = ui->textEdit_sendMessage->toPlainText();
-//    writeSerialPort(dataWriteString);
-//    ui->txtOutput->append(readSerialPort()); // провериь, что без последующего чтения идет запись и убрать!!!!
-//}
-
 //-------------- настройка режима работы адаптера ----------
-
 void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index) // выбор частоты CAN шины
 {
+    // ввести проверку на состояние порта!!!!!
+    qDebug() << "выбор частоты CAN шины; ";
     switch (index) {
         case 0: {
          //  ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_125, 2).toHex());
@@ -320,13 +320,9 @@ void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index) // выбо�
 }
 
 
-//void MainWindow::writeConfigAdapter(QString configString)
-//{
-//    writeSerialPort(configString);
-//}
-
 void MainWindow::on_comboBox_readAllCan_currentIndexChanged(int index) // выбор фильтра CAN шины
 {
+     qDebug() << "выбор фильтра CAN шины; ";
     switch (index) {
         case 0: {
          //  ui->lineEdit_readAllCan->setText(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
@@ -341,14 +337,28 @@ void MainWindow::on_comboBox_readAllCan_currentIndexChanged(int index) // выб
 
 }
 
-//void MainWindow::on_pushButton_setConfigAdapter_clicked() // конфигурация адаптера по комбобоксам
-//{
-//    QString dataWriteString = ui->lineEdit_canFreq->text() + ui->lineEdit_readAllCan->text();
-//    writeSerialPort(dataWriteString);
-//}
+void MainWindow::on_pushButton_setConfigAdapter_clicked() // конфигурация адаптера по комбобоксам
+{
+    init_setConfigAdapter();
+}
 
 void MainWindow::init_setConfigAdapter()
 {
-    QString dataWriteString = AddCRC(AD_COM_SET_FREQ_CAN_250, 2).toHex() + AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex();
+    QString setFreqCan = AD_COM_SET_FREQ_CAN_250; // по умолчанию 250
+    int index = ui->comboBox_canFreq->currentIndex();
+    qDebug() << "принудительная инициализация адаптера. index=" << index;
+    switch (index) {
+        case 0: {
+           setFreqCan = AD_COM_SET_FREQ_CAN_125;
+        } break;
+        case 1: {
+           setFreqCan = AD_COM_SET_FREQ_CAN_250;
+        } break;
+        case 2: {
+          setFreqCan = AD_COM_SET_FREQ_CAN_500;
+        } break;
+       // default: ui->lineEdit_canFreq->setText("не установлена частота CAN");
+    }
+    QString dataWriteString = AddCRC(setFreqCan, 2).toHex() + AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex();
     writeSerialPort(dataWriteString);
 }

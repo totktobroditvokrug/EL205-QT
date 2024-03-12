@@ -24,7 +24,7 @@ void MainWindow::on_pushButton_saveRegToFile_clicked()
 
     QFile file(pathSave);
      // Открываем файл, создаем, если его не существует
-    if((file.open(QIODevice::ReadWrite | QIODevice::Text))){
+    if((file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))){
         QTextStream stream(&file);
         stream << ui->textEdit_selectedRegNum->toPlainText();
         file.close();
@@ -59,8 +59,10 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
            item->setText(stringArray.at(i));
            item->setCheckState(Qt::Unchecked);
            ui->listWidget_regNum->addItem(item);
-           file.close();
+
+
         }
+        file.close(); // перенести на после for !!!!!!!!!
     }
     else ui->statusbar->showMessage("Ошибка: error opening output file");
 }

@@ -4,10 +4,13 @@
 //------------------ Чтение потока из serialport -----------------
 void MainWindow::readStream()
 {
+    // QStringList adapterAnswerList; // ошибки адаптера и дежурные ответы
     QByteArray dataRead;    // принятая куча из COM- порта
     bool checkStandart = ui->checkBox_canStandart->checkState();
     bool checkExtended = ui->checkBox_canExtended->checkState();
     bool checkAnswer = ui->checkBox_adapterAnswer->checkState();
+
+    // qDebug() << "запуск чтения порта";
 
     dataRead.clear();
     while (serial->waitForReadyRead(30))
@@ -15,18 +18,21 @@ void MainWindow::readStream()
         if ((serial->bytesAvailable())>8) // если пришло достаточное количество байт, то читаем
         {
             ui->lineEdit_availableByte->setText(QString::number(serial->bytesAvailable(), 10));
+            // qDebug() << "прочитано " << QString::number(serial->bytesAvailable(), 10) << " байт";
             dataRead = serial->readAll();
             ui->textEdit_dataRead->setText(handleUartParsing(dataRead,
                                                              checkStandart,
                                                              checkExtended,
                                                              checkAnswer,
                                                              regNumList,
-                                                             regDataArray).join("\n"));
+                                                             regDataArray,
+                                                             &adapterAnswerList).join("\n"));
 
 
             // regDisplay(); // как только прошел парсинг- выдаем данные
             regDisplayTable();
-
+            // qDebug() << adapterAnswerList.join("\n");
+            ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n"));
 
             return;  // обработали валидное количество байт. Выходим из функции запроса
         }

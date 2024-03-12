@@ -25,7 +25,6 @@ SOURCES += \
     tab_can_adapter.cpp \
     tab_control.cpp \
     tab_register_list.cpp \
-    tab_register_widget.cpp \
     tab_registers_table.cpp
 
 HEADERS += \

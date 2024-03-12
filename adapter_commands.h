@@ -74,6 +74,7 @@ QStringList handleUartParsing(
         bool checkExtended,
         bool checkAnswer,
         QVector<QString> regNumList,
-        registerFields *regDataArray);
+        registerFields *regDataArray,
+        QStringList *adapterAnswerList);
 
 #endif // ADAPTER_COMMANDS_H

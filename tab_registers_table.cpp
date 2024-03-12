@@ -169,7 +169,7 @@ void MainWindow::regDisplayTable()
             if(!!regDataArray[regNum].flagNewData){ // если получили новое значение
               //  qDebug() << "у регистра №" << regNum << " обновилось значение";
 
-              //  regDataArray[regNum].flagNewData = false; // сброс флага
+              //  regDataArray[regNum].flagNewData = false; // сброс флага лишает возможности дублировать регистры
 
 
 
@@ -182,6 +182,11 @@ void MainWindow::regDisplayTable()
                 QString maxValue = "-";
                 QString value = QString::number(valueInt, 10); //
                 QString scaledValue = "-";
+
+//                if(regNum == 128){
+//                    qDebug() << "пришел регистр 128:" <;
+
+//                }
 
 
                     if(regDataArray[regNum].flagReg){
@@ -223,7 +228,7 @@ void MainWindow::regDisplayTable()
                         ui->tableRegister->item(i, 7)->setForeground(Qt::blue);
         //                ui->tableRegister->item(i, 6)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
         //                ui->tableRegister->item(i, 7)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
-                       // qDebug() << "регистр можно редактировать";
+        //                qDebug() << regNum << " :регистр можно редактировать";
                         // если  ячейка редактируется, не меняем ее
 
                         if((i == selectedRow) && (selectedColumn == 6)){
@@ -259,3 +264,43 @@ void MainWindow::regDisplayTable()
         }
     }
 }
+
+
+// --------------------   чтение и запись таблицы  -----------------------
+
+void MainWindow::on_pushButton_saveTable_clicked()
+{    QFileDialog dialogSave;
+     QString pathSave = dialogSave.getSaveFileName();
+     qDebug() << "записываем файл с таблицей регистров: " << pathSave;
+
+     QFile file(pathSave);
+      // Открываем файл, создаем, если его не существует
+     if((file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))){
+         QTextStream stream(&file);
+         stream << " check write value registers";
+         file.close();
+     }
+     else ui->statusbar->showMessage("Ошибка: error opening output file");
+
+}
+
+void MainWindow::on_pushButton_loadTable_clicked()
+{
+    qDebug() << "открываем файл со значениями регистров";
+    QFileDialog dialogOpen;
+    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "Текстовый файл (*.txt)");
+    qDebug() << "Выбранный файл: " << fileName;
+    QFile file(fileName);
+    if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
+        QTextStream stream(&file);
+        QString readStr = stream.readAll();
+        qDebug() << readStr;
+
+        file.close();
+
+    }
+    else ui->statusbar->showMessage("Ошибка: error opening output file");
+
+}
+
+

@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
         tempVector[i] = value;
     }
     regNumList = tempVector;  // инициализация списка регистров
-
+    adapterAnswerList.clear(); // ошибки адаптера и дежурные ответы
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
 
@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->lineEdit_volumeTextRead->setText("50");
     ui->textEdit_dataRead->document()->setMaximumBlockCount(50); //
+
+    qDebug() << "объявляем serial";
     serial = new QSerialPort;
 
     initTabCan(); // установить активность кнопок
