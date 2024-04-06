@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1450</width>
-    <height>797</height>
+    <height>901</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -685,7 +685,7 @@
           <x>0</x>
           <y>80</y>
           <width>1200</width>
-          <height>1500</height>
+          <height>800</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -697,7 +697,7 @@
         <property name="minimumSize">
          <size>
           <width>1200</width>
-          <height>1500</height>
+          <height>800</height>
          </size>
         </property>
         <property name="sizeAdjustPolicy">
@@ -788,6 +788,39 @@
           </widget>
          </item>
         </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Table from file</string>
+       </attribute>
+       <widget class="QTableWidget" name="tableFromFile">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1200</width>
+          <height>800</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>1200</width>
+          <height>800</height>
+         </size>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustToContents</enum>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_4">

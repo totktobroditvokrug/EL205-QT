@@ -25,6 +25,8 @@ qint16 changeHiLowBytes(qint16 dataIn){
 void MainWindow::createRegistersTable()
 {
     qDebug() << "создать таблицу регистров";
+    ui->tableRegister->clear();
+    ui->tableRegister->setRowCount(0); // очистить предыдущую таблицу
     QStringList headers;
     headers << "№"
             << "Name"
@@ -269,6 +271,96 @@ void MainWindow::regDisplayTable()
 
 // --------------------   чтение и запись таблицы  -----------------------
 
+void MainWindow::createTableFromFile()
+{
+    qDebug() << "таблица из файла";
+//    ui->tableFromFile->clear();
+//    ui->tableFromFile->setRowCount(0); // очистить предыдущую таблицу
+    QStringList headers;
+    headers << "№"
+            << "Name"
+            << "min"
+            << "max"
+            << "scale"
+            << "maxValue"
+            << "value"
+            << "scaledValue";
+    // добавить архив для data
+
+    ui->tableFromFile->setColumnCount(8); // Указываем число колонок
+    ui->tableFromFile->setShowGrid(true); // Включаем сетку
+    // Разрешаем выделение только одного элемента
+//    ui->tableRegister->setSelectionMode(QAbstractItemView::SingleSelection);
+    // Разрешаем выделение построчно
+ //   ui->tableRegister->setSelectionBehavior(QAbstractItemView::SelectRows);
+    // Устанавливаем заголовки колонок
+    ui->tableFromFile->setHorizontalHeaderLabels(headers);
+//    ui->tableRegister->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//    ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    // Растягиваем последнюю колонку на всё доступное пространство
+ //   ui->tableRegister->horizontalHeader()->setStretchLastSection(true);
+    ui->tableFromFile->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    ui->tableFromFile->blockSignals(true);
+}
+
+void MainWindow::addRowTableFromFile(QString lineFromFile)
+{
+    QStringList splitIntoColumns = lineFromFile.split(";"); // разделяем по столбцам
+
+
+    int prevRowCount = ui->tableFromFile->rowCount(); // определяем текущий размер таблицы
+     qDebug() << prevRowCount << " - " << splitIntoColumns;
+    ui->tableFromFile->insertRow(prevRowCount);
+
+    QString regNumber = splitIntoColumns[0];
+    QString regName = splitIntoColumns[1];
+    QString min = splitIntoColumns[2];
+    QString max = splitIntoColumns[3];
+    QString scaleValue = splitIntoColumns[4];
+    QString maxValue = splitIntoColumns[5];
+    QString value = splitIntoColumns[6];
+    QString scaledValue = splitIntoColumns[7];
+
+
+    QTableWidgetItem *regNum = new QTableWidgetItem(regNumber);
+    QTableWidgetItem *nameReg = new QTableWidgetItem(regName);
+    QTableWidgetItem *currentRegMin = new QTableWidgetItem(min);
+    QTableWidgetItem *currentRegMax = new QTableWidgetItem(max);
+    QTableWidgetItem *currentRegScale = new QTableWidgetItem(scaleValue);
+    QTableWidgetItem *currentRegMaxValue = new QTableWidgetItem(maxValue);
+    QTableWidgetItem *currentRegData = new QTableWidgetItem(value);
+    QTableWidgetItem *currentRegScaledValue = new QTableWidgetItem(scaledValue);
+
+
+    ui->tableFromFile->setItem(prevRowCount, 0, regNum);
+    ui->tableFromFile->setItem(prevRowCount, 1, nameReg);
+    ui->tableFromFile->setItem(prevRowCount, 2, currentRegMin);
+    ui->tableFromFile->setItem(prevRowCount, 3, currentRegMax);
+    ui->tableFromFile->setItem(prevRowCount, 4, currentRegScale);
+    ui->tableFromFile->setItem(prevRowCount, 5, currentRegMaxValue);
+    ui->tableFromFile->setItem(prevRowCount, 6, currentRegData);
+    ui->tableFromFile->setItem(prevRowCount, 7, currentRegScaledValue);
+
+    ui->tableFromFile->item(prevRowCount, 1)->setBackground(Qt::lightGray);
+    ui->tableFromFile->setColumnWidth(1, 220);
+
+
+    ui->tableFromFile->item(prevRowCount, 0)->setBackground(Qt::lightGray);
+    ui->tableFromFile->setColumnWidth(0, 70);
+
+//    // запрет редактирования и выбора ячеек по умолчанию
+//    ui->tableRegister->item(prevRowCount, 0)->setFlags(Qt::NoItemFlags);
+//    ui->tableRegister->item(prevRowCount, 1)->setFlags(Qt::NoItemFlags);
+//    ui->tableRegister->item(prevRowCount, 2)->setFlags(Qt::NoItemFlags);
+//    ui->tableRegister->item(prevRowCount, 3)->setFlags(Qt::NoItemFlags);
+//    ui->tableRegister->item(prevRowCount, 4)->setFlags(Qt::NoItemFlags);
+//    ui->tableRegister->item(prevRowCount, 5)->setFlags(Qt::NoItemFlags);
+//    ui->tableRegister->item(prevRowCount, 6)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+//    ui->tableRegister->item(prevRowCount, 7)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+//    ui->tableRegister->item(prevRowCount, 6)->setFlags(Qt::NoItemFlags);
+//    ui->tableRegister->item(prevRowCount, 7)->setFlags(Qt::NoItemFlags);
+}
+
 void MainWindow::on_pushButton_saveTable_clicked()
 {    QFileDialog dialogSave;
      QString pathSave = dialogSave.getSaveFileName(nullptr, "Save file", "/", "table (*.csv)");
@@ -287,6 +379,7 @@ void MainWindow::on_pushButton_saveTable_clicked()
          for (int j = 0; j < columns; j++) {
              headers += (ui->tableRegister->horizontalHeaderItem(j)->text() + ";");
          }
+//         headers.chop(1);
          headers += "\n";
          //stream << headers;
          qDebug() << headers;
@@ -297,6 +390,7 @@ void MainWindow::on_pushButton_saveTable_clicked()
                      textData += ui->tableRegister->item(i, j)->text();
                      textData += ";";      // для .csv формата в экселе нужен разделитель ;
              }
+//             textData.chop(1);
              textData += "\n";             // перенос строки
 
          }
@@ -315,9 +409,15 @@ void MainWindow::on_pushButton_loadTable_clicked()
     qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
+//        QTableWidget tabFromFile = ui->tableFromFile;
+        createTableFromFile();
         QTextStream stream(&file);
         QString readStr = stream.readAll();
-        qDebug() << readStr;
+        QStringList splitIntoLines = readStr.split("\n", QString::SkipEmptyParts); // разделяем на строки таблиц
+        int rows = splitIntoLines.size();
+        for (int i = 1; i < rows; i++){ // Считываем без заголовка
+            addRowTableFromFile(splitIntoLines[i]);
+        }
 
         file.close();
 

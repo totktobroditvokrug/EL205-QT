@@ -85,6 +85,8 @@ private slots:
     void addRowRegistersTable(int index, QString regName);
     void deleteRowRegistersTable(int index);
     void regDisplayTable();
+    void createTableFromFile();
+    void addRowTableFromFile(QString lineFromFile);
 
     QString glueString(quint16 data, quint8 registerInv);
     QString glueAdapterHeader();
