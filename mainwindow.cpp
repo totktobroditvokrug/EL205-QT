@@ -1,11 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDesktopWidget>
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.7); // не работает изменение окна
     QVector<QString> tempVector(IREG_INV_ALL_END_REGISTERS);
     for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++) {
         QString value = "unknown";

@@ -48,6 +48,7 @@ void MainWindow::createRegistersTable()
 //    ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     // Растягиваем последнюю колонку на всё доступное пространство
  //   ui->tableRegister->horizontalHeader()->setStretchLastSection(true);
+    ui->tableRegister->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     ui->tableRegister->blockSignals(true);
 }
 
@@ -270,14 +271,36 @@ void MainWindow::regDisplayTable()
 
 void MainWindow::on_pushButton_saveTable_clicked()
 {    QFileDialog dialogSave;
-     QString pathSave = dialogSave.getSaveFileName();
+     QString pathSave = dialogSave.getSaveFileName(nullptr, "Save file", "/", "table (*.csv)");
      qDebug() << "записываем файл с таблицей регистров: " << pathSave;
 
      QFile file(pathSave);
       // Открываем файл, создаем, если его не существует
      if((file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))){
          QTextStream stream(&file);
-         stream << " check write value registers";
+         //stream << " check write value registers";
+         QString headers = "";
+         QString textData = "";
+         int rows = ui->tableRegister->rowCount();
+         int columns = ui->tableRegister->columnCount();
+
+         for (int j = 0; j < columns; j++) {
+             headers += (ui->tableRegister->horizontalHeaderItem(j)->text() + ";");
+         }
+         headers += "\n";
+         //stream << headers;
+         qDebug() << headers;
+
+         for (int i = 0; i < rows; i++) {
+             for (int j = 0; j < columns; j++) {
+
+                     textData += ui->tableRegister->item(i, j)->text();
+                     textData += ";";      // для .csv формата в экселе нужен разделитель ;
+             }
+             textData += "\n";             // перенос строки
+
+         }
+         stream << headers << textData;
          file.close();
      }
      else ui->statusbar->showMessage("Ошибка: error opening output file");
@@ -288,7 +311,7 @@ void MainWindow::on_pushButton_loadTable_clicked()
 {
     qDebug() << "открываем файл со значениями регистров";
     QFileDialog dialogOpen;
-    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "Текстовый файл (*.txt)");
+    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "table (*.csv)");
     qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
