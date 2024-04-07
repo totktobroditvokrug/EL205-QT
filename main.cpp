@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     QScrollArea scrollArea;
     scrollArea.setWidget(&w);
+    scrollArea.setMinimumSize(1100, 800);
     scrollArea.show();
-    // w.show();
+ //    w.show();
     return a.exec();
 }

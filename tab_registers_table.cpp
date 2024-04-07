@@ -307,6 +307,7 @@ void MainWindow::addRowTableFromFile(QString lineFromFile)
 {
     QStringList splitIntoColumns = lineFromFile.split(";"); // разделяем по столбцам
 
+    if (splitIntoColumns.size() < 8) return; // выходим, если запись неполная
 
     int prevRowCount = ui->tableFromFile->rowCount(); // определяем текущий размер таблицы
      qDebug() << prevRowCount << " - " << splitIntoColumns;
@@ -415,8 +416,10 @@ void MainWindow::on_pushButton_loadTable_clicked()
         QString readStr = stream.readAll();
         QStringList splitIntoLines = readStr.split("\n", QString::SkipEmptyParts); // разделяем на строки таблиц
         int rows = splitIntoLines.size();
-        for (int i = 1; i < rows; i++){ // Считываем без заголовка
-            addRowTableFromFile(splitIntoLines[i]);
+        if (rows > 1) {
+            for (int i = 1; i < rows; i++){ // Считываем без заголовка
+                        addRowTableFromFile(splitIntoLines[i]);
+                    }
         }
 
         file.close();
