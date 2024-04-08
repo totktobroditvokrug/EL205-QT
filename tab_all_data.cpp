@@ -33,10 +33,12 @@ void MainWindow::readStream()
             regDisplayTable();
             // qDebug() << adapterAnswerList.join("\n");
             ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n"));
+            ui->pushButton_setRegistersFromFile->setEnabled(true);
 
             return;  // обработали валидное количество байт. Выходим из функции запроса
         }
     }
+    ui->pushButton_setRegistersFromFile->setEnabled(false);
     init_setConfigAdapter(); // если не было ничего прочитано, повторно конфигурируем адаптер
        // qDebug() << "не  вышли по return, неполное сообщение";
 
@@ -76,7 +78,7 @@ void MainWindow::on_pushButton_stopRead_clicked()
     ui->pushButton_stopRead->setEnabled(false);
     ui->pushButton_startRead->setEnabled(true);
     ui->pushButton_disconnect->setEnabled(true);
-
+    ui->pushButton_setRegistersFromFile->setEnabled(false);
 }
 
 void MainWindow::on_pushButton_clear_clicked() // очистить поле вывода потока

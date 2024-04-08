@@ -355,6 +355,7 @@ void MainWindow::addRowTableFromFile(QString lineFromFile)
     ui->tableFromFile->setColumnWidth(0, 70);
 
     ui->tableFromFile->item(prevRowCount, 7)->setBackground(Qt::cyan);
+    ui->tableFromFile->item(prevRowCount, 7)->setForeground(Qt::black);
 
     // запрет редактирования и выбора ячеек по умолчанию
     ui->tableFromFile->item(prevRowCount, 0)->setFlags(Qt::NoItemFlags);
@@ -445,29 +446,46 @@ void MainWindow::checkRangeValue()
             int min = ui->tableFromFile->item(i, 2)->text().toInt();
             int max = ui->tableFromFile->item(i, 3)->text().toInt();
             int value = ui->tableFromFile->item(i, 6)->text().toInt();
+            checkValueRegister(i, value);
          //   qDebug() << "проверка диапазона: " << min << " < " << value << " < " << max;
             if((value >= min) && (value <= max)){
                  ui->tableFromFile->item(i, 6)->setForeground(Qt::darkGreen);
                  ui->tableFromFile->item(i, 1)->setBackground(Qt::green);
                  ui->tableFromFile->item(i, 0)->setBackground(Qt::green);
             }
-
             else{
                 ui->tableFromFile->item(i, 6)->setForeground(Qt::red);
                 ui->tableFromFile->item(i, 1)->setBackground(Qt::red);
                 ui->tableFromFile->item(i, 0)->setBackground(Qt::red);
             }
         }
+
     }
 }
 
-void MainWindow::checkValueRegister()
+void MainWindow::checkValueRegister(int i, int value)   // запретить без подключения к CAN
 {
+    QTableWidgetItem *currentRegNum = ui->tableFromFile->item(i, 0); // номер регистра из нулевого столбца
 
+    if (!!currentRegNum) { // если ячейка не NULL
+        int regNum = currentRegNum->text().toInt();
+
+        if((regNum <= 0) & (regNum >= 255)) qDebug() << "невалидный номер регистра. regNum=" << regNum;
+        else{
+            qint16 valueInt = regDataArray[regNum].value.Reg16;
+            QString currentValue = QString::number(valueInt, 10); //
+ //           QTableWidgetItem *currentValue = ui->tableFromFile->item(i, 7); // ячейка текущего значения
+            ui->tableFromFile->item(i, 7)->setText(currentValue);
+            if(value != int(valueInt)){
+                ui->tableFromFile->item(i, 7)->setBackground(Qt::red);
+            }
+            else ui->tableFromFile->item(i, 7)->setBackground(Qt::green);
+        }
+    }
 }
 
 // Проверка значений в таблице на диапазон и сравнение с текущими данными из ПЧ
-void MainWindow::on_pushButton_checkRegistersFromFile_clicked() // запретить без подключения к CAN
+void MainWindow::on_pushButton_checkRegistersFromFile_clicked()
 {
    qDebug() << "проверка таблицы регистров";
    checkRangeValue();

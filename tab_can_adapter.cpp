@@ -100,6 +100,8 @@ void MainWindow::initTabCan(){
 
     ui->comboBox_canFreq->setEnabled(false);
     ui->comboBox_readAllCan->setEnabled(false);
+
+    ui->pushButton_setRegistersFromFile->setEnabled(false);
 }
 
 
@@ -259,6 +261,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
     ui->pushButton_stopRead->setEnabled(false);
     ui->pushButton_startRead->setEnabled(false);
     ui->pushButton_connect->setEnabled(true);
+    ui->pushButton_setRegistersFromFile->setEnabled(false);
 
     ui->pushButton_setConfigAdapter->setEnabled(false);
     ui->comboBox_canFreq->setEnabled(false);

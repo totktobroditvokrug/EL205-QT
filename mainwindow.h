@@ -104,7 +104,7 @@ private slots:
     void on_pushButton_loadTable_clicked();
     void on_pushButton_checkRegistersFromFile_clicked();
     void checkRangeValue();
-    void checkValueRegister();
+    void checkValueRegister(int i, int value);
 
 private:
     Ui::MainWindow *ui;
