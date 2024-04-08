@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1127</width>
-    <height>794</height>
+    <width>1363</width>
+    <height>889</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -151,7 +151,7 @@
           <rect>
            <x>10</x>
            <y>30</y>
-           <width>211</width>
+           <width>171</width>
            <height>16</height>
           </rect>
          </property>
@@ -192,7 +192,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>12.03.24</string>
+          <string>08.04.24</string>
          </property>
         </widget>
        </widget>
@@ -769,13 +769,6 @@
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_loadTable">
-           <property name="text">
-            <string>Load table</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </widget>
@@ -790,9 +783,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
-          <width>1200</width>
-          <height>700</height>
+          <y>50</y>
+          <width>1250</width>
+          <height>731</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -803,13 +796,118 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>1000</width>
+          <width>1100</width>
           <height>500</height>
          </size>
         </property>
         <property name="sizeAdjustPolicy">
          <enum>QAbstractScrollArea::AdjustToContents</enum>
         </property>
+       </widget>
+       <widget class="QWidget" name="horizontalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1101</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMaximumSize</enum>
+           </property>
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="pushButton_loadTable">
+             <property name="minimumSize">
+              <size>
+               <width>200</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Load registers table</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_checkRegistersFromFile">
+             <property name="text">
+              <string>Check registers</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_setRegistersFromFile">
+             <property name="text">
+              <string>Set registers</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QFormLayout" name="formLayout">
+             <property name="formAlignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>File:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEdit_registersFile">
+               <property name="minimumSize">
+                <size>
+                 <width>250</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_4">
@@ -887,7 +985,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1127</width>
+     <width>1363</width>
      <height>26</height>
     </rect>
    </property>

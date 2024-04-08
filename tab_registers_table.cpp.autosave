@@ -461,13 +461,13 @@ void MainWindow::checkRangeValue()
     }
 }
 
-void MainWindow::checkValueRegister()
+void MainWindow::checkValueRegister()   // запретить без подключения к CAN
 {
 
 }
 
 // Проверка значений в таблице на диапазон и сравнение с текущими данными из ПЧ
-void MainWindow::on_pushButton_checkRegistersFromFile_clicked() // запретить без подключения к CAN
+void MainWindow::on_pushButton_checkRegistersFromFile_clicked() 
 {
    qDebug() << "проверка таблицы регистров";
    checkRangeValue();

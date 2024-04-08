@@ -94,18 +94,17 @@ private slots:
     void on_pushButton_sendCommand_clicked();
 
     void on_pushButton_startInv_clicked();
-
     void on_pushButton_stopInv_clicked();
-
     void on_pushButton_alarmInv_clicked();
 
     void on_tableRegister_cellChanged(int row, int column);
-
     void on_tableRegister_cellDoubleClicked(int row, int column);
 
     void on_pushButton_saveTable_clicked();
-
     void on_pushButton_loadTable_clicked();
+    void on_pushButton_checkRegistersFromFile_clicked();
+    void checkRangeValue();
+    void checkValueRegister();
 
 private:
     Ui::MainWindow *ui;
