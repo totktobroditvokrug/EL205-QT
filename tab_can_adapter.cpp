@@ -33,12 +33,12 @@ void MainWindow::on_pushButton_searchListPort_clicked() // список дост
 
        ui->comboBox_serialPort->addItem(list[0]);
        ui->listWidget_portInfo->addItem(list[0] + ": " + list[1]+ ": " + list[2]+ ": " + list[3]);
-       qDebug() << "Description: " << list;
+//       qDebug() << "Description: " << list;
     }
 }
 
 void MainWindow::initTabCan(){
-    qDebug() << "инициализация комбо-боксов и кнопок;";
+//    qDebug() << "инициализация комбо-боксов и кнопок;";
     // Сбросить биты контроля состояния порта
     ui->label_nameOk->setText("-");
     ui->label_baudOk->setText("-");
@@ -105,7 +105,7 @@ void MainWindow::initTabCan(){
 
 void MainWindow::on_pushButton_connect_clicked()
 {
-    qDebug() << "попытка соединиться с портом. Предварительный сброс;";
+//    qDebug() << "попытка соединиться с портом. Предварительный сброс;";
 
     serial->close(); // усли порт был открыт, закрываем его
 
@@ -127,7 +127,7 @@ void MainWindow::on_pushButton_connect_clicked()
         // Устанавливаем скорость передачи
     if (serial->setBaudRate(ui->comboBox_baudRate->currentText().toInt())){
         ui->label_baudOk->setText("ok");
-        qDebug() << "setBaudRate" << ui->comboBox_baudRate->currentText().toInt();
+      //  qDebug() << "setBaudRate" << ui->comboBox_baudRate->currentText().toInt();
     }
     else qDebug() << "Error setBaudRate";
 
@@ -136,26 +136,26 @@ void MainWindow::on_pushButton_connect_clicked()
     switch (ui->comboBox_dataBits->currentText().toUInt()) {
         case 5: if (serial->setDataBits(QSerialPort::Data5)) {
            ui->label_dataOk->setText("ok");
-           qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
+          // qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
         } break;
     case 6: if (serial->setDataBits(QSerialPort::Data6)){
-            ui->label_dataOk->setText("ok");
+          //  ui->label_dataOk->setText("ok");
             qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
         } break;
     case 7: if (serial->setDataBits(QSerialPort::Data7)){
             ui->label_dataOk->setText("ok");
-            qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
+          //  qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
         } break;
     case 8: if (serial->setDataBits(QSerialPort::Data8)){
             ui->label_dataOk->setText("OK");
-            qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
+          //  qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
         } break;
         default: qDebug() << "Error setDataBits"; break;
     }
 
 
         // Установить бит четности
-    qDebug() << "setParity: " << ui->comboBox_parity->currentIndex();
+ //   qDebug() << "setParity: " << ui->comboBox_parity->currentIndex();
     switch(ui->comboBox_parity->currentIndex()) {
         case 0:
             if (serial->setParity(QSerialPort::NoParity)){
@@ -183,7 +183,7 @@ void MainWindow::on_pushButton_connect_clicked()
 
 
         // Установить стоп-бит
-    qDebug() << "setStopBits: " << (ui->comboBox_stopBit->currentText().toInt());
+ //   qDebug() << "setStopBits: " << (ui->comboBox_stopBit->currentText().toInt());
     switch (ui->comboBox_stopBit->currentText().toUInt()) {
         case 1: if (serial->setStopBits(QSerialPort::OneStop)){
             ui->label_stopOk->setText("ok");
@@ -197,7 +197,7 @@ void MainWindow::on_pushButton_connect_clicked()
 
     // Установить управление потоком
 
-    qDebug() << "setFlowControl: " << ui->comboBox_flowBit->currentIndex();
+ //   qDebug() << "setFlowControl: " << ui->comboBox_flowBit->currentIndex();
 
     switch (ui->comboBox_flowBit->currentIndex()) {
         case 0:
@@ -223,7 +223,7 @@ void MainWindow::on_pushButton_connect_clicked()
         ui->pushButton_disconnect->setEnabled(true);
         return;
     }
-    qDebug()<<"Serial port is OPEN: ";
+//    qDebug()<<"Serial port is OPEN: ";
     ui->statusbar->showMessage("Serial port is OPEN");
 
     ui->pushButton_disconnect->setEnabled(true);
@@ -278,7 +278,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
 void MainWindow::writeSerialPort(QString dataWriteString)
 {
     QByteArray dataWriteIn = QByteArray::fromHex(dataWriteString.toUtf8()); // данные из строки textEdit_sendMessage
-    qDebug() << "функция записи: " << dataWriteString;
+ //   qDebug() << "функция записи: " << dataWriteString;
     serial->write(dataWriteIn);
     serial->waitForBytesWritten();
 }
@@ -286,14 +286,14 @@ void MainWindow::writeSerialPort(QString dataWriteString)
 //------------------ Чтение из serialport -----------------
 QByteArray MainWindow::readSerialPort()
 {
-    qDebug() << "запуск чтения порта";
+ //   qDebug() << "запуск чтения порта";
     QByteArray dataRead;
     while (serial->waitForReadyRead(30)) {
         dataRead = serial->readAll();
     }
 
     QByteArray text = dataRead.toHex();
-    qDebug() << "приняли";
+ //   qDebug() << "приняли";
     return text;
 }
 
@@ -301,7 +301,7 @@ QByteArray MainWindow::readSerialPort()
 void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index) // выбор частоты CAN шины
 {
     // ввести проверку на состояние порта!!!!!
-    qDebug() << "выбор частоты CAN шины; ";
+ //   qDebug() << "выбор частоты CAN шины; ";
     switch (index) {
         case 0: {
          //  ui->lineEdit_canFreq->setText(AddCRC(AD_COM_SET_FREQ_CAN_125, 2).toHex());
@@ -322,7 +322,7 @@ void MainWindow::on_comboBox_canFreq_currentIndexChanged(int index) // выбо�
 
 void MainWindow::on_comboBox_readAllCan_currentIndexChanged(int index) // выбор фильтра CAN шины
 {
-     qDebug() << "выбор фильтра CAN шины; ";
+ //    qDebug() << "выбор фильтра CAN шины; ";
     switch (index) {
         case 0: {
          //  ui->lineEdit_readAllCan->setText(AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex());
@@ -346,7 +346,7 @@ void MainWindow::init_setConfigAdapter()
 {
     QString setFreqCan = AD_COM_SET_FREQ_CAN_250; // по умолчанию 250
     int index = ui->comboBox_canFreq->currentIndex();
-    qDebug() << "принудительная инициализация адаптера. index=" << index;
+ //   qDebug() << "принудительная инициализация адаптера. index=" << index;
     switch (index) {
         case 0: {
            setFreqCan = AD_COM_SET_FREQ_CAN_125;

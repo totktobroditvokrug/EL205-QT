@@ -19,8 +19,8 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
 void MainWindow::on_pushButton_saveRegToFile_clicked()
 {
     QFileDialog dialogSave;
-    QString pathSave = dialogSave.getSaveFileName();
-    qDebug() << "записываем файл с картой регистров: " << pathSave;
+    QString pathSave = dialogSave.getSaveFileName(nullptr, "Выберите файл", "/", "Текстовый файл (*.txt)");
+ //   qDebug() << "записываем файл с картой регистров: " << pathSave;
 
     QFile file(pathSave);
      // Открываем файл, создаем, если его не существует
@@ -28,8 +28,9 @@ void MainWindow::on_pushButton_saveRegToFile_clicked()
         QTextStream stream(&file);
         stream << ui->textEdit_selectedRegNum->toPlainText();
         file.close();
+        ui->statusbar->showMessage("Карта регистров записана в файл " + pathSave);
     }
-    else ui->statusbar->showMessage("Ошибка: error opening output file");
+    else ui->statusbar->showMessage("Ошибка записи файла " + pathSave);
 }
 
 void MainWindow::on_pushButton_readRegFromFile_clicked()
@@ -37,7 +38,7 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
     qDebug() << "открываем файл с картой регистров";
     QFileDialog dialogOpen;
     QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "Текстовый файл (*.txt)");
-    qDebug() << "Выбранный файл: " << fileName;
+//    qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
         QTextStream stream(&file);
@@ -59,12 +60,11 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
            item->setText(stringArray.at(i));
            item->setCheckState(Qt::Unchecked);
            ui->listWidget_regNum->addItem(item);
-
-
         }
+        ui->statusbar->showMessage("Прочитаны регистры из файла " + fileName);
         file.close(); // перенести на после for !!!!!!!!!
     }
-    else ui->statusbar->showMessage("Ошибка: error opening output file");
+    else ui->statusbar->showMessage("Ошибка чтения файла " + fileName);
 }
 
 

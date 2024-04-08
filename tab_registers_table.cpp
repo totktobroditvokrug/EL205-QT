@@ -364,7 +364,7 @@ void MainWindow::addRowTableFromFile(QString lineFromFile)
 void MainWindow::on_pushButton_saveTable_clicked()
 {    QFileDialog dialogSave;
      QString pathSave = dialogSave.getSaveFileName(nullptr, "Save file", "/", "table (*.csv)");
-     qDebug() << "записываем файл с таблицей регистров: " << pathSave;
+//     qDebug() << "записываем файл с таблицей регистров: " << pathSave;
 
      QFile file(pathSave);
       // Открываем файл, создаем, если его не существует
@@ -379,10 +379,8 @@ void MainWindow::on_pushButton_saveTable_clicked()
          for (int j = 0; j < columns; j++) {
              headers += (ui->tableRegister->horizontalHeaderItem(j)->text() + ";");
          }
-         headers.chop(1);
+         headers.chop(1);           // убрать последнюю ;
          headers += "\n";
-         //stream << headers;
-         qDebug() << headers;
 
          for (int i = 0; i < rows; i++) {
              for (int j = 0; j < columns; j++) {
@@ -390,23 +388,24 @@ void MainWindow::on_pushButton_saveTable_clicked()
                      textData += ui->tableRegister->item(i, j)->text();
                      textData += ";";      // для .csv формата в экселе нужен разделитель ;
              }
-             textData.chop(1);
-             textData += "\n";             // перенос строки
+             textData.chop(1);             // убрать последнюю ;
+             textData += "\n";
 
          }
          stream << headers << textData;
          file.close();
+         ui->statusbar->showMessage("Файл настроек сохранен в " + pathSave);
      }
-     else ui->statusbar->showMessage("Ошибка: error opening output file");
+     else ui->statusbar->showMessage("Ошибка сохранения файла настроек " + pathSave);
 
 }
 
 void MainWindow::on_pushButton_loadTable_clicked()
 {
-    qDebug() << "открываем файл со значениями регистров";
+//    qDebug() << "открываем файл со значениями регистров";
     QFileDialog dialogOpen;
     QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "table (*.csv)");
-    qDebug() << "Выбранный файл: " << fileName;
+//    qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
 //        QTableWidget tabFromFile = ui->tableFromFile;
@@ -422,9 +421,10 @@ void MainWindow::on_pushButton_loadTable_clicked()
         }
 
         file.close();
+        ui->statusbar->showMessage("Чтение файла настроек " + fileName);
 
     }
-    else ui->statusbar->showMessage("Ошибка: error opening output file");
+    else ui->statusbar->showMessage("Ошибка чтения файла настроек " + fileName);
 
 }
 
