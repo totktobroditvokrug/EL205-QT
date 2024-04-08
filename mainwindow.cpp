@@ -41,6 +41,6 @@ MainWindow::~MainWindow()
     serial->close();
 
     delete ui;
+//    delete timer;
+//    delete serial;
 }
-
-

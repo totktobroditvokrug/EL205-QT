@@ -14,6 +14,7 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
        item->setCheckState(Qt::Unchecked);
        ui->listWidget_regNum->addItem(item);
     }
+    ui->statusbar->showMessage("Генерация списка всех регистров ПЧ");
 }
 
 void MainWindow::on_pushButton_saveRegToFile_clicked()

@@ -57,7 +57,7 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
 
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
 
-   // timerRegDisplay->start((ui->lineEdit_freqSampl->text().toInt())); // вывод на экран регистров ВРЕМЕННО!!!
+   ui->statusbar->showMessage("Запущено чтение CAN");
 
 
 }
@@ -79,6 +79,7 @@ void MainWindow::on_pushButton_stopRead_clicked()
     ui->pushButton_startRead->setEnabled(true);
     ui->pushButton_disconnect->setEnabled(true);
     ui->pushButton_setRegistersFromFile->setEnabled(false);
+    ui->statusbar->showMessage("Остановка чтения CAN");
 }
 
 void MainWindow::on_pushButton_clear_clicked() // очистить поле вывода потока

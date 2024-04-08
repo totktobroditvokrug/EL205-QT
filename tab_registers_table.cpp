@@ -129,7 +129,7 @@ void MainWindow::on_tableRegister_cellChanged(int row, int column)
 //                     << "; new value=" << QString::number(changeHiLowBytes(regData), 10);
 
             QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(regData), regNumber)), 2).toHex();
-            ui->textEdit_commandCRC->append(commandString);
+//            ui->textEdit_commandCRC->append(commandString);
             writeSerialPort(commandString);
            selectedRow = 300;
            selectedColumn = 300;
@@ -184,12 +184,6 @@ void MainWindow::regDisplayTable()
                 QString maxValue = "-";
                 QString value = QString::number(valueInt, 10); //
                 QString scaledValue = "-";
-
-//                if(regNum == 128){
-//                    qDebug() << "пришел регистр 128:" <;
-
-//                }
-
 
                     if(regDataArray[regNum].flagReg){
                         min = QString::number(regDataArray[regNum].min.Reg16, 10);
@@ -436,33 +430,6 @@ void MainWindow::on_pushButton_loadTable_clicked()
 
 //-------------- работа с загруженной из файла таблицей регистров --------------
 
-
-void MainWindow::checkRangeValue()
-{
-    int lengthTable = ui->tableFromFile->rowCount(); // определяем текущий размер таблицы
-    for(int i = 0; i < lengthTable; i++){
-        if((!!(ui->tableFromFile->item(i, 0))) && (!!(ui->tableFromFile->item(i, 1))) && (!!(ui->tableFromFile->item(i, 2)))
-           && (!!(ui->tableFromFile->item(i, 3)))&& (!!(ui->tableFromFile->item(i, 6)))){
-            int min = ui->tableFromFile->item(i, 2)->text().toInt();
-            int max = ui->tableFromFile->item(i, 3)->text().toInt();
-            int value = ui->tableFromFile->item(i, 6)->text().toInt();
-            checkValueRegister(i, value);
-         //   qDebug() << "проверка диапазона: " << min << " < " << value << " < " << max;
-            if((value >= min) && (value <= max)){
-                 ui->tableFromFile->item(i, 6)->setForeground(Qt::darkGreen);
-                 ui->tableFromFile->item(i, 1)->setBackground(Qt::green);
-                 ui->tableFromFile->item(i, 0)->setBackground(Qt::green);
-            }
-            else{
-                ui->tableFromFile->item(i, 6)->setForeground(Qt::red);
-                ui->tableFromFile->item(i, 1)->setBackground(Qt::red);
-                ui->tableFromFile->item(i, 0)->setBackground(Qt::red);
-            }
-        }
-
-    }
-}
-
 void MainWindow::checkValueRegister(int i, int value)   // запретить без подключения к CAN
 {
     QTableWidgetItem *currentRegNum = ui->tableFromFile->item(i, 0); // номер регистра из нулевого столбца
@@ -487,7 +454,50 @@ void MainWindow::checkValueRegister(int i, int value)   // запретить б
 // Проверка значений в таблице на диапазон и сравнение с текущими данными из ПЧ
 void MainWindow::on_pushButton_checkRegistersFromFile_clicked()
 {
-   qDebug() << "проверка таблицы регистров";
-   checkRangeValue();
+    int lengthTable = ui->tableFromFile->rowCount(); // определяем текущий размер таблицы
+    for(int i = 0; i < lengthTable; i++){
+        if((!!(ui->tableFromFile->item(i, 0))) && (!!(ui->tableFromFile->item(i, 1))) && (!!(ui->tableFromFile->item(i, 2)))
+           && (!!(ui->tableFromFile->item(i, 3)))&& (!!(ui->tableFromFile->item(i, 6)))){
+            int min = ui->tableFromFile->item(i, 2)->text().toInt();
+            int max = ui->tableFromFile->item(i, 3)->text().toInt();
+            int value = ui->tableFromFile->item(i, 6)->text().toInt();
+            checkValueRegister(i, value);
+         //   qDebug() << "проверка диапазона: " << min << " < " << value << " < " << max;
+            if((value >= min) && (value <= max)){
+                 ui->tableFromFile->item(i, 6)->setForeground(Qt::darkGreen);
+                 ui->tableFromFile->item(i, 1)->setBackground(Qt::green);
+                 ui->tableFromFile->item(i, 0)->setBackground(Qt::green);
+            }
+            else{
+                ui->tableFromFile->item(i, 6)->setForeground(Qt::red);
+                ui->tableFromFile->item(i, 1)->setBackground(Qt::red);
+                ui->tableFromFile->item(i, 0)->setBackground(Qt::red);
+            }
+        }
+    }
+    ui->statusbar->showMessage("Сравнение карты регистров с ПЧ");
 }
+
+
+// Запись значений регистров из файла в ПЧ
+void MainWindow::on_pushButton_setRegistersFromFile_clicked()
+{
+    QString commandString = "";
+    for(int i = 0; i< ui->tableFromFile->rowCount(); i++){
+        if(!!(ui->tableFromFile->item(i, 6))){
+            ui->tableFromFile->item(i, 6)->setForeground(Qt::black);
+            ui->tableFromFile->item(i, 6)->setBackground(Qt::yellow);
+            ui->tableFromFile->item(i, 7)->setBackground(Qt::yellow);
+            QString newValueString = ui->tableFromFile->item(i, 6)->text();
+            qint16 regDataPrimary = newValueString.toShort();
+            qint16 regData = changeHiLowBytes(regDataPrimary);
+            quint8 regNumber = quint8(ui->tableFromFile->item(i, 0)->text().toUInt());
+            commandString += AddCRC((glueAdapterHeader() + glueString(quint16(regData), regNumber)), 2).toHex();
+        }
+    }
+    QTimer::singleShot(5000, this, SLOT(on_pushButton_checkRegistersFromFile_clicked())); // запустить с задержкой повторную проверку на соответствие регистров
+    writeSerialPort(commandString);
+    ui->statusbar->showMessage("Ожидание записи регистров в ПЧ");
+}
+
 

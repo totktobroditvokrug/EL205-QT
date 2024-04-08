@@ -100,11 +100,14 @@ private slots:
     void on_tableRegister_cellChanged(int row, int column);
     void on_tableRegister_cellDoubleClicked(int row, int column);
 
+    // работа с конфигурацией регистров из файла настроек
     void on_pushButton_saveTable_clicked();
     void on_pushButton_loadTable_clicked();
     void on_pushButton_checkRegistersFromFile_clicked();
-    void checkRangeValue();
+
     void checkValueRegister(int i, int value);
+
+    void on_pushButton_setRegistersFromFile_clicked();
 
 private:
     Ui::MainWindow *ui;
