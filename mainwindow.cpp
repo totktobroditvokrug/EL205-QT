@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    resize(QDesktopWidget().availableGeometry(this).size() * 0.7); // не работает изменение окна
+  //  resize(QDesktopWidget().availableGeometry(this).size() * 0.7); // не работает изменение окна
     QVector<QString> tempVector(IREG_INV_ALL_END_REGISTERS);
     for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++) {
         QString value = "unknown";
@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(timer, SIGNAL(timeout()), this, SLOT(regDisplay()));
 
     ui->setupUi(this);
+
+    ui->tabWidget_registerWidget->setCurrentIndex(0); // окно при загрузке с настройками интерфейса
 
     ui->lineEdit_volumeTextRead->setText("50");
     ui->textEdit_dataRead->document()->setMaximumBlockCount(50); //

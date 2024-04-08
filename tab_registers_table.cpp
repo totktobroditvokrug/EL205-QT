@@ -155,7 +155,6 @@ void MainWindow::deleteRowRegistersTable(int index)
 }
 
 
-// void QTableWidgetItem::setFlags(Qt::ItemFlags flags)
 //------------------Вывод значений регистров в таблицу-----------------
 void MainWindow::regDisplayTable()
 {
@@ -380,7 +379,7 @@ void MainWindow::on_pushButton_saveTable_clicked()
          for (int j = 0; j < columns; j++) {
              headers += (ui->tableRegister->horizontalHeaderItem(j)->text() + ";");
          }
-//         headers.chop(1);
+         headers.chop(1);
          headers += "\n";
          //stream << headers;
          qDebug() << headers;
@@ -391,7 +390,7 @@ void MainWindow::on_pushButton_saveTable_clicked()
                      textData += ui->tableRegister->item(i, j)->text();
                      textData += ";";      // для .csv формата в экселе нужен разделитель ;
              }
-//             textData.chop(1);
+             textData.chop(1);
              textData += "\n";             // перенос строки
 
          }
