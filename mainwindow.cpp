@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->textEdit_dataRead->document()->setMaximumBlockCount(50); //
     ui->textEdit_adapterAnswer->document()->setMaximumBlockCount(100);
 
-    qDebug() << "объявляем serial";
+   // qDebug() << "объявляем serial";
     serial = new QSerialPort;
 
     initTabCan(); // установить активность кнопок
@@ -44,3 +44,4 @@ MainWindow::~MainWindow()
 //    delete timer;
 //    delete serial;
 }
+

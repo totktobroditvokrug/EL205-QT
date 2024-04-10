@@ -109,6 +109,8 @@ private slots:
 
     void on_pushButton_setRegistersFromFile_clicked();
 
+    void on_pushButton_clearAnswer_clicked();
+
 private:
     Ui::MainWindow *ui;
 

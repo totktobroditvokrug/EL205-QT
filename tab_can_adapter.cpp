@@ -10,7 +10,7 @@ void MainWindow::on_pushButton_searchListPort_clicked() // список дост
     QList<QSerialPortInfo> serialPortInfos = QSerialPortInfo::availablePorts();
 
          // Выводим количество последовательных портов, которые может использовать текущая система
-    qDebug() << "Total numbers of ports: " << serialPortInfos.count();
+    // qDebug() << "Total numbers of ports: " << serialPortInfos.count();
 
     ui->listWidget_portInfo->clear();
     ui->comboBox_serialPort->clear();
@@ -281,7 +281,7 @@ void MainWindow::on_pushButton_disconnect_clicked()
 void MainWindow::writeSerialPort(QString dataWriteString)
 {
     QByteArray dataWriteIn = QByteArray::fromHex(dataWriteString.toUtf8()); // данные из строки textEdit_sendMessage
- //   qDebug() << "функция записи: " << dataWriteString;
+  //  qDebug() << "функция записи: " << dataWriteString;
     serial->write(dataWriteIn);
     serial->waitForBytesWritten();
 }
@@ -365,3 +365,4 @@ void MainWindow::init_setConfigAdapter()
     QString dataWriteString = AddCRC(setFreqCan, 2).toHex() + AddCRC(AD_COM_SET_READ_ALL_CAN, 2).toHex();
     writeSerialPort(dataWriteString);
 }
+

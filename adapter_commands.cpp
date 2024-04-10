@@ -26,7 +26,7 @@ QByteArray AddCRC(QString textCommand, int indexStartByte)
 //            qDebug() << "index: " << i << "data[i]=" << addCheckSum[i] << " checkSum= " << checkSum;
         }
         addCheckSum.append(checkSum);
-//        qDebug() << "добавили контрольную сумму: " << addCheckSum.toHex();
+//        qDebug() << "добавили контрольную сумму: " << checkSum;
     return addCheckSum;
 }
 
@@ -85,21 +85,30 @@ QStringList handleUartParsing(
     QString checkCRC = "crc-FALSE";
     bool CRC_OK = false;
     parsingDataList.clear();
-    for (int i=0; i<=(dataRead.size()-2); i++)
+    int dataSize = dataRead.size(); // размер полученных данных для парсинга
+    for (int i=0; i<=(dataSize-2); i++)
     {
         if ((quint8(dataRead.at(i)) == AD_COM_ID_FIRST_BYTE)) // если вероятен первый пакет
         {
-            //qDebug() << "пришел стартовый байт_";
+//            qDebug() << "пришел стартовый байт_" <<
+//                        QString::number(quint8(dataRead[i]), 16) <<
+//                        QString::number(quint8(dataRead[i+1]), 16) <<
+//                        QString::number(quint8(dataRead[i+2]), 16) <<
+//                        QString::number(quint8(dataRead[i+3]), 16) <<
+//                        QString::number(quint8(dataRead[i+4]), 16) <<
+//                        QString::number(quint8(dataRead[i+5]), 16) <<
+//                        QString::number(quint8(dataRead[i+6]), 16);
+
             switch (quint8(dataRead.at(i+1))) { // проверяем второй байт после стартового
                 case AD_COM_ID_CAN_1 :{  // это CAN сообщение
-                    if ((i+AD_COM_LENGTH_MIN-1) > dataRead.size()){ // проверка по минимальной длине
+                    if ((i+AD_COM_LENGTH_MIN-1) > dataSize){ // проверка по минимальной длине
                         parsingDataList.append("-- Неполное CAN сообщение --");
                         return (parsingDataList); // добавить склейку неполных сообщений!!!
                     }
                     else {
                         dataLength = quint8(dataRead[i+12]);
                         // проверка длины полей сообщения c учетом прочитанной длины
-                        if ((i+AD_COM_LENGTH_CAN-1+dataLength-8) > dataRead.size())
+                        if ((i+AD_COM_LENGTH_CAN-1+dataLength-8) > dataSize)
                         {
                           // qDebug() << "Неполное CAN сообщение";
                           // ui->textEdit_dataRead->append("-- Неполное CAN сообщение --");
@@ -147,7 +156,7 @@ QStringList handleUartParsing(
                         //----- проверка формата CAN (расширенный/стандартный)
                         if(!(quint8(dataRead.at(i+11)) & AD_COM_EXT_CAN_FLAG)) // если стандартное сообщение
                         {
-                          // qDebug() << "Стандартное CAN сообщение №"; // QString::number(quint8(dataRead[i+21]), 10);
+                         //  qDebug() << "Стандартное CAN сообщение №"; // QString::number(quint8(dataRead[i+21]), 10);
                          //  QString standartFrame = handleStandartCAN(standartArrayID, lengthDataCAN, standartArrayDATA);
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX + checkCRC);
 
@@ -158,7 +167,7 @@ QStringList handleUartParsing(
                         }
                         else
                         {
-                            //qDebug() << "Расширенное CAN сообщение №";
+                           // qDebug() << "Расширенное CAN сообщение №";
                             QString extendedFrame = handleCAN(canMessage, EXT_PREFIX + checkCRC);
                             if(checkExtended) parsingDataList.append(extendedFrame);  // выводим при чекбоксе
                         }
@@ -167,51 +176,62 @@ QStringList handleUartParsing(
                    // qDebug() << "следующие два байта" << QString::number(quint8(dataRead[i+1]), 16)<< QString::number(quint8(dataRead[i+2]), 16);
                 } break;
                 case AD_COM_ID_ANS_1 :{
-                   // qDebug() << "switch: Дежурный ответ";
+                    // qDebug() << "switch: Дежурный ответ";
                     quint8 lengthDataAnswer = quint8(dataRead[i+2]);
-                    if ((i+lengthDataAnswer)>dataRead.size() && (lengthDataAnswer>6)){ // неполная посылка с ответом
-                      // qDebug() << "switch: неполный дежурный ответ";
+                    if ((i+lengthDataAnswer) > dataSize && (lengthDataAnswer>6)){ // неполная посылка с ответом
+                     //  qDebug() << "switch: неполный дежурный ответ";
                     }
                     else{ // размер буфера данных больше или равен длине посылки
                         QByteArray answerArrayID = dataRead.mid((i+3), 4);
                         QByteArray answerArrayDATA = dataRead.mid((i+7), lengthDataAnswer-6);
                         QString adapterAnswer = handleAdapterAnswer(answerArrayID, lengthDataAnswer, answerArrayDATA);
-                        // qDebug() << "пишем в QStringList дежурный ответ: " << adapterAnswer;
+                      //  qDebug() << "дежурный ответ: " << adapterAnswer;
                         adapterAnswerList->append(adapterAnswer);
                         if(checkAnswer) {
                              parsingDataList.append(adapterAnswer);
-
                         }
                         i = i + lengthDataAnswer+2;
                     }
-
                 } break;
                 case AD_COM_ID_ERR_1START_BYTE :{
-                    adapterAnswerList->append("ERR: пропущен первый стартовый байт при передаче");
+                // qDebug() << "ERR: пропущен первый стартовый байт при передаче";
+                   adapterAnswerList->append("ERR: пропущен первый стартовый байт при передаче");
                     parsingDataList.append("ERR: пропущен первый стартовый байт при передаче");
                     i+=1;
                 } break;
                 case AD_COM_ID_ERR_2START_BYTE :{
+               // qDebug() << "ERR: пропущен второй стартовый байт при передаче";
                     adapterAnswerList->append("ERR: пропущен второй стартовый байт при передаче");
                     parsingDataList.append("ERR: пропущен второй стартовый байт при передаче");
                     i+=1;
                 } break;
-                case AD_COM_ID_ERR_CHECK_SUM :{
-                    adapterAnswerList->append("ERR: неправильная контрольная сумма при передаче");
-                    parsingDataList.append("ERR: неправильная контрольная сумма при передаче");
+                case AD_COM_ID_ERR_CHECK_SUM :{ // в адаптере к каждому ответу подмешан 0х 87 66
+                    if(i + 3 <= dataSize){ // если есть еще три байта в потоке
+                        if((quint8(dataRead.at(i+2)) == AD_COM_ID_FIRST_BYTE) &&
+                            ((quint8(dataRead.at(i+3))) == AD_COM_ID_ERR_CHECK_SUM)){
+                         //   qDebug() << "ERR: неправильная контрольная сумма при передаче";
+                            adapterAnswerList->append("ERR: неправильная контрольная сумма при передаче");
+                            parsingDataList.append("ERR: неправильная контрольная сумма при передаче");
+                         //   qDebug() << "ошибка CRC: " << dataRead[i] << ":" << dataRead[i+1];
+                            i+=3;
+                        }
+                    }
                     i+=1;
                 } break;
                 case AD_COM_ID_OVER_LENGTH :{
+             //   qDebug() << "ERR: длина посылки более 40 бит";
                     adapterAnswerList->append("ERR: длина посылки более 40 бит");
                     parsingDataList.append("ERR: длина посылки более 40 бит");
                     i+=1;
                 } break;
                 case AD_COM_ID_ERR_TRANS_CAN :{
+             //   qDebug() << "ERR: ошибка при передаче CAN-сообщения";
                     adapterAnswerList->append("ERR: ошибка при передаче CAN-сообщения");
                     parsingDataList.append("ERR: ошибка при передаче CAN-сообщения");
                     i+=1;
                 } break;
                 default:{
+              //  qDebug() << "Это был не стартовый бит, а случайно залетевшее число, похожее на него!!!";
                      parsingDataList.append("Это был не стартовый бит, а случайно залетевшее число, похожее на него!!!");
                      adapterAnswerList->append("Это был не стартовый бит, а случайно залетевшее число, похожее на него!!!");
                 } break;

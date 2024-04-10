@@ -36,7 +36,8 @@ void MainWindow::on_pushButton_saveRegToFile_clicked()
 
 void MainWindow::on_pushButton_readRegFromFile_clicked()
 {
-    qDebug() << "открываем файл с картой регистров";
+  //  qDebug() << "открываем файл с картой регистров";
+    QString message = "Прочитаны регистры из файла ";
     QFileDialog dialogOpen;
     QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "Текстовый файл (*.txt)");
 //    qDebug() << "Выбранный файл: " << fileName;
@@ -53,19 +54,25 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
            QListWidgetItem *item = new QListWidgetItem;
 
            QStringList separateNum = stringArray.at(i).split(":", QString::SkipEmptyParts); // разделяем номер и имя
-           quint8 index = quint8(separateNum[0].toInt()); // номер до :
-           QString regName = separateNum[1].simplified();              // строка после :
+           if (separateNum.size() != 2){
+              message = "Неверный формат списка регистров ";
+           }
+           else {
+               quint8 index = quint8(separateNum[0].toInt()); // номер до :
+               QString regName = separateNum[1].simplified();              // строка после :
 
-           regNumList[index] = regName; // инициализируем имена регистров
+               regNumList[index] = regName; // инициализируем имена регистров
 
-           item->setText(stringArray.at(i));
-           item->setCheckState(Qt::Unchecked);
-           ui->listWidget_regNum->addItem(item);
+               item->setText(stringArray.at(i));
+               item->setCheckState(Qt::Unchecked);
+               ui->listWidget_regNum->addItem(item);
+           }
         }
-        ui->statusbar->showMessage("Прочитаны регистры из файла " + fileName);
         file.close(); // перенести на после for !!!!!!!!!
     }
-    else ui->statusbar->showMessage("Ошибка чтения файла " + fileName);
+    else message = "Ошибка чтения файла ";
+
+    ui->statusbar->showMessage(message + fileName);
 }
 
 
@@ -111,7 +118,7 @@ void MainWindow::on_pushButton_selectAll_clicked()
 {
 
     int countRegnum = ui->listWidget_regNum->count();
-    qDebug() << "Select All. Count=" << QString::number(countRegnum,10);
+  //  qDebug() << "Select All. Count=" << QString::number(countRegnum,10);
     for(int i = 0; i < countRegnum; i++){
         QListWidgetItem *item = ui->listWidget_regNum->item(i);
         QStringList separateNum = item->text().split(":", QString::SkipEmptyParts); // разделяем номер и имя
@@ -125,7 +132,7 @@ void MainWindow::on_pushButton_selectAll_clicked()
 void MainWindow::on_pushButton_resetAll_clicked()
 {
     int countRegnum = ui->listWidget_regNum->count();
-    qDebug() << "Reset All. Count=" << QString::number(countRegnum,10);
+  //  qDebug() << "Reset All. Count=" << QString::number(countRegnum,10);
     for(int i = 0; i < countRegnum; i++){
         QListWidgetItem *item = ui->listWidget_regNum->item(i);
         QStringList separateNum = item->text().split(":", QString::SkipEmptyParts); // разделяем номер и имя

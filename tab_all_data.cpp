@@ -41,7 +41,6 @@ void MainWindow::readStream()
     ui->pushButton_setRegistersFromFile->setEnabled(false);
     init_setConfigAdapter(); // если не было ничего прочитано, повторно конфигурируем адаптер
        // qDebug() << "не  вышли по return, неполное сообщение";
-
 }
 
 void MainWindow::on_pushButton_startRead_clicked() // запуск цикличного чтения потока данных
@@ -58,8 +57,6 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
 
    ui->statusbar->showMessage("Запущено чтение CAN");
-
-
 }
 
 void MainWindow::on_pushButton_readOnce_clicked()
@@ -97,4 +94,11 @@ void MainWindow::on_lineEdit_volumeTextRead_editingFinished()
 void MainWindow::on_lineEdit_freqSampl_editingFinished()
 {
     timer->setInterval((ui->lineEdit_freqSampl->text().toInt()));
+}
+
+//------- очистить поле ответов адаптера и список ошибок
+void MainWindow::on_pushButton_clearAnswer_clicked()
+{
+    ui->textEdit_adapterAnswer->clear();
+    adapterAnswerList.clear();
 }
