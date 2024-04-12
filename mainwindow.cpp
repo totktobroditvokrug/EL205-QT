@@ -32,8 +32,11 @@ MainWindow::MainWindow(QWidget *parent)
    // qDebug() << "объявляем serial";
     serial = new QSerialPort;
 
+//    int emptyBufferCounter = 5;
+
     initTabCan(); // установить активность кнопок
     createRegistersTable();
+//    QMessageBox::warning(this, "Внимание","Проверка сообщения");
 }
 
 MainWindow::~MainWindow()

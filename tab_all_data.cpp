@@ -15,9 +15,10 @@ void MainWindow::readStream()
     dataRead.clear();
     while (serial->waitForReadyRead(30))
     {
-        if ((serial->bytesAvailable())>8) // если пришло достаточное количество байт, то читаем
+        qint64 bytesFromAdapter = serial->bytesAvailable();
+        if (bytesFromAdapter > 8) // если пришло достаточное количество байт, то читаем
         {
-            ui->lineEdit_availableByte->setText(QString::number(serial->bytesAvailable(), 10));
+            ui->lineEdit_availableByte->setText(QString::number(bytesFromAdapter, 10));
             // qDebug() << "прочитано " << QString::number(serial->bytesAvailable(), 10) << " байт";
             dataRead = serial->readAll();
             ui->textEdit_dataRead->setText(handleUartParsing(dataRead,
@@ -33,13 +34,25 @@ void MainWindow::readStream()
             regDisplayTable();
             // qDebug() << adapterAnswerList.join("\n");
             ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n"));
-            ui->pushButton_setRegistersFromFile->setEnabled(true);
 
+            if(bytesFromAdapter > 60) {
+               ui->pushButton_setRegistersFromFile->setEnabled(true);
+               emptyBufferCounter = 0;
+            }
             return;  // обработали валидное количество байт. Выходим из функции запроса
         }
     }
     ui->pushButton_setRegistersFromFile->setEnabled(false);
-    init_setConfigAdapter(); // если не было ничего прочитано, повторно конфигурируем адаптер
+    if(emptyBufferCounter < 15) {
+        init_setConfigAdapter(); // если не было ничего прочитано, повторно конфигурируем адаптер
+        emptyBufferCounter++;
+    }
+    else {
+      //  qDebug() << "Вывод предупреждения про частоту кэн";
+        QMessageBox::warning(this, "Внимание","Проверьте подключение к CAN шине и скорость передачи данных.");
+        emptyBufferCounter = 0;
+    }
+
        // qDebug() << "не  вышли по return, неполное сообщение";
 }
 
@@ -67,6 +80,7 @@ void MainWindow::on_pushButton_readOnce_clicked()
 void MainWindow::on_pushButton_stopRead_clicked()
 {
     timer->stop();
+    emptyBufferCounter = 0; // запускать таймер проверки связи с нуля
     // разрешить менять настройки CAN
     ui->comboBox_canFreq->setEnabled(true);
     ui->comboBox_readAllCan->setEnabled(true);

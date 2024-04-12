@@ -120,5 +120,6 @@ private:
     QVector<QString> regNumList; // формирование списка регистров
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
     QStringList adapterAnswerList; // ошибки адаптера и дежурные ответы
+    int emptyBufferCounter; // количество попыток связи с can
 };
 #endif // MAINWINDOW_H
