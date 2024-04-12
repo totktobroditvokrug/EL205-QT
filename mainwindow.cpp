@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     initTabCan(); // установить активность кнопок
     createRegistersTable();
+    ui->checkBox_lossConnection->setChecked(true);
 //    QMessageBox::warning(this, "Внимание","Проверка сообщения");
 }
 

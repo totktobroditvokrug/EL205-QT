@@ -48,8 +48,11 @@ void MainWindow::readStream()
         emptyBufferCounter++;
     }
     else {
-      //  qDebug() << "Вывод предупреждения про частоту кэн";
-        QMessageBox::warning(this, "Внимание","Проверьте подключение к CAN шине и скорость передачи данных.");
+        if(ui->checkBox_lossConnection->checkState()){
+            //  qDebug() << "Вывод предупреждения про частоту кэн";
+              QMessageBox::warning(this, "Внимание","Проверьте подключение к CAN шине и скорость передачи данных.");
+
+        }
         emptyBufferCounter = 0;
     }
 

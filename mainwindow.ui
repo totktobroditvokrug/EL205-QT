@@ -30,7 +30,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -192,7 +192,20 @@
           </rect>
          </property>
          <property name="text">
-          <string>08.04.24</string>
+          <string>12.04.24</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBox_lossConnection">
+         <property name="geometry">
+          <rect>
+           <x>200</x>
+           <y>60</y>
+           <width>141</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Loss of connection</string>
          </property>
         </widget>
        </widget>
