@@ -21,6 +21,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     menu.cpp \
+    stylehelper.cpp \
     tab_all_data.cpp \
     tab_can_adapter.cpp \
     tab_control.cpp \
@@ -32,7 +33,8 @@ HEADERS += \
     iface.h \
     invertor.h \
     mainwindow.h \
-    registers.h
+    registers.h \
+    stylehelper.h
 
 FORMS += \
     mainwindow.ui

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "stylehelper.h"
 
 void MainWindow::on_pushButton_searchListPort_clicked() // список доступных портов
 {
@@ -102,6 +103,13 @@ void MainWindow::initTabCan(){
     ui->comboBox_readAllCan->setEnabled(false);
 
     ui->pushButton_setRegistersFromFile->setEnabled(false);
+
+    ui->pushButton_startInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_stopInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_startInv->setEnabled(false);
+    ui->pushButton_stopInv->setEnabled(false);
+    ui->pushButton_alarmInv->setEnabled(false);
 }
 
 

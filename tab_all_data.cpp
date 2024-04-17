@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "stylehelper.h"
+
 //------------------ Чтение потока из serialport -----------------
 void MainWindow::readStream()
 {
@@ -72,6 +74,10 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
 
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
 
+    ui->pushButton_startInv->setEnabled(true);
+    ui->pushButton_stopInv->setEnabled(true);
+    ui->pushButton_alarmInv->setEnabled(true);
+
    ui->statusbar->showMessage("Запущено чтение CAN");
 }
 
@@ -93,6 +99,12 @@ void MainWindow::on_pushButton_stopRead_clicked()
     ui->pushButton_startRead->setEnabled(true);
     ui->pushButton_disconnect->setEnabled(true);
     ui->pushButton_setRegistersFromFile->setEnabled(false);
+    ui->pushButton_startInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_stopInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_startInv->setEnabled(false);
+    ui->pushButton_stopInv->setEnabled(false);
+    ui->pushButton_alarmInv->setEnabled(false);
     ui->statusbar->showMessage("Остановка чтения CAN");
 }
 
