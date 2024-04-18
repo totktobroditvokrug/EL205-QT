@@ -88,6 +88,7 @@ private slots:
     void createTableFromFile();
     void addRowTableFromFile(QString lineFromFile);
     void checkInvertorStatus();
+    void getFreqInv();
 
     QString glueString(quint16 data, quint8 registerInv);
     QString glueAdapterHeader();

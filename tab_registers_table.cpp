@@ -162,6 +162,8 @@ void MainWindow::deleteRowRegistersTable(int index)
 void MainWindow::regDisplayTable()
 {
     checkInvertorStatus();
+    getFreqInv();
+
     if( ui->tableRegister->signalsBlocked()) ui->tableRegister->blockSignals(false);
     for(int i = 0; i <= ui->tableRegister->rowCount(); i++){
 
@@ -511,12 +513,36 @@ void MainWindow::on_pushButton_setRegistersFromFile_clicked()
     ui->statusbar->showMessage("Ожидание записи регистров в ПЧ");
 }
 
+ //------ расчет значение частоты
+void MainWindow::getFreqInv(){
+
+    qint32 scaledValueInt = 0;
+    QString scaledValue = "--";
+    qint16 valueInt = regDataArray[IREG_FREQ].value.Reg16;
+
+      if((regDataArray[IREG_FREQ].scale.Reg16 == 0) || (regDataArray[IREG_FREQ].maxValue.Reg16 == 0)){
+         //  qDebug() << "деление на ноль";
+           scaledValue = "Error";
+       }
+       else{
+           scaledValueInt = valueInt * regDataArray[IREG_FREQ].scale.Reg16 / regDataArray[IREG_FREQ].maxValue.Reg16;
+           scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
+       }
+      ui->lineEdit_currentFreq->setText(scaledValue);
+}
+
 void MainWindow::checkInvertorStatus()
 {
     QString currentStatus = "";
     qint16 invStatus = regDataArray[IREG_INV_STATUS].value.Reg16;
     if (invStatus & INV_STS_STARTED){
-      ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartedButtonStyle());
+
+      if (invStatus & INV_STS_TO_STOP_MODE) {
+          ui->pushButton_startInv->setStyleSheet(StyleHelper::getWaitButtonStyle());
+      }
+      else{
+         ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartedButtonStyle());
+      }
       currentStatus += ("Система запущена \n");
     }
     else{

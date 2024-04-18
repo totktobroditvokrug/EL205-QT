@@ -9,6 +9,8 @@ public:
     StyleHelper();
     static QString getStartButtonStyle();
     static QString getStartedButtonStyle();
+    static QString getWaitButtonStyle();
+
     static QString getDisableButtonStyle();
 
     static QString getStopButtonStyle();

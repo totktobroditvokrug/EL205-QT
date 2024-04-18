@@ -27,6 +27,20 @@ QString StyleHelper::getStartedButtonStyle()
            "}";
 }
 
+QString StyleHelper::getWaitButtonStyle()
+{
+    return "QPushButton{"
+            "color: #000000;"
+            "background-color: #ffff7f;"
+            "border: 1px solid #808080;"
+           "}"
+           "QPushButton::hover{"
+
+                       "background-color: #ffff00;"
+                       "border: 1px solid #c0c0c0;"
+           "}";
+}
+
 QString StyleHelper::getDisableButtonStyle()
 {
     return "QPushButton{"
