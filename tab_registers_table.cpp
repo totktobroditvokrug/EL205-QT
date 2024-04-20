@@ -513,6 +513,50 @@ void MainWindow::on_pushButton_setRegistersFromFile_clicked()
     ui->statusbar->showMessage("Ожидание записи регистров в ПЧ");
 }
 
+//---------------- Запись регистра через слайдер
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    switch (selectedComboBox) {
+    case 0: ui->lineEdit_registerValue->setText(QString::number(value, 10));
+    break;
+    case 1: ui->lineEdit_registerValue_1->setText(QString::number(value, 10));
+    break;
+    case 2: ui->lineEdit_registerValue_2->setText(QString::number(value, 10));
+    break;
+    }
+
+}
+void MainWindow::on_lineEdit_registerValue_selectionChanged()
+{
+    qDebug() << "было выбрано поле №0";
+    selectedComboBox = 0;
+}
+
+void MainWindow::on_lineEdit_registerValue_1_selectionChanged()
+{
+    qDebug() << "было выбрано поле №1";
+    selectedComboBox = 1;
+}
+
+void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
+{
+    qDebug() << "было выбрано поле №2";
+    selectedComboBox = 2;
+}
+
+void MainWindow::initComboBoxRegister()
+{
+    selectedComboBox = 0; // текущий комбобокс- частота инвертора
+    QStringList registersList = RegnumClass::regnumList();
+    ui->comboBox_register->addItems(registersList);
+    ui->comboBox_register_1->addItems(registersList);
+    ui->comboBox_register_2->addItems(registersList);
+
+    ui->comboBox_register->setCurrentIndex(IREG_FC_IRMS);
+    ui->comboBox_register_1->setCurrentIndex(IREG_UOUT);
+    ui->comboBox_register_2->setCurrentIndex(IREG_FREQ_REF_MAX);
+}
+
  //------ расчет значение частоты
 void MainWindow::getFreqInv(){
 

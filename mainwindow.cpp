@@ -33,9 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
     serial = new QSerialPort;
 
 //    int emptyBufferCounter = 5;
-
+    on_pushButton_genRegFromEnum_clicked();
     initTabCan(); // установить активность кнопок
     createRegistersTable();
+    initComboBoxRegister();
     ui->checkBox_lossConnection->setChecked(true);
 //    QMessageBox::warning(this, "Внимание","Проверка сообщения");
 }

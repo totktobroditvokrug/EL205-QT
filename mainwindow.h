@@ -79,6 +79,7 @@ private slots:
     void on_pushButton_resetAll_clicked(); // снять все check списка
     void addItemFromlistwidget(QListWidgetItem *item, quint8 index, QString regName);
     void deleteItemFromlistwidget(QListWidgetItem *item, quint8 index);
+    void initComboBoxRegister();
 
     // работа с таблицей регистров
     void createRegistersTable();
@@ -113,6 +114,14 @@ private slots:
 
     void on_pushButton_clearAnswer_clicked();
 
+    void on_horizontalSlider_valueChanged(int value);
+
+    void on_lineEdit_registerValue_selectionChanged();
+
+    void on_lineEdit_registerValue_1_selectionChanged();
+
+    void on_lineEdit_registerValue_2_selectionChanged();
+
 private:
     Ui::MainWindow *ui;
 
@@ -123,5 +132,6 @@ private:
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
     QStringList adapterAnswerList; // ошибки адаптера и дежурные ответы
     int emptyBufferCounter; // количество попыток связи с can
+    int selectedComboBox;
 };
 #endif // MAINWINDOW_H

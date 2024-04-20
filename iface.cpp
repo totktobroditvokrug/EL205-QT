@@ -47,6 +47,7 @@ QVector<QString> RegnumClass::regnumArray()
 }
 
 
+
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(
         QByteArray arrayDataFromCAN,
