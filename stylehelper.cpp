@@ -71,3 +71,13 @@ QString StyleHelper::getStopedButtonStyle()
                        "border: 1px solid #c0c0c0;"
            "}";
 }
+
+QString StyleHelper::getAlarmButtonStyle()
+{
+    return "QPushButton{"
+           "color: #808080;"
+           "background-color: #c0c0c0;"
+           "border: 1px solid #808080;"
+           "border-radius: 20%;"
+           "}";
+}

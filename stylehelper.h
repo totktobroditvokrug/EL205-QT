@@ -15,6 +15,7 @@ public:
 
     static QString getStopButtonStyle();
     static QString getStopedButtonStyle();
+    static QString getAlarmButtonStyle();
 
 };
 
