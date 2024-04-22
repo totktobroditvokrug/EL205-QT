@@ -117,8 +117,9 @@ private slots:
     void on_pushButton_clearAnswer_clicked();
 
     void on_horizontalSlider_valueChanged(int value);
+    void setSelectedRegisterSlider(int regNum);
 
-    void on_lineEdit_registerValue_selectionChanged();
+    void on_lineEdit_registerValue_0_selectionChanged();
 
     void on_lineEdit_registerValue_1_selectionChanged();
 

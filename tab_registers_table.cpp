@@ -518,72 +518,66 @@ void MainWindow::on_pushButton_setRegistersFromFile_clicked()
 //---------------- Запись регистра через слайдер
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
+    int regNum;
     switch (selectedComboBox) {
-    case 0: ui->lineEdit_registerValue->setText(QString::number(value, 10));
+    case 0:{
+        regNum = ui->comboBox_register_0->currentIndex();
+        setSelectedRegisterSlider(regNum);
+        ui->lineEdit_registerValue_0->setText(QString::number(value, 10));
+    }
     break;
-    case 1: ui->lineEdit_registerValue_1->setText(QString::number(value, 10));
+    case 1: {
+        regNum = ui->comboBox_register_1->currentIndex();
+        setSelectedRegisterSlider(regNum);
+        ui->lineEdit_registerValue_1->setText(QString::number(value, 10));
+    }
     break;
-    case 2: ui->lineEdit_registerValue_2->setText(QString::number(value, 10));
+    case 2: {
+        regNum = ui->comboBox_register_2->currentIndex();
+        setSelectedRegisterSlider(regNum);
+        ui->lineEdit_registerValue_2->setText(QString::number(value, 10));
+    }
     break;
     }
 
 }
-void MainWindow::on_lineEdit_registerValue_selectionChanged()
+void MainWindow::on_lineEdit_registerValue_0_selectionChanged()
 {
-    qDebug() << "было выбрано поле №0";
+    qDebug() << "было выбрано поле №0 " << ui->comboBox_register_0->currentIndex();
     selectedComboBox = 0;
+    ui->horizontalSlider->setValue(regDataArray[ui->comboBox_register_0->currentIndex()].value.Reg16);
 }
 
 void MainWindow::on_lineEdit_registerValue_1_selectionChanged()
 {
     qDebug() << "было выбрано поле №1";
     selectedComboBox = 1;
+    ui->horizontalSlider->setValue(regDataArray[ui->comboBox_register_1->currentIndex()].value.Reg16);
 }
 
 void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
 {
     qDebug() << "было выбрано поле №2";
     selectedComboBox = 2;
+    ui->horizontalSlider->setValue(regDataArray[ui->comboBox_register_2->currentIndex()].value.Reg16);
 }
 
 void MainWindow::initComboBoxRegister()
 {
     selectedComboBox = 0; // текущий комбобокс- частота инвертора
     QStringList registersList = RegnumClass::regnumList();
-    ui->comboBox_register->addItems(registersList);
+    ui->comboBox_register_0->addItems(registersList);
     ui->comboBox_register_1->addItems(registersList);
     ui->comboBox_register_2->addItems(registersList);
 
-//    regNumList = RegnumClass::regnumArray();
-
-//    for (int i = 0; i < IREG_INV_ALL_END_REGISTERS; i++) {
-//       QListWidgetItem *item = new QListWidgetItem;
-//       item->setText(QString::number(i, 10) + ": " + regNumList.at(i));
-//       item->setCheckState(Qt::Unchecked);
-//       ui->listWidget_regNum->addItem(item);
-//    }
-
-    ui->comboBox_register->setCurrentIndex(IREG_FC_IRMS);
+    ui->comboBox_register_0->setCurrentIndex(IREG_FC_IRMS);
     ui->comboBox_register_1->setCurrentIndex(IREG_UOUT);
     ui->comboBox_register_2->setCurrentIndex(IREG_FREQ_REF_MAX);
 }
 
  //------ расчет значение частоты
-void MainWindow::getFreqInv(){
-
-    qint32 scaledValueInt = 0;
-    QString scaledValue = "--";
-    qint16 valueInt = regDataArray[IREG_FREQ].value.Reg16;
-
-      if((regDataArray[IREG_FREQ].scale.Reg16 == 0) || (regDataArray[IREG_FREQ].maxValue.Reg16 == 0)){
-         //  qDebug() << "деление на ноль";
-           scaledValue = "Error";
-       }
-       else{
-           scaledValueInt = valueInt * regDataArray[IREG_FREQ].scale.Reg16 / regDataArray[IREG_FREQ].maxValue.Reg16;
-           scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
-       }
-      ui->lineEdit_currentFreq->setText(scaledValue);
+void MainWindow::getFreqInv(){     
+      ui->lineEdit_currentFreq->setText(getRegisterInv(IREG_FREQ));
 }
 
 //------ расчет значение регистров
@@ -607,12 +601,33 @@ QString MainWindow::getRegisterInv(int regNum){
      return QString::number(valueInt, 10); // без учета шкалы
 }
 
+
+//------ установить значения выбранных регистров с учетом шкалы
 void MainWindow::setRegistersCombobox(){
-    ui->lineEdit_registerValue->setText(getRegisterInv(ui->comboBox_register->currentIndex()));
+    ui->lineEdit_registerValue_0->setText(getRegisterInv(ui->comboBox_register_0->currentIndex()));
     ui->lineEdit_registerValue_1->setText(getRegisterInv(ui->comboBox_register_1->currentIndex()));
     ui->lineEdit_registerValue_2->setText(getRegisterInv(ui->comboBox_register_2->currentIndex()));
 }
 
+//------ установить значения выбранных регистров с учетом шкалы
+void MainWindow::setSelectedRegisterSlider(int regNum){
+    if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){
+        ui->horizontalSlider->setMinimum(regDataArray[regNum].min.Reg16);
+    }
+
+    if(regDataArray[regNum].flagReg & IREGF_MAX_PRESENT){
+        ui->horizontalSlider->setMaximum(regDataArray[regNum].max.Reg16);
+    }
+//    if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){
+//       scaleValue = QString::number(regDataArray[regNum].scale.Reg16, 10);
+//    }
+    if(regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT){
+       ui->horizontalSlider->setMaximum(regDataArray[regNum].maxValue.Reg16);
+    }
+}
+
+
+//---------- проверка статуса работы инвертора, стили кнопок управления в зависимости от режима
 void MainWindow::checkInvertorStatus()
 {
     QString currentStatus = "";
@@ -658,7 +673,7 @@ void MainWindow::checkInvertorStatus()
     ui->textEdit_invertorStatus->setText(currentStatus);
 }
 
-
+//----------- для дальнейшего отображения статуса инвертора!!!!
 /* система запущена */
 //#define INV_STS_STARTED			(1 << 0)
 

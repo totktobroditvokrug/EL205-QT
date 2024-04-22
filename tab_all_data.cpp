@@ -6,7 +6,6 @@
 //------------------ Чтение потока из serialport -----------------
 void MainWindow::readStream()
 {
-    // QStringList adapterAnswerList; // ошибки адаптера и дежурные ответы
     QByteArray dataRead;    // принятая куча из COM- порта
     bool checkStandart = ui->checkBox_canStandart->checkState();
     bool checkExtended = ui->checkBox_canExtended->checkState();
@@ -31,8 +30,6 @@ void MainWindow::readStream()
                                                              regDataArray,
                                                              &adapterAnswerList).join("\n"));
 
-
-            // regDisplay(); // как только прошел парсинг- выдаем данные
             regDisplayTable();
             // qDebug() << adapterAnswerList.join("\n");
             ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n"));

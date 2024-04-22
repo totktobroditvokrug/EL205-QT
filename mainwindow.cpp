@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-  //  resize(QDesktopWidget().availableGeometry(this).size() * 0.7); // не работает изменение окна
     QVector<QString> tempVector(IREG_INV_ALL_END_REGISTERS);
     for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++) {
         QString value = "unknown";
@@ -29,24 +28,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->textEdit_dataRead->document()->setMaximumBlockCount(50); //
     ui->textEdit_adapterAnswer->document()->setMaximumBlockCount(100);
 
-   // qDebug() << "объявляем serial";
-    serial = new QSerialPort;
 
-//    int emptyBufferCounter = 5;
-    on_pushButton_genRegFromEnum_clicked();
+    serial = new QSerialPort;  // объявляем serial
+
+    on_pushButton_genRegFromEnum_clicked(); // заранее подгружаем список всех регистров инвертора
     initTabCan(); // установить активность кнопок
     createRegistersTable();
-    initComboBoxRegister();
-    ui->checkBox_lossConnection->setChecked(true);
-//    QMessageBox::warning(this, "Внимание","Проверка сообщения");
+    initComboBoxRegister(); // три кастомных регистра в заголовке таблицы значений
+    ui->checkBox_lossConnection->setChecked(true); // по умолчанию останавливаем процесс при потере связи
+    on_pushButton_searchListPort_clicked(); // заранее загрузить доступные порты
 }
 
 MainWindow::~MainWindow()
 {
-    serial->close();
-
+    serial->close(); // освободить порт при закрытии программы
     delete ui;
-//    delete timer;
-//    delete serial;
 }
 

@@ -821,10 +821,10 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QComboBox" name="comboBox_register"/>
+                 <widget class="QComboBox" name="comboBox_register_0"/>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QLineEdit" name="lineEdit_registerValue"/>
+                 <widget class="QLineEdit" name="lineEdit_registerValue_0"/>
                 </item>
                 <item row="2" column="0">
                  <widget class="QComboBox" name="comboBox_register_1"/>

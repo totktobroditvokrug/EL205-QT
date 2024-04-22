@@ -119,7 +119,7 @@ void MainWindow::on_pushButton_connect_clicked()
 {
 //    qDebug() << "попытка соединиться с портом. Предварительный сброс;";
 
-    serial->close(); // усли порт был открыт, закрываем его
+    serial->close(); // если порт был открыт, закрываем его
 
     ui->pushButton_connect->setEnabled(false);
 
