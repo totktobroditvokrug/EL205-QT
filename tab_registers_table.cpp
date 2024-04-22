@@ -163,6 +163,8 @@ void MainWindow::regDisplayTable()
 {
     checkInvertorStatus();
     getFreqInv();
+    setRegistersCombobox();
+   // getRegisterInv(int regNum)
 
     if( ui->tableRegister->signalsBlocked()) ui->tableRegister->blockSignals(false);
     for(int i = 0; i <= ui->tableRegister->rowCount(); i++){
@@ -552,6 +554,15 @@ void MainWindow::initComboBoxRegister()
     ui->comboBox_register_1->addItems(registersList);
     ui->comboBox_register_2->addItems(registersList);
 
+//    regNumList = RegnumClass::regnumArray();
+
+//    for (int i = 0; i < IREG_INV_ALL_END_REGISTERS; i++) {
+//       QListWidgetItem *item = new QListWidgetItem;
+//       item->setText(QString::number(i, 10) + ": " + regNumList.at(i));
+//       item->setCheckState(Qt::Unchecked);
+//       ui->listWidget_regNum->addItem(item);
+//    }
+
     ui->comboBox_register->setCurrentIndex(IREG_FC_IRMS);
     ui->comboBox_register_1->setCurrentIndex(IREG_UOUT);
     ui->comboBox_register_2->setCurrentIndex(IREG_FREQ_REF_MAX);
@@ -573,6 +584,33 @@ void MainWindow::getFreqInv(){
            scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
        }
       ui->lineEdit_currentFreq->setText(scaledValue);
+}
+
+//------ расчет значение регистров
+QString MainWindow::getRegisterInv(int regNum){
+    //------ расчет значение при наличии шкалы
+    qint32 scaledValueInt = 0;
+    QString scaledValue = "--";
+    qint16 valueInt = regDataArray[regNum].value.Reg16;
+
+    if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
+       if((regDataArray[regNum].scale.Reg16 == 0) || (regDataArray[regNum].maxValue.Reg16 == 0)){
+         //  qDebug() << "деление на ноль";
+           scaledValue = "Error";
+       }
+       else{
+           scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
+           scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
+       }
+       return scaledValue;
+     }
+     return QString::number(valueInt, 10); // без учета шкалы
+}
+
+void MainWindow::setRegistersCombobox(){
+    ui->lineEdit_registerValue->setText(getRegisterInv(ui->comboBox_register->currentIndex()));
+    ui->lineEdit_registerValue_1->setText(getRegisterInv(ui->comboBox_register_1->currentIndex()));
+    ui->lineEdit_registerValue_2->setText(getRegisterInv(ui->comboBox_register_2->currentIndex()));
 }
 
 void MainWindow::checkInvertorStatus()
