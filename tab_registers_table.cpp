@@ -542,16 +542,13 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     }
 }
 
-void MainWindow::on_horizontalSlider_sliderPressed()
-{
-    qDebug() << "slider pressed";
-}
 
 
+// по сигналу отпускания слайдера делаем запись его значения в регистр
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
 
-    qDebug() << "slider released. Value = " << ui->horizontalSlider->value();
+  //  qDebug() << "slider released. Value = " << ui->horizontalSlider->value();
 
     int regNum = 0;
     switch (selectedComboBox) {
@@ -578,7 +575,7 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 
 void MainWindow::on_lineEdit_registerValue_1_selectionChanged()
 {
-    qDebug() << "было выбрано поле №1 ";
+  //  qDebug() << "было выбрано поле №1 ";
     int regNum = ui->comboBox_register_1->currentIndex();
     selectedComboBox = 1;
 
@@ -594,7 +591,7 @@ void MainWindow::on_lineEdit_registerValue_1_selectionChanged()
 
 void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
 {
-    qDebug() << "было выбрано поле №2";
+ //   qDebug() << "было выбрано поле №2";
     int regNum = ui->comboBox_register_2->currentIndex();
     selectedComboBox = 2;
 
@@ -610,7 +607,7 @@ void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
 
 void MainWindow::on_lineEdit_registerValue_3_selectionChanged()
 {
-    qDebug() << "было выбрано поле №3";
+  //  qDebug() << "было выбрано поле №3";
     int regNum = ui->comboBox_register_3->currentIndex();
     selectedComboBox = 3;
 
@@ -637,6 +634,8 @@ void MainWindow::initComboBoxRegister()
     ui->comboBox_register_1->setCurrentIndex(IREG_UOUT);
     ui->comboBox_register_2->setCurrentIndex(IREG_FREQ_REF_MAX);
     ui->comboBox_register_3->setCurrentIndex(IREG_FC_IRMS);
+
+    ui->horizontalSlider->setEnabled(false);
 }
 
  //------ расчет значение частоты
@@ -644,7 +643,7 @@ void MainWindow::getFreqInv(){
       ui->lineEdit_currentFreq->setText(getRegisterInv(IREG_FREQ, regDataArray[IREG_FREQ].value.Reg16));
 }
 
-//------ расчет значение регистров
+//------ расчет значения регистра с учетом шкалы
 QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
     //------ расчет значение при наличии шкалы
     qint32 scaledValueInt = 0;
@@ -666,7 +665,7 @@ QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
 }
 
 
-//------ установить значения выбранных регистров с учетом шкалы
+//------ установить значения трех выбранных регистров быстрого доступа с учетом шкалы
 void MainWindow::setRegistersCombobox(){
     int regNum_1 = ui->comboBox_register_1->currentIndex();
     int regNum_2 = ui->comboBox_register_2->currentIndex();
@@ -697,7 +696,7 @@ void MainWindow::setRegistersCombobox(){
          ui->lineEdit_registerValue_3->setStyleSheet(StyleHelper::getReadOnlyStyle());
     }
 
-    // если работает слайдер, не пишем текущее значение
+    // если работает слайдер, не пишем текущее значение трех регистров быстрого доступа
     if(!(ui->horizontalSlider->underMouse())){
         int regNum_1 = ui->comboBox_register_1->currentIndex();
         int regNum_2 = ui->comboBox_register_2->currentIndex();

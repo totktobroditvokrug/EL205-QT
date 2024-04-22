@@ -102,6 +102,9 @@ void MainWindow::on_pushButton_stopRead_clicked()
     ui->pushButton_startInv->setEnabled(false);
     ui->pushButton_stopInv->setEnabled(false);
     ui->pushButton_alarmInv->setEnabled(false);
+
+    ui->horizontalSlider->setEnabled(false);
+
     ui->statusbar->showMessage("Остановка чтения CAN");
 }
 

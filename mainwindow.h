@@ -125,8 +125,6 @@ private slots:
 
     void on_lineEdit_registerValue_3_selectionChanged();
 
-    void on_horizontalSlider_sliderPressed();
-
     void on_horizontalSlider_sliderReleased();
 
 private:

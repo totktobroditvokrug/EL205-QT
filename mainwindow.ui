@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1059</width>
-    <height>756</height>
+    <width>1030</width>
+    <height>504</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_7">
        <attribute name="title">
@@ -77,8 +77,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1041</width>
-             <height>661</height>
+             <width>991</width>
+             <height>527</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -445,6 +445,12 @@
                    </item>
                    <item>
                     <widget class="QPushButton" name="pushButton_setConfigAdapter">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="text">
                       <string>set config adapter</string>
                      </property>
@@ -1214,7 +1220,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1059</width>
+     <width>1030</width>
      <height>26</height>
     </rect>
    </property>
