@@ -81,3 +81,31 @@ QString StyleHelper::getAlarmButtonStyle()
            "border-radius: 20%;"
            "}";
 }
+
+QString StyleHelper::getReadOnlyStyle()
+{
+    return  "QLineEdit{"
+            "color: rgb(255, 0, 0);"
+            "}";
+}
+
+QString StyleHelper::getReadWriteStyle()
+{
+    return  "QLineEdit{"
+            "color: rgb(0, 0, 255);"
+            "}";
+}
+
+QString StyleHelper::getSlidersSelectedStyle()
+{
+    return  "QLineEdit{"
+            "color: rgb(0, 100, 0);"
+            "}";
+}
+
+QString StyleHelper::getRemoveSelectionStyle()
+{
+    return "QLineEdit {background-color: none;}";
+}
+
+

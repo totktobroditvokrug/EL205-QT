@@ -50,7 +50,7 @@ void MainWindow::createRegistersTable()
     // Устанавливаем заголовки колонок
     ui->tableRegister->setHorizontalHeaderLabels(headers);
 //    ui->tableRegister->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->tableRegister->verticalHeader()->setVisible(false);
     // Растягиваем последнюю колонку на всё доступное пространство
  //   ui->tableRegister->horizontalHeader()->setStretchLastSection(true);
     ui->tableRegister->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -164,7 +164,6 @@ void MainWindow::regDisplayTable()
     checkInvertorStatus();
     getFreqInv();
     setRegistersCombobox();
-   // getRegisterInv(int regNum)
 
     if( ui->tableRegister->signalsBlocked()) ui->tableRegister->blockSignals(false);
     for(int i = 0; i <= ui->tableRegister->rowCount(); i++){
@@ -515,77 +514,142 @@ void MainWindow::on_pushButton_setRegistersFromFile_clicked()
     ui->statusbar->showMessage("Ожидание записи регистров в ПЧ");
 }
 
+//---------------------------------- Быстрое меню и кнопки ------------------------
+
 //---------------- Запись регистра через слайдер
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     int regNum;
     switch (selectedComboBox) {
-    case 0:{
-        regNum = ui->comboBox_register_0->currentIndex();
-        setSelectedRegisterSlider(regNum);
-        ui->lineEdit_registerValue_0->setText(QString::number(value, 10));
-    }
-    break;
-    case 1: {
+    case 1:{
         regNum = ui->comboBox_register_1->currentIndex();
         setSelectedRegisterSlider(regNum);
-        ui->lineEdit_registerValue_1->setText(QString::number(value, 10));
+        ui->lineEdit_registerValue_1->setText(getRegisterInv(regNum, qint16(value)));
     }
     break;
     case 2: {
         regNum = ui->comboBox_register_2->currentIndex();
         setSelectedRegisterSlider(regNum);
-        ui->lineEdit_registerValue_2->setText(QString::number(value, 10));
+        ui->lineEdit_registerValue_2->setText(getRegisterInv(regNum, qint16(value)));
+    }
+    break;
+    case 3: {
+        regNum = ui->comboBox_register_3->currentIndex();
+        setSelectedRegisterSlider(regNum);
+        ui->lineEdit_registerValue_3->setText(getRegisterInv(regNum, qint16(value)));
     }
     break;
     }
-
 }
-void MainWindow::on_lineEdit_registerValue_0_selectionChanged()
+
+void MainWindow::on_horizontalSlider_sliderPressed()
 {
-    qDebug() << "было выбрано поле №0 " << ui->comboBox_register_0->currentIndex();
-    selectedComboBox = 0;
-    ui->horizontalSlider->setValue(regDataArray[ui->comboBox_register_0->currentIndex()].value.Reg16);
+    qDebug() << "slider pressed";
+}
+
+
+void MainWindow::on_horizontalSlider_sliderReleased()
+{
+
+    qDebug() << "slider released. Value = " << ui->horizontalSlider->value();
+
+    int regNum = 0;
+    switch (selectedComboBox) {
+    case 1:{
+        regNum = ui->comboBox_register_1->currentIndex();
+    }
+    break;
+    case 2: {
+        regNum = ui->comboBox_register_2->currentIndex();
+    }
+    break;
+    case 3: {
+        regNum = ui->comboBox_register_3->currentIndex();
+    }
+    break;
+    }
+    qint16 regDataPrimary = qint16(ui->horizontalSlider->value());
+    qint16 regData = changeHiLowBytes(regDataPrimary);
+
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(regData), quint8(regNum))), 2).toHex();
+
+    writeSerialPort(commandString);
 }
 
 void MainWindow::on_lineEdit_registerValue_1_selectionChanged()
 {
-    qDebug() << "было выбрано поле №1";
+    qDebug() << "было выбрано поле №1 ";
+    int regNum = ui->comboBox_register_1->currentIndex();
     selectedComboBox = 1;
-    ui->horizontalSlider->setValue(regDataArray[ui->comboBox_register_1->currentIndex()].value.Reg16);
+
+    ui->horizontalSlider->setValue(regDataArray[regNum].value.Reg16);
+    //------ определить, можно ли редактировать регистр
+    if(!(regDataArray[regNum].flagReg & IREGF_READONLY)){
+        ui->horizontalSlider->setEnabled(true);
+    }
+    else{
+         ui->horizontalSlider->setEnabled(false);
+    }
 }
 
 void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
 {
     qDebug() << "было выбрано поле №2";
+    int regNum = ui->comboBox_register_2->currentIndex();
     selectedComboBox = 2;
-    ui->horizontalSlider->setValue(regDataArray[ui->comboBox_register_2->currentIndex()].value.Reg16);
+
+    ui->horizontalSlider->setValue(regDataArray[regNum].value.Reg16);
+    //------ определить, можно ли редактировать регистр
+    if(!(regDataArray[regNum].flagReg & IREGF_READONLY)){
+        ui->horizontalSlider->setEnabled(true);
+    }
+    else{
+         ui->horizontalSlider->setEnabled(false);
+    }
+}
+
+void MainWindow::on_lineEdit_registerValue_3_selectionChanged()
+{
+    qDebug() << "было выбрано поле №3";
+    int regNum = ui->comboBox_register_3->currentIndex();
+    selectedComboBox = 3;
+
+    ui->horizontalSlider->setValue(regDataArray[regNum].value.Reg16);
+    //------ определить, можно ли редактировать регистр
+    if(!(regDataArray[regNum].flagReg & IREGF_READONLY)){
+        ui->horizontalSlider->setEnabled(true);
+    }
+    else{
+         ui->horizontalSlider->setEnabled(false);
+    }
 }
 
 void MainWindow::initComboBoxRegister()
 {
     selectedComboBox = 0; // текущий комбобокс- частота инвертора
     QStringList registersList = RegnumClass::regnumList();
-    ui->comboBox_register_0->addItems(registersList);
+
     ui->comboBox_register_1->addItems(registersList);
     ui->comboBox_register_2->addItems(registersList);
+    ui->comboBox_register_3->addItems(registersList);
 
-    ui->comboBox_register_0->setCurrentIndex(IREG_FC_IRMS);
+
     ui->comboBox_register_1->setCurrentIndex(IREG_UOUT);
     ui->comboBox_register_2->setCurrentIndex(IREG_FREQ_REF_MAX);
+    ui->comboBox_register_3->setCurrentIndex(IREG_FC_IRMS);
 }
 
  //------ расчет значение частоты
 void MainWindow::getFreqInv(){     
-      ui->lineEdit_currentFreq->setText(getRegisterInv(IREG_FREQ));
+      ui->lineEdit_currentFreq->setText(getRegisterInv(IREG_FREQ, regDataArray[IREG_FREQ].value.Reg16));
 }
 
 //------ расчет значение регистров
-QString MainWindow::getRegisterInv(int regNum){
+QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
     //------ расчет значение при наличии шкалы
     qint32 scaledValueInt = 0;
     QString scaledValue = "--";
-    qint16 valueInt = regDataArray[regNum].value.Reg16;
+   // qint16 valueInt = regDataArray[regNum].value.Reg16;
 
     if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
        if((regDataArray[regNum].scale.Reg16 == 0) || (regDataArray[regNum].maxValue.Reg16 == 0)){
@@ -596,7 +660,7 @@ QString MainWindow::getRegisterInv(int regNum){
            scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
            scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
        }
-       return scaledValue;
+       return scaledValue;  // с учетом шкалы
      }
      return QString::number(valueInt, 10); // без учета шкалы
 }
@@ -604,12 +668,51 @@ QString MainWindow::getRegisterInv(int regNum){
 
 //------ установить значения выбранных регистров с учетом шкалы
 void MainWindow::setRegistersCombobox(){
-    ui->lineEdit_registerValue_0->setText(getRegisterInv(ui->comboBox_register_0->currentIndex()));
-    ui->lineEdit_registerValue_1->setText(getRegisterInv(ui->comboBox_register_1->currentIndex()));
-    ui->lineEdit_registerValue_2->setText(getRegisterInv(ui->comboBox_register_2->currentIndex()));
+    int regNum_1 = ui->comboBox_register_1->currentIndex();
+    int regNum_2 = ui->comboBox_register_2->currentIndex();
+    int regNum_3 = ui->comboBox_register_3->currentIndex();
+
+    //------ определить, можно ли редактировать регистр
+    if(!(regDataArray[regNum_1].flagReg & IREGF_READONLY)){
+        if(selectedComboBox == 1) ui->lineEdit_registerValue_1->setStyleSheet(StyleHelper::getSlidersSelectedStyle());
+        else ui->lineEdit_registerValue_1->setStyleSheet(StyleHelper::getReadWriteStyle());
+    }
+    else{
+         ui->lineEdit_registerValue_1->setStyleSheet(StyleHelper::getReadOnlyStyle());
+    }
+
+    if(!(regDataArray[regNum_2].flagReg & IREGF_READONLY)){
+        if(selectedComboBox == 2) ui->lineEdit_registerValue_2->setStyleSheet(StyleHelper::getSlidersSelectedStyle());
+        else ui->lineEdit_registerValue_2->setStyleSheet(StyleHelper::getReadWriteStyle());
+    }
+    else{
+         ui->lineEdit_registerValue_2->setStyleSheet(StyleHelper::getReadOnlyStyle());
+    }
+
+    if(!(regDataArray[regNum_3].flagReg & IREGF_READONLY)){
+        if(selectedComboBox == 3) ui->lineEdit_registerValue_3->setStyleSheet(StyleHelper::getSlidersSelectedStyle());
+        else ui->lineEdit_registerValue_3->setStyleSheet(StyleHelper::getReadWriteStyle());
+    }
+    else{
+         ui->lineEdit_registerValue_3->setStyleSheet(StyleHelper::getReadOnlyStyle());
+    }
+
+    // если работает слайдер, не пишем текущее значение
+    if(!(ui->horizontalSlider->underMouse())){
+        int regNum_1 = ui->comboBox_register_1->currentIndex();
+        int regNum_2 = ui->comboBox_register_2->currentIndex();
+        int regNum_3 = ui->comboBox_register_3->currentIndex();
+        qint16 valueInt_1 = regDataArray[regNum_1].value.Reg16;
+        qint16 valueInt_2 = regDataArray[regNum_2].value.Reg16;
+        qint16 valueInt_3 = regDataArray[regNum_3].value.Reg16;
+
+        ui->lineEdit_registerValue_1->setText(getRegisterInv(regNum_1, valueInt_1));
+        ui->lineEdit_registerValue_2->setText(getRegisterInv(regNum_2, valueInt_2));
+        ui->lineEdit_registerValue_3->setText(getRegisterInv(regNum_3, valueInt_3));
+    }
 }
 
-//------ установить значения выбранных регистров с учетом шкалы
+//------ установить границы слайдера
 void MainWindow::setSelectedRegisterSlider(int regNum){
     if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){
         ui->horizontalSlider->setMinimum(regDataArray[regNum].min.Reg16);
@@ -618,9 +721,6 @@ void MainWindow::setSelectedRegisterSlider(int regNum){
     if(regDataArray[regNum].flagReg & IREGF_MAX_PRESENT){
         ui->horizontalSlider->setMaximum(regDataArray[regNum].max.Reg16);
     }
-//    if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){
-//       scaleValue = QString::number(regDataArray[regNum].scale.Reg16, 10);
-//    }
     if(regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT){
        ui->horizontalSlider->setMaximum(regDataArray[regNum].maxValue.Reg16);
     }

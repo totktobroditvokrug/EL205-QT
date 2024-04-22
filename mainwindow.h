@@ -90,7 +90,7 @@ private slots:
     void addRowTableFromFile(QString lineFromFile);
     void checkInvertorStatus();
     void getFreqInv();
-    QString getRegisterInv(int regNum);
+    QString getRegisterInv(int regNum, qint16 valueInt);
     void setRegistersCombobox();
 
     QString glueString(quint16 data, quint8 registerInv);
@@ -119,11 +119,15 @@ private slots:
     void on_horizontalSlider_valueChanged(int value);
     void setSelectedRegisterSlider(int regNum);
 
-    void on_lineEdit_registerValue_0_selectionChanged();
-
     void on_lineEdit_registerValue_1_selectionChanged();
 
     void on_lineEdit_registerValue_2_selectionChanged();
+
+    void on_lineEdit_registerValue_3_selectionChanged();
+
+    void on_horizontalSlider_sliderPressed();
+
+    void on_horizontalSlider_sliderReleased();
 
 private:
     Ui::MainWindow *ui;

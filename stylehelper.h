@@ -17,6 +17,12 @@ public:
     static QString getStopedButtonStyle();
     static QString getAlarmButtonStyle();
 
+    static QString getReadOnlyStyle();
+    static QString getReadWriteStyle();
+
+    static QString getSlidersSelectedStyle();
+    static QString getRemoveSelectionStyle();
+
 };
 
 #endif // STYLEHELPER_H
