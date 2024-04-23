@@ -15,18 +15,14 @@ QByteArray AddCRC(QString textCommand, int indexStartByte)
     char checkSum = 0;
 
     QByteArray addCheckSum = QByteArray::fromHex(textCommand.toUtf8() ); // переводим строку в массив
-//    qDebug() << "приняли для подсчета массив:" << addCheckSum.toHex() << " из строки:" << textCommand;
     int SizeCMD = addCheckSum.size();
-//    qDebug() << "size=" << SizeCMD << "addCheckSum= " << addCheckSum;
     int i = 0;
     for (i = indexStartByte; i < SizeCMD; i++) // Начинаем считать для всех байт со 2-го
 
         {
             checkSum ^= addCheckSum[i];  // контрольная сумма по исключающему ИЛИ
-//            qDebug() << "index: " << i << "data[i]=" << addCheckSum[i] << " checkSum= " << checkSum;
         }
         addCheckSum.append(checkSum);
-//        qDebug() << "добавили контрольную сумму: " << checkSum;
     return addCheckSum;
 }
 
@@ -90,15 +86,6 @@ QStringList handleUartParsing(
     {
         if ((quint8(dataRead.at(i)) == AD_COM_ID_FIRST_BYTE)) // если вероятен первый пакет
         {
-//            qDebug() << "пришел стартовый байт_" <<
-//                        QString::number(quint8(dataRead[i]), 16) <<
-//                        QString::number(quint8(dataRead[i+1]), 16) <<
-//                        QString::number(quint8(dataRead[i+2]), 16) <<
-//                        QString::number(quint8(dataRead[i+3]), 16) <<
-//                        QString::number(quint8(dataRead[i+4]), 16) <<
-//                        QString::number(quint8(dataRead[i+5]), 16) <<
-//                        QString::number(quint8(dataRead[i+6]), 16);
-
             switch (quint8(dataRead.at(i+1))) { // проверяем второй байт после стартового
                 case AD_COM_ID_CAN_1 :{  // это CAN сообщение
                     if ((i+AD_COM_LENGTH_MIN-1) > dataSize){ // проверка по минимальной длине
@@ -113,7 +100,7 @@ QStringList handleUartParsing(
                           // qDebug() << "Неполное CAN сообщение";
                           // ui->textEdit_dataRead->append("-- Неполное CAN сообщение --");
                            parsingDataList.append("-- Неполное CAN сообщение --");
-                           return (parsingDataList); // добавить склейку неполных сообщений!!!
+                           return (parsingDataList); // добавить склейку неполных сообщений!!!!!!!
                         }
 
                         //---------- подсчет контрольной суммы -------------
@@ -241,4 +228,3 @@ QStringList handleUartParsing(
 
     return (parsingDataList);
 }
-

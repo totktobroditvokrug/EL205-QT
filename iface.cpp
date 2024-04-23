@@ -1,7 +1,7 @@
 #include "iface.h"
 
 
-
+//------------- формирование списка регистров из enum инвертора
 QStringList RegnumClass::regnumList() // вернет строку со списком enum
 {
     QStringList regnumList;
@@ -45,7 +45,6 @@ QVector<QString> RegnumClass::regnumArray()
      }
      return (regnumArray);
 }
-
 
 
 //-----------------Все данные стандартного CAN из парсинга uart-----------

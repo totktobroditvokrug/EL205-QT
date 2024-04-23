@@ -82,7 +82,7 @@ void MainWindow::initTabCan(){
     ui->comboBox_flowBit->addItem(tr("XON/XOFF"), 2);
 
 
-    ui->statusbar->showMessage("well");
+    ui->statusbar->showMessage("ver. 23-04-2024");
 
     ui->comboBox_canFreq->addItem(tr("125 kb/s"), 0);
     ui->comboBox_canFreq->addItem(tr("250 kb/s"), 1);
@@ -108,11 +108,14 @@ void MainWindow::initTabCan(){
     ui->pushButton_stopInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
     ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
 
+    ui->textEdit_invertorStatus->setEnabled(false);
+
     // отключить активность кнопок управления инвертором
     ui->pushButton_startInv->setEnabled(false);
     ui->pushButton_stopInv->setEnabled(false);
     ui->pushButton_alarmInv->setEnabled(false);
     // отключит активность полей вывода регистров. По ним вторично активизируется слайдер
+    ui->lineEdit_currentFreq->setEnabled(false);
     ui->lineEdit_registerValue_1->setEnabled(false);
     ui->lineEdit_registerValue_2->setEnabled(false);
     ui->lineEdit_registerValue_3->setEnabled(false);
@@ -169,7 +172,6 @@ void MainWindow::on_pushButton_connect_clicked()
         default: qDebug() << "Error setDataBits"; break;
     }
 
-
         // Установить бит четности
  //   qDebug() << "setParity: " << ui->comboBox_parity->currentIndex();
     switch(ui->comboBox_parity->currentIndex()) {
@@ -197,7 +199,6 @@ void MainWindow::on_pushButton_connect_clicked()
         default: qDebug() << "Error parity"; break;
     }
 
-
         // Установить стоп-бит
  //   qDebug() << "setStopBits: " << (ui->comboBox_stopBit->currentText().toInt());
     switch (ui->comboBox_stopBit->currentText().toUInt()) {
@@ -209,7 +210,6 @@ void MainWindow::on_pushButton_connect_clicked()
         } break;
         default: qDebug() << "Error stop bit"; break;
     }
-
 
     // Установить управление потоком
 
@@ -254,6 +254,7 @@ void MainWindow::on_pushButton_connect_clicked()
 
     init_setConfigAdapter();  // инициализация адаптера по частоте CAN и фильтру сообщений
 }
+
 
 void MainWindow::on_pushButton_disconnect_clicked()
 {

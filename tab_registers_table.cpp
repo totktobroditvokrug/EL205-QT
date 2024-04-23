@@ -632,8 +632,8 @@ void MainWindow::initComboBoxRegister()
 
 
     ui->comboBox_register_1->setCurrentIndex(IREG_UOUT);
-    ui->comboBox_register_2->setCurrentIndex(IREG_FREQ_REF_MAX);
-    ui->comboBox_register_3->setCurrentIndex(IREG_FC_IRMS);
+    ui->comboBox_register_2->setCurrentIndex(IREG_IOUT);
+    ui->comboBox_register_3->setCurrentIndex(IREG_FREQ_REF);
 
     ui->horizontalSlider->setEnabled(false);
     ui->lineEdit_registerValue_1->setEnabled(false);

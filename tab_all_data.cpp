@@ -75,6 +75,9 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     ui->pushButton_stopInv->setEnabled(true);
     ui->pushButton_alarmInv->setEnabled(true);
 
+    ui->textEdit_invertorStatus->setEnabled(true);
+
+    ui->lineEdit_currentFreq->setEnabled(true);
     ui->lineEdit_registerValue_1->setEnabled(true);
     ui->lineEdit_registerValue_2->setEnabled(true);
     ui->lineEdit_registerValue_3->setEnabled(true);
@@ -100,14 +103,20 @@ void MainWindow::on_pushButton_stopRead_clicked()
     ui->pushButton_startRead->setEnabled(true);
     ui->pushButton_disconnect->setEnabled(true);
     ui->pushButton_setRegistersFromFile->setEnabled(false);
+
     ui->pushButton_startInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
     ui->pushButton_stopInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
     ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+
     ui->pushButton_startInv->setEnabled(false);
     ui->pushButton_stopInv->setEnabled(false);
     ui->pushButton_alarmInv->setEnabled(false);
 
+    ui->textEdit_invertorStatus->setEnabled(false);
+
     ui->horizontalSlider->setEnabled(false);
+
+    ui->lineEdit_currentFreq->setEnabled(false);
     ui->lineEdit_registerValue_1->setEnabled(false);
     ui->lineEdit_registerValue_2->setEnabled(false);
     ui->lineEdit_registerValue_3->setEnabled(false);
