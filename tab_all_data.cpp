@@ -34,7 +34,7 @@ void MainWindow::readStream()
             // qDebug() << adapterAnswerList.join("\n");
             ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n"));
 
-            if(bytesFromAdapter > 60) {
+            if(bytesFromAdapter > 60) { // переделать под настоящие ответы по CAN
                ui->pushButton_setRegistersFromFile->setEnabled(true);
                emptyBufferCounter = 0;
             }
@@ -75,6 +75,10 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     ui->pushButton_stopInv->setEnabled(true);
     ui->pushButton_alarmInv->setEnabled(true);
 
+    ui->lineEdit_registerValue_1->setEnabled(true);
+    ui->lineEdit_registerValue_2->setEnabled(true);
+    ui->lineEdit_registerValue_3->setEnabled(true);
+
    ui->statusbar->showMessage("Запущено чтение CAN");
 }
 
@@ -104,6 +108,9 @@ void MainWindow::on_pushButton_stopRead_clicked()
     ui->pushButton_alarmInv->setEnabled(false);
 
     ui->horizontalSlider->setEnabled(false);
+    ui->lineEdit_registerValue_1->setEnabled(false);
+    ui->lineEdit_registerValue_2->setEnabled(false);
+    ui->lineEdit_registerValue_3->setEnabled(false);
 
     ui->statusbar->showMessage("Остановка чтения CAN");
 }

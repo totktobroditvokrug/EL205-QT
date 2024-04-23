@@ -68,7 +68,7 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
                ui->listWidget_regNum->addItem(item);
            }
         }
-        file.close(); // перенести на после for !!!!!!!!!
+        file.close();
     }
     else message = "Ошибка чтения файла ";
 
@@ -90,6 +90,7 @@ void MainWindow::deleteItemFromlistwidget(QListWidgetItem *item, quint8 index){
     regDataArray[index].displayed = false;
     deleteRowRegistersTable(index);
 
+    // чудовищная по скоростиисполнения реализация!!!!!! переделать
     ui->textEdit_selectedRegNum->clear();
     int countRegnum = ui->listWidget_regNum->count();
     for(int i = 0; i < countRegnum; i++){
@@ -141,5 +142,4 @@ void MainWindow::on_pushButton_resetAll_clicked()
         item->setCheckState(Qt::Unchecked);
         deleteItemFromlistwidget(item, index);
     }
-
 }

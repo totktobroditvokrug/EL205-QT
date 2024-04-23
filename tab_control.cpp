@@ -40,23 +40,3 @@ QString MainWindow::glueAdapterHeader(){
     return writeADHeader;
 }
 
-void MainWindow::on_pushButton_startInv_clicked()
-{
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_START, IREG_INV_CONTROL)), 2).toHex();
-    ui->textEdit_commandCRC->append(commandString);
-    writeSerialPort(commandString);
-}
-
-void MainWindow::on_pushButton_stopInv_clicked()
-{
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_STOP, IREG_INV_CONTROL)), 2).toHex();
-    ui->textEdit_commandCRC->append(commandString);
-    writeSerialPort(commandString);
-}
-
-void MainWindow::on_pushButton_alarmInv_clicked()
-{
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_ALARM, IREG_INV_CONTROL)), 2).toHex();
-    ui->textEdit_commandCRC->append(commandString);
-    writeSerialPort(commandString);
-}

@@ -636,6 +636,9 @@ void MainWindow::initComboBoxRegister()
     ui->comboBox_register_3->setCurrentIndex(IREG_FC_IRMS);
 
     ui->horizontalSlider->setEnabled(false);
+    ui->lineEdit_registerValue_1->setEnabled(false);
+    ui->lineEdit_registerValue_2->setEnabled(false);
+    ui->lineEdit_registerValue_3->setEnabled(false);
 }
 
  //------ расчет значение частоты
@@ -726,7 +729,32 @@ void MainWindow::setSelectedRegisterSlider(int regNum){
 }
 
 
-//---------- проверка статуса работы инвертора, стили кнопок управления в зависимости от режима
+//-------------------- панель управления ----------------------
+
+//---------- кнопки управления
+
+void MainWindow::on_pushButton_startInv_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_START, IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_stopInv_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_STOP, IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_alarmInv_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_ALARM, IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+//---------- проверка статуса работы инвертора
 void MainWindow::checkInvertorStatus()
 {
     QString currentStatus = "";
