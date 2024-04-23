@@ -127,6 +127,12 @@ private slots:
 
     void on_horizontalSlider_sliderReleased();
 
+    void on_pushButton_testMeasure_clicked();
+
+    void on_pushButton_showPanel_clicked();
+
+    void on_pushButton_hidePanel_clicked();
+
 private:
     Ui::MainWindow *ui;
 

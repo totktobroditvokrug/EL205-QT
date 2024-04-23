@@ -639,6 +639,8 @@ void MainWindow::initComboBoxRegister()
     ui->lineEdit_registerValue_1->setEnabled(false);
     ui->lineEdit_registerValue_2->setEnabled(false);
     ui->lineEdit_registerValue_3->setEnabled(false);
+
+    on_pushButton_showPanel_clicked(); // по умолчанию показать панель управления
 }
 
  //------ расчет значение частоты
@@ -732,6 +734,18 @@ void MainWindow::setSelectedRegisterSlider(int regNum){
 //-------------------- панель управления ----------------------
 
 //---------- кнопки управления
+
+void MainWindow::on_pushButton_showPanel_clicked()
+{
+    ui->groupBox_controlPanel->setVisible(true);
+    ui->pushButton_showPanel->setVisible(false);
+}
+
+void MainWindow::on_pushButton_hidePanel_clicked()
+{
+    ui->groupBox_controlPanel->setVisible(false);
+    ui->pushButton_showPanel->setVisible(true);
+}
 
 void MainWindow::on_pushButton_startInv_clicked()
 {

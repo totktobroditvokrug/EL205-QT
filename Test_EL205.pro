@@ -20,11 +20,13 @@ SOURCES += \
     iface.cpp \
     main.cpp \
     mainwindow.cpp \
+    measure.cpp \
     menu.cpp \
     stylehelper.cpp \
     tab_all_data.cpp \
     tab_can_adapter.cpp \
     tab_control.cpp \
+    tab_measure.cpp \
     tab_register_list.cpp \
     tab_registers_table.cpp
 
@@ -33,6 +35,7 @@ HEADERS += \
     iface.h \
     invertor.h \
     mainwindow.h \
+    measure.h \
     registers.h \
     stylehelper.h
 
