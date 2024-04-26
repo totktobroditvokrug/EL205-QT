@@ -140,10 +140,9 @@ void MainWindow::on_tableRegister_cellChanged(int row, int column)
            ui->tableRegister->item(row, column)->setText(newValueString);
             ui->tableRegister->blockSignals(true); // заблокировать фоновые события
         }
-
     }
-
 }
+
 
 void MainWindow::deleteRowRegistersTable(int index)
 {
@@ -219,7 +218,6 @@ void MainWindow::regDisplayTable()
                            scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
                            scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
                        }
-
                     }
 
                     ui->tableRegister->item(i, 2)->setText(min);
@@ -271,6 +269,7 @@ void MainWindow::regDisplayTable()
 }
 
 
+
 // --------------------   чтение и запись таблицы  -----------------------
 
 void MainWindow::createTableFromFile()
@@ -305,6 +304,7 @@ void MainWindow::createTableFromFile()
     ui->tableFromFile->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     ui->tableFromFile->blockSignals(true);
 }
+
 
 void MainWindow::addRowTableFromFile(QString lineFromFile)
 {
@@ -377,6 +377,7 @@ void MainWindow::addRowTableFromFile(QString lineFromFile)
 //    ui->tableRegister->item(prevRowCount, 7)->setFlags(Qt::NoItemFlags);
 }
 
+
 void MainWindow::on_pushButton_saveTable_clicked()
 {    QFileDialog dialogSave;
      QString pathSave = dialogSave.getSaveFileName(nullptr, "Save file", "/", "table (*.csv)");
@@ -413,6 +414,7 @@ void MainWindow::on_pushButton_saveTable_clicked()
      }
      else ui->statusbar->showMessage("Ошибка сохранения файла настроек " + pathSave);
 }
+
 
 void MainWindow::on_pushButton_loadTable_clicked()
 {
@@ -465,6 +467,7 @@ void MainWindow::checkValueRegister(int i, int value)   // запретить б
     }
 }
 
+
 // Проверка значений в таблице на диапазон и сравнение с текущими данными из ПЧ
 void MainWindow::on_pushButton_checkRegistersFromFile_clicked()
 {
@@ -514,6 +517,7 @@ void MainWindow::on_pushButton_setRegistersFromFile_clicked()
     ui->statusbar->showMessage("Ожидание записи регистров в ПЧ");
 }
 
+
 //---------------------------------- Быстрое меню и кнопки ------------------------
 
 //---------------- Запись регистра через слайдер
@@ -541,7 +545,6 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     break;
     }
 }
-
 
 
 // по сигналу отпускания слайдера делаем запись его значения в регистр
@@ -605,6 +608,7 @@ void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
     }
 }
 
+
 void MainWindow::on_lineEdit_registerValue_3_selectionChanged()
 {
   //  qDebug() << "было выбрано поле №3";
@@ -620,6 +624,7 @@ void MainWindow::on_lineEdit_registerValue_3_selectionChanged()
          ui->horizontalSlider->setEnabled(false);
     }
 }
+
 
 void MainWindow::initComboBoxRegister()
 {
@@ -641,12 +646,14 @@ void MainWindow::initComboBoxRegister()
     ui->lineEdit_registerValue_3->setEnabled(false);
 
     on_pushButton_showPanel_clicked(); // по умолчанию показать панель управления
+    ui->pushButton_showPanel->setIcon(QIcon());
 }
 
  //------ расчет значение частоты
 void MainWindow::getFreqInv(){     
       ui->lineEdit_currentFreq->setText(getRegisterInv(IREG_FREQ, regDataArray[IREG_FREQ].value.Reg16));
 }
+
 
 //------ расчет значения регистра с учетом шкалы
 QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
@@ -672,9 +679,13 @@ QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
 
 //------ установить значения трех выбранных регистров быстрого доступа с учетом шкалы
 void MainWindow::setRegistersCombobox(){
+    // по выбранным в комбобоксе регистрам смотрим их значения
     int regNum_1 = ui->comboBox_register_1->currentIndex();
     int regNum_2 = ui->comboBox_register_2->currentIndex();
     int regNum_3 = ui->comboBox_register_3->currentIndex();
+    qint16 valueInt_1 = regDataArray[regNum_1].value.Reg16;
+    qint16 valueInt_2 = regDataArray[regNum_2].value.Reg16;
+    qint16 valueInt_3 = regDataArray[regNum_3].value.Reg16;
 
     //------ определить, можно ли редактировать регистр
     if(!(regDataArray[regNum_1].flagReg & IREGF_READONLY)){
@@ -703,18 +714,17 @@ void MainWindow::setRegistersCombobox(){
 
     // если работает слайдер, не пишем текущее значение трех регистров быстрого доступа
     if(!(ui->horizontalSlider->underMouse())){
-        int regNum_1 = ui->comboBox_register_1->currentIndex();
-        int regNum_2 = ui->comboBox_register_2->currentIndex();
-        int regNum_3 = ui->comboBox_register_3->currentIndex();
-        qint16 valueInt_1 = regDataArray[regNum_1].value.Reg16;
-        qint16 valueInt_2 = regDataArray[regNum_2].value.Reg16;
-        qint16 valueInt_3 = regDataArray[regNum_3].value.Reg16;
-
         ui->lineEdit_registerValue_1->setText(getRegisterInv(regNum_1, valueInt_1));
         ui->lineEdit_registerValue_2->setText(getRegisterInv(regNum_2, valueInt_2));
         ui->lineEdit_registerValue_3->setText(getRegisterInv(regNum_3, valueInt_3));
     }
+
+    ui->pushButton_showPanel->setText("     F = " + getRegisterInv(IREG_FREQ, regDataArray[IREG_FREQ].value.Reg16) +
+                                      "      " + ui->comboBox_register_1->currentText() + " = " + getRegisterInv(regNum_1, valueInt_1) +
+                                      "      " + ui->comboBox_register_2->currentText() + " = " + getRegisterInv(regNum_2, valueInt_2) +
+                                      "      " + ui->comboBox_register_3->currentText() + " = " + getRegisterInv(regNum_3, valueInt_3));
 }
+
 
 //------ установить границы слайдера
 void MainWindow::setSelectedRegisterSlider(int regNum){
@@ -777,14 +787,17 @@ void MainWindow::checkInvertorStatus()
 
       if (invStatus & INV_STS_TO_STOP_MODE) {
           ui->pushButton_startInv->setStyleSheet(StyleHelper::getWaitButtonStyle());
+          ui->pushButton_showPanel->setIcon(QIcon(":/images/wait.png"));
       }
       else{
          ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartedButtonStyle());
+         ui->pushButton_showPanel->setIcon(QIcon(":/images/start.png"));
       }
       currentStatus += ("Система запущена \n");
     }
     else{
       ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartButtonStyle());
+      ui->pushButton_showPanel->setIcon(QIcon(":/images/stop.png"));
       currentStatus += ("Система остановлена \n");
     }
     if (invStatus & INV_STS_WAIT_RECT_START) currentStatus += ("Ожидает запуска выпрямителя \n");

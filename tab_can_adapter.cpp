@@ -82,7 +82,7 @@ void MainWindow::initTabCan(){
     ui->comboBox_flowBit->addItem(tr("XON/XOFF"), 2);
 
 
-    ui->statusbar->showMessage("ver. 23-04-2024");
+    ui->statusbar->showMessage("ver. 26-04-2024");
 
     ui->comboBox_canFreq->addItem(tr("125 kb/s"), 0);
     ui->comboBox_canFreq->addItem(tr("250 kb/s"), 1);
