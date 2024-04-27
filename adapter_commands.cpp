@@ -71,7 +71,8 @@ QStringList handleUartParsing(
     bool checkAnswer,
     QVector<QString> regNumList,  // имена регистров, взятые из enum или из файла
     registerFields *regDataArray,  // эти поля регистров надо заполнить (данные, масштабы)
-    QStringList *adapterAnswerList
+    QStringList *adapterAnswerList,
+    QHash<QByteArray, QByteArray> *canByID
 ) {
     formatCanMessage canMessage;
     QStringList parsingDataList;
@@ -82,6 +83,7 @@ QStringList handleUartParsing(
     bool CRC_OK = false;
 
     parsingDataList.clear();
+
     int dataSize = dataRead.size(); // размер полученных данных для парсинга
     for (int i=0; i<=(dataSize-2); i++)
     {
@@ -138,6 +140,9 @@ QStringList handleUartParsing(
                         canMessage.id_hdr = idHdr;
                         canMessage.data = standartArrayDATA;
                         canMessage.dataLen = lengthDataCAN;
+
+                        // заполняем хэш-таблицу с ключом по ID
+                        canByID->insert(standartArrayID, standartArrayDATA); // новый id добавится, старый перезапишется
 
                         //----- проверка формата CAN (расширенный/стандартный)
                         if(!(quint8(dataRead.at(i+11)) & AD_COM_EXT_CAN_FLAG)) // если стандартное сообщение

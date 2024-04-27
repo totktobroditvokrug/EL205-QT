@@ -163,6 +163,7 @@ void MainWindow::regDisplayTable()
     checkInvertorStatus();
     getFreqInv();
     setRegistersCombobox();
+    //
 
     if( ui->tableRegister->signalsBlocked()) ui->tableRegister->blockSignals(false);
     for(int i = 0; i <= ui->tableRegister->rowCount(); i++){

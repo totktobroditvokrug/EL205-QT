@@ -23,6 +23,8 @@
 
 #include<QDebug>
 
+#include <QHash>
+
 #include "adapter_commands.h"
 #include <iface.h>
 
@@ -93,6 +95,8 @@ private slots:
     QString getRegisterInv(int regNum, qint16 valueInt);
     void setRegistersCombobox();
 
+    void displayHashID();
+
     QString glueString(quint16 data, quint8 registerInv);
     QString glueAdapterHeader();
 
@@ -133,6 +137,7 @@ private slots:
 
     void on_pushButton_hidePanel_clicked();
 
+
 private:
     Ui::MainWindow *ui;
 
@@ -144,5 +149,7 @@ private:
     QStringList adapterAnswerList; // ошибки адаптера и дежурные ответы
     int emptyBufferCounter; // количество попыток связи с can
     int selectedComboBox;
+
+    QHash<QByteArray, QByteArray> canByID;  // хэш таблица всех пришедших ID (добавить архив)
 };
 #endif // MAINWINDOW_H

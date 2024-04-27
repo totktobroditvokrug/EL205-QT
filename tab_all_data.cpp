@@ -22,22 +22,24 @@ void MainWindow::readStream()
             ui->lineEdit_availableByte->setText(QString::number(bytesFromAdapter, 10));
             // qDebug() << "прочитано " << QString::number(serial->bytesAvailable(), 10) << " байт";
             dataRead = serial->readAll();
+            // принятые данные распишутся по структурам и возвращаютсяв виде форматированных строк ответа
             QStringList parsingDataList = handleUartParsing(dataRead,
                                                             checkStandart,
                                                             checkExtended,
                                                             checkAnswer,
                                                             regNumList,
                                                             regDataArray,
-                                                            &adapterAnswerList);
-            if (parsingDataList.size() > 0){
+                                                            &adapterAnswerList,
+                                                            &canByID);
+            if (parsingDataList.size() > 0){ // если ответ не нулевой, выводим его в текстовое поле регулируемой длины
                 ui->textEdit_dataRead->append(parsingDataList.join("\n"));
             }
 
-
-
             regDisplayTable();
+            displayHashID();
+
             // qDebug() << adapterAnswerList.join("\n");
-            ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n"));
+            ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n")); // убрать со временем эту заглушку
 
             if(bytesFromAdapter > 60) { // переделать под настоящие ответы по CAN
                ui->pushButton_setRegistersFromFile->setEnabled(true);
@@ -46,6 +48,7 @@ void MainWindow::readStream()
             return;  // обработали валидное количество байт. Выходим из функции запроса
         }
     }
+
     ui->pushButton_setRegistersFromFile->setEnabled(false);
     if(emptyBufferCounter < 15) {
         init_setConfigAdapter(); // если не было ничего прочитано, повторно конфигурируем адаптер
@@ -151,4 +154,15 @@ void MainWindow::on_pushButton_clearAnswer_clicked()
 {
     ui->textEdit_adapterAnswer->clear();
     adapterAnswerList.clear();
+}
+
+void MainWindow::displayHashID()
+{
+    // qDebug() << "displayHashID";
+    ui->textEdit_hash->clear();
+    QHashIterator<QByteArray, QByteArray> iterator(canByID);
+    for (auto i = canByID.cbegin(), end = canByID.cend(); i != end; ++i){
+     //   qDebug() << "ID: " + QString::fromUtf8(i.key().toHex(' '));
+        ui->textEdit_hash->append(QString::fromUtf8(i.key().toHex(' ')) + " : " + QString::fromUtf8(i.value().toHex(' ')));
+    }
 }
