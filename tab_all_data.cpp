@@ -22,13 +22,18 @@ void MainWindow::readStream()
             ui->lineEdit_availableByte->setText(QString::number(bytesFromAdapter, 10));
             // qDebug() << "прочитано " << QString::number(serial->bytesAvailable(), 10) << " байт";
             dataRead = serial->readAll();
-            ui->textEdit_dataRead->setText(handleUartParsing(dataRead,
-                                                             checkStandart,
-                                                             checkExtended,
-                                                             checkAnswer,
-                                                             regNumList,
-                                                             regDataArray,
-                                                             &adapterAnswerList).join("\n"));
+            QStringList parsingDataList = handleUartParsing(dataRead,
+                                                            checkStandart,
+                                                            checkExtended,
+                                                            checkAnswer,
+                                                            regNumList,
+                                                            regDataArray,
+                                                            &adapterAnswerList);
+            if (parsingDataList.size() > 0){
+                ui->textEdit_dataRead->append(parsingDataList.join("\n"));
+            }
+
+
 
             regDisplayTable();
             // qDebug() << adapterAnswerList.join("\n");

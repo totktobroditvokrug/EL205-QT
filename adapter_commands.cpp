@@ -80,6 +80,7 @@ QStringList handleUartParsing(
     quint8 CRC;  // CRC из посылки
     QString checkCRC = "crc-FALSE";
     bool CRC_OK = false;
+
     parsingDataList.clear();
     int dataSize = dataRead.size(); // размер полученных данных для парсинга
     for (int i=0; i<=(dataSize-2); i++)
@@ -137,8 +138,6 @@ QStringList handleUartParsing(
                         canMessage.id_hdr = idHdr;
                         canMessage.data = standartArrayDATA;
                         canMessage.dataLen = lengthDataCAN;
-
-
 
                         //----- проверка формата CAN (расширенный/стандартный)
                         if(!(quint8(dataRead.at(i+11)) & AD_COM_EXT_CAN_FLAG)) // если стандартное сообщение
