@@ -148,87 +148,105 @@ void MainWindow::on_pushButton_connect_clicked()
         ui->label_baudOk->setText("ok");
       //  qDebug() << "setBaudRate" << ui->comboBox_baudRate->currentText().toInt();
     }
-    else qDebug() << "Error setBaudRate";
+    else ui->label_baudOk->setText("err");
 
 
         // Устанавливаем биты данных
     switch (ui->comboBox_dataBits->currentText().toUInt()) {
-        case 5: if (serial->setDataBits(QSerialPort::Data5)) {
-           ui->label_dataOk->setText("ok");
-          // qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
-        } break;
+    case 5: if (serial->setDataBits(QSerialPort::Data5)) {
+            ui->label_dataOk->setText("ok");
+        }
+        else ui->label_dataOk->setText("err");
+        break;
     case 6: if (serial->setDataBits(QSerialPort::Data6)){
-          //  ui->label_dataOk->setText("ok");
-            qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
-        } break;
+            ui->label_dataOk->setText("err");
+        }
+        else ui->label_dataOk->setText("ok");
+        break;
     case 7: if (serial->setDataBits(QSerialPort::Data7)){
             ui->label_dataOk->setText("ok");
-          //  qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
-        } break;
+        }
+        else ui->label_dataOk->setText("err");
+        break;
     case 8: if (serial->setDataBits(QSerialPort::Data8)){
-            ui->label_dataOk->setText("OK");
-          //  qDebug() << "setDataBits: " << (ui->comboBox_dataBits->currentText().toInt());
-        } break;
-        default: qDebug() << "Error setDataBits"; break;
+            ui->label_dataOk->setText("ok");
+        }
+        else ui->label_dataOk->setText("err");
+        break;
+    default: ui->label_dataOk->setText("err"); break;
     }
 
         // Установить бит четности
- //   qDebug() << "setParity: " << ui->comboBox_parity->currentIndex();
     switch(ui->comboBox_parity->currentIndex()) {
-        case 0:
-            if (serial->setParity(QSerialPort::NoParity)){
-               ui->label_parityOk->setText("OK");
-            }
-             break;
-        case 1:
-            if (serial->setParity(QSerialPort::EvenParity)){
-                ui->label_parityOk->setText("ok");
-            } break;
-        case 2:
-            if (serial->setParity(QSerialPort::OddParity)){
-                ui->label_parityOk->setText("ok");
-            } break;
-        case 3:
-            if (serial->setParity(QSerialPort::MarkParity)){
-                ui->label_parityOk->setText("ok");
-            } break;
-        case 4:
-            if (serial->setParity(QSerialPort::SpaceParity)){
-                ui->label_parityOk->setText("ok");
-            } break;
-        default: qDebug() << "Error parity"; break;
+    case 0:
+        if (serial->setParity(QSerialPort::NoParity)){
+            ui->label_parityOk->setText("ok");
+        }
+        else ui->label_parityOk->setText("err");
+        break;
+    case 1:
+        if (serial->setParity(QSerialPort::EvenParity)){
+            ui->label_parityOk->setText("ok");
+        }
+        else ui->label_parityOk->setText("err");
+        break;
+    case 2:
+        if (serial->setParity(QSerialPort::OddParity)){
+            ui->label_parityOk->setText("ok");
+        }
+        else ui->label_parityOk->setText("err");
+        break;
+    case 3:
+        if (serial->setParity(QSerialPort::MarkParity)){
+            ui->label_parityOk->setText("ok");
+        }
+        else ui->label_parityOk->setText("err");
+        break;
+    case 4:
+        if (serial->setParity(QSerialPort::SpaceParity)){
+            ui->label_parityOk->setText("ok");
+        }
+        else ui->label_parityOk->setText("err");
+        break;
+    default: ui->label_parityOk->setText("err"); break;
     }
 
         // Установить стоп-бит
- //   qDebug() << "setStopBits: " << (ui->comboBox_stopBit->currentText().toInt());
     switch (ui->comboBox_stopBit->currentText().toUInt()) {
-        case 1: if (serial->setStopBits(QSerialPort::OneStop)){
+    case 1: if (serial->setStopBits(QSerialPort::OneStop)){
             ui->label_stopOk->setText("ok");
-        } break;
+        }
+        else ui->label_stopOk->setText("err");
+        break;
     case 2:  if (serial->setStopBits(QSerialPort::TwoStop)){
-        ui->label_stopOk->setText("ok");
-        } break;
-        default: qDebug() << "Error stop bit"; break;
+            ui->label_stopOk->setText("ok");
+        }
+        else ui->label_stopOk->setText("err");
+        break;
+    default: ui->label_stopOk->setText("err"); break;
     }
 
     // Установить управление потоком
-
- //   qDebug() << "setFlowControl: " << ui->comboBox_flowBit->currentIndex();
-
     switch (ui->comboBox_flowBit->currentIndex()) {
-        case 0:
-            if (serial->setFlowControl(QSerialPort::NoFlowControl)){
-                ui->label_flowOk->setText("OK");
-            } break;
-        case 1:
-            if (serial->setFlowControl(QSerialPort::HardwareControl)){
-                ui->label_flowOk->setText("OK");
-            } break;
-        case 2:
-            if (serial->setFlowControl(QSerialPort::SoftwareControl)){
-                ui->label_flowOk->setText("OK");
-            } break;
-        default: qDebug() << "Error setFlowControl"; break;
+    case 0:
+        if (serial->setFlowControl(QSerialPort::NoFlowControl)){
+            ui->label_flowOk->setText("ok");
+        }
+        else ui->label_flowOk->setText("err");
+        break;
+    case 1:
+        if (serial->setFlowControl(QSerialPort::HardwareControl)){
+            ui->label_flowOk->setText("ok");
+        }
+        else ui->label_flowOk->setText("err");
+        break;
+    case 2:
+        if (serial->setFlowControl(QSerialPort::SoftwareControl)){
+            ui->label_flowOk->setText("ok");
+        }
+        else ui->label_flowOk->setText("err");
+        break;
+    default: ui->label_flowOk->setText("err"); break;
     }
 
     // пробуем подключится
@@ -270,6 +288,12 @@ void MainWindow::on_pushButton_disconnect_clicked()
     ui->comboBox_parity->setEnabled(true);
     ui->comboBox_serialPort->setEnabled(true);
     ui->comboBox_stopBit->setEnabled(true);
+
+    ui->label_flowOk->setText("-");
+    ui->label_stopOk->setText("-");
+    ui->label_parityOk->setText("-");
+    ui->label_dataOk->setText("-");
+    ui->label_baudOk->setText("-");
 
 //   ui->pushButton_sendMessage->setEnabled(false);
     ui->pushButton_readOnce->setEnabled(false);

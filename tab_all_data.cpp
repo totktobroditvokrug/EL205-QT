@@ -29,7 +29,6 @@ void MainWindow::readStream()
                                                             checkAnswer,
                                                             regNumList,
                                                             regDataArray,
-                                                            &adapterAnswerList,
                                                             &canByID);
             if (parsingDataList.size() > 0){ // если ответ не нулевой, выводим его в текстовое поле регулируемой длины
                 ui->textEdit_dataRead->append(parsingDataList.join("\n"));
@@ -37,9 +36,6 @@ void MainWindow::readStream()
 
             regDisplayTable();
             displayHashID();
-
-            // qDebug() << adapterAnswerList.join("\n");
-            ui->textEdit_adapterAnswer->setText(adapterAnswerList.join("\n")); // убрать со временем эту заглушку
 
             if(bytesFromAdapter > 60) { // переделать под настоящие ответы по CAN
                ui->pushButton_setRegistersFromFile->setEnabled(true);
@@ -147,13 +143,6 @@ void MainWindow::on_lineEdit_volumeTextRead_editingFinished()
 void MainWindow::on_lineEdit_freqSampl_editingFinished()
 {
     timer->setInterval((ui->lineEdit_freqSampl->text().toInt()));
-}
-
-//------- очистить поле ответов адаптера и список ошибок
-void MainWindow::on_pushButton_clearAnswer_clicked()
-{
-    ui->textEdit_adapterAnswer->clear();
-    adapterAnswerList.clear();
 }
 
 void MainWindow::displayHashID()

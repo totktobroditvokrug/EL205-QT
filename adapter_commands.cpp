@@ -71,7 +71,6 @@ QStringList handleUartParsing(
     bool checkAnswer,
     QVector<QString> regNumList,  // имена регистров, взятые из enum или из файла
     registerFields *regDataArray,  // эти поля регистров надо заполнить (данные, масштабы)
-    QStringList *adapterAnswerList,
     QHash<QByteArray, QByteArray> *canByID
 ) {
     formatCanMessage canMessage;
@@ -177,7 +176,6 @@ QStringList handleUartParsing(
                         QByteArray answerArrayDATA = dataRead.mid((i+7), lengthDataAnswer-6);
                         QString adapterAnswer = handleAdapterAnswer(answerArrayID, lengthDataAnswer, answerArrayDATA);
                       //  qDebug() << "дежурный ответ: " << adapterAnswer;
-                        adapterAnswerList->append(adapterAnswer);
                         if(checkAnswer) {
                              parsingDataList.append(adapterAnswer);
                         }
@@ -186,13 +184,11 @@ QStringList handleUartParsing(
                 } break;
                 case AD_COM_ID_ERR_1START_BYTE :{
                 // qDebug() << "ERR: пропущен первый стартовый байт при передаче";
-                   adapterAnswerList->append("ERR: пропущен первый стартовый байт при передаче");
                     parsingDataList.append("ERR: пропущен первый стартовый байт при передаче");
                     i+=1;
                 } break;
                 case AD_COM_ID_ERR_2START_BYTE :{
                // qDebug() << "ERR: пропущен второй стартовый байт при передаче";
-                    adapterAnswerList->append("ERR: пропущен второй стартовый байт при передаче");
                     parsingDataList.append("ERR: пропущен второй стартовый байт при передаче");
                     i+=1;
                 } break;
@@ -201,7 +197,6 @@ QStringList handleUartParsing(
                         if((quint8(dataRead.at(i+2)) == AD_COM_ID_FIRST_BYTE) &&
                             ((quint8(dataRead.at(i+3))) == AD_COM_ID_ERR_CHECK_SUM)){
                          //   qDebug() << "ERR: неправильная контрольная сумма при передаче";
-                            adapterAnswerList->append("ERR: неправильная контрольная сумма при передаче");
                             parsingDataList.append("ERR: неправильная контрольная сумма при передаче");
                          //   qDebug() << "ошибка CRC: " << dataRead[i] << ":" << dataRead[i+1];
                             i+=3;
@@ -211,20 +206,17 @@ QStringList handleUartParsing(
                 } break;
                 case AD_COM_ID_OVER_LENGTH :{
              //   qDebug() << "ERR: длина посылки более 40 бит";
-                    adapterAnswerList->append("ERR: длина посылки более 40 бит");
                     parsingDataList.append("ERR: длина посылки более 40 бит");
                     i+=1;
                 } break;
                 case AD_COM_ID_ERR_TRANS_CAN :{
              //   qDebug() << "ERR: ошибка при передаче CAN-сообщения";
-                    adapterAnswerList->append("ERR: ошибка при передаче CAN-сообщения");
                     parsingDataList.append("ERR: ошибка при передаче CAN-сообщения");
                     i+=1;
                 } break;
                 default:{
               //  qDebug() << "Это был не стартовый бит, а случайно залетевшее число, похожее на него!!!";
                      parsingDataList.append("Это был не стартовый бит, а случайно залетевшее число, похожее на него!!!");
-                     adapterAnswerList->append("Это был не стартовый бит, а случайно залетевшее число, похожее на него!!!");
                 } break;
             }
         }

@@ -17,23 +17,12 @@ MainWindow::MainWindow(QWidget *parent)
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
 
-//    timerRegDisplay = new QTimer;
-//    connect(timer, SIGNAL(timeout()), this, SLOT(regDisplay()));
-
-
-//    QByteArray standartArrayID = QByteArray::fromHex("0000"); // ID сообщения 4 байта
-//    QByteArray standartArrayDATA = QByteArray::fromHex("00000000");
-
-//    canByID.insert(standartArrayID, standartArrayDATA);
-
     ui->setupUi(this);
 
     ui->tabWidget_registerWidget->setCurrentIndex(0); // окно при загрузке с настройками интерфейса
 
     ui->lineEdit_volumeTextRead->setText("50");
     ui->textEdit_dataRead->document()->setMaximumBlockCount(50); //
-    ui->textEdit_adapterAnswer->document()->setMaximumBlockCount(100);
-
 
     serial = new QSerialPort;  // объявляем serial
 

@@ -118,8 +118,6 @@ private slots:
 
     void on_pushButton_setRegistersFromFile_clicked();
 
-    void on_pushButton_clearAnswer_clicked();
-
     void on_horizontalSlider_valueChanged(int value);
     void setSelectedRegisterSlider(int regNum);
 

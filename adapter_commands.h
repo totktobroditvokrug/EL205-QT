@@ -75,7 +75,6 @@ QStringList handleUartParsing(
         bool checkAnswer,
         QVector<QString> regNumList,
         registerFields *regDataArray,
-        QStringList *adapterAnswerList,
         QHash<QByteArray, QByteArray> *canByID);
 
 #endif // ADAPTER_COMMANDS_H
