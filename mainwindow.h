@@ -144,10 +144,10 @@ private:
  //   QTimer *timerRegDisplay; // таймер вывода регистров на дисплей
     QVector<QString> regNumList; // формирование списка регистров
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
-    QStringList adapterAnswerList; // ошибки адаптера и дежурные ответы
     int emptyBufferCounter; // количество попыток связи с can
     int selectedComboBox;
 
-    QHash<QByteArray, QByteArray> canByID;  // хэш таблица всех пришедших ID (добавить архив)
+    QHash<quint16, QByteArray> canByIdStandart;  // хэш таблица стандартных ID (добавить архив)
+    QHash<quint32, QByteArray> canByIdExtended;  // хэш таблица расширенных ID (добавить архив)
 };
 #endif // MAINWINDOW_H

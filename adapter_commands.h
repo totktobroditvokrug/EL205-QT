@@ -45,17 +45,38 @@ const quint8 AD_COM_ID_ERR_TRANS_CAN = 0x68;         // Ошибка при пе
 const quint8 AD_COM_EXT_CAN_FLAG = 0x20;  // флаг расширенного CAN сообщения
 
 
+//struct formatCanMessage {
+//    union { // переделать под 4 байта!!!
+
+//        quint16 id16; // 16-ти битный идентификатор. Будет адресом массива всех данных
+//        struct {         // идентификатор в двух 8-ми битных полях
+//          quint8 id_body;
+//          quint8 id_hdr;
+//      };
+//    };
+//   quint8 dataLen;          // длина переданных данных
+//   QByteArray data;  	// данные
+//   quint8 numberSerialMessage;  // под каким номером пришло сообщение
+//};
+
 struct formatCanMessage {
-    union { // переделать под 4 байта!!!
-        quint16 id16; // 16-ти битный идентификатор. Будет адресом массива всех данных
+    union { // 4 байта ID
+        quint32 id_ext_32; // 16-ти битный идентификатор. Будет адресом массива всех данных
         struct {         // идентификатор в двух 8-ми битных полях
-          quint8 id_body;
-          quint8 id_hdr;
-      };
+            quint8 id_0; // самый младший байт id extended
+            quint8 id_1; // второй байт id extended
+            union {
+                quint16 id_std_16; // 16-ти битный идентификатор. Будет адресом массива всех данных
+                struct {         // идентификатор в двух 8-ми битных полях
+                    quint8 id_body;
+                    quint8 id_hdr;
+                };
+            };
+        };
     };
-   quint8 dataLen;          // длина переданных данных
-   QByteArray data;  	// данные
-   quint8 numberSerialMessage;  // под каким номером пришло сообщение
+    quint8 dataLen;          // длина переданных данных
+    QByteArray data;  	// данные
+    quint8 numberSerialMessage;  // под каким номером пришло сообщение
 };
 
 //-------------- Добавление контрольной суммы для адаптера EL205-1 -------------
@@ -75,6 +96,7 @@ QStringList handleUartParsing(
         bool checkAnswer,
         QVector<QString> regNumList,
         registerFields *regDataArray,
-        QHash<QByteArray, QByteArray> *canByID);
+        QHash<quint16, QByteArray> *canByIdStandart,
+        QHash<quint32, QByteArray> *canByIdExtended);
 
 #endif // ADAPTER_COMMANDS_H

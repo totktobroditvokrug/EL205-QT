@@ -47,7 +47,7 @@ quint8 calcCRC(QByteArray addCheckSum)
 QString handleCAN(formatCanMessage canMessage, QString prefix)
 {
     QString str = (QString::number(canMessage.numberSerialMessage, 10).rightJustified(3, '_') + prefix + " ID: " +
-                   QString::number(canMessage.id16, 16).rightJustified(4, '0') + " length: " +
+                   QString::number(canMessage.id_std_16, 16).rightJustified(4, '0') + " length: " +
                    QString::number(canMessage.dataLen, 10) +
                    " DATA:" + QString::fromUtf8(canMessage.data.toHex(' ')));
     return (str);
@@ -65,13 +65,14 @@ QString handleAdapterAnswer(QByteArray answerArrayID, quint8 lengthDataAnswer, Q
 
 //-------------- Парсинг потока из адаптера EL205-1 -----------------------------
 QStringList handleUartParsing(
-    QByteArray dataRead,
-    bool checkStandart,
-    bool checkExtended,
-    bool checkAnswer,
+    QByteArray dataRead,  // принятай массив из CAN-адаптера
+    bool checkStandart,   // флаг на вывод стандартных CAN сообщений
+    bool checkExtended,   // флаг на вывод расширенных CAN сообщений
+    bool checkAnswer,     // флаг на вывод ответов адаптера
     QVector<QString> regNumList,  // имена регистров, взятые из enum или из файла
     registerFields *regDataArray,  // эти поля регистров надо заполнить (данные, масштабы)
-    QHash<QByteArray, QByteArray> *canByID
+    QHash<quint16, QByteArray> *canByIdStandart, // таблица стандартных CAN сообщений
+    QHash<quint32, QByteArray> *canByIdExtended  // таблица расширенных CAN сообщений
 ) {
     formatCanMessage canMessage;
     QStringList parsingDataList;
@@ -118,30 +119,30 @@ QStringList handleUartParsing(
                         }
                     }
 
-
                     //-------- если длина сообщения достаточная, заполняем поля ID, DATA и проверяем формат
                     //-------- 4 байта ID_CAN, флаги, количество байт данных, 8 байт данных (с 7 по 20 позиции)
 
                         QByteArray arrayDataFromCAN = dataRead.mid((i+7), 14); // 4 ID, 1 Flags, 1 Length, 8 DATA
-                        QByteArray standartArrayID = dataRead.mid((i+7), 4); // ID сообщения 4 байта
+                        QByteArray arrayID = dataRead.mid((i+7), 4); // ID сообщения 4 байта
 
                         quint8 idBody = quint8(dataRead[i+7]);  // тело идентификатора
                         quint8 idHdr = quint8(dataRead[i+8]);   // заголовок идентификатора
+                        quint8 id_1 = quint8(dataRead[i+9]);  // тело идентификатора
+                        quint8 id_0 = quint8(dataRead[i+10]);   // заголовок идентификатора
 
                         quint8 lengthDataCAN = quint8(dataRead[i+12]);  // длина сообщения
 
-                        QByteArray standartArrayDATA = dataRead.mid((i+13), 8);
+                        QByteArray arrayDATA = dataRead.mid((i+13), 8);
                         quint8 numberSerialMessage = quint8(dataRead[i+21]);  // номер сообщения
 
 
                         canMessage.numberSerialMessage = numberSerialMessage;
                         canMessage.id_body = idBody;
                         canMessage.id_hdr = idHdr;
-                        canMessage.data = standartArrayDATA;
+                        canMessage.id_1 = id_1;
+                        canMessage.id_0 = id_0;
+                        canMessage.data = arrayDATA;
                         canMessage.dataLen = lengthDataCAN;
-
-                        // заполняем хэш-таблицу с ключом по ID
-                        canByID->insert(standartArrayID, standartArrayDATA); // новый id добавится, старый перезапишется
 
                         //----- проверка формата CAN (расширенный/стандартный)
                         if(!(quint8(dataRead.at(i+11)) & AD_COM_EXT_CAN_FLAG)) // если стандартное сообщение
@@ -153,6 +154,9 @@ QStringList handleUartParsing(
                             //------------ заполняем поля стандартного фрэйма ----------
                            handleAllStandartDataCan(arrayDataFromCAN, regDataArray, regNumList);
 
+                           // заполняем хэш-таблицу с ключом по стандартному ID
+                           canByIdStandart->insert(canMessage.id_std_16, arrayDATA); // новый id добавится, старый перезапишется
+
                             if(checkStandart) parsingDataList.append(standartFrame);  // выводим при чекбоксе
                         }
                         else
@@ -160,6 +164,10 @@ QStringList handleUartParsing(
                            // qDebug() << "Расширенное CAN сообщение №";
                             QString extendedFrame = handleCAN(canMessage, EXT_PREFIX + checkCRC);
                             if(checkExtended) parsingDataList.append(extendedFrame);  // выводим при чекбоксе
+
+                            // заполняем хэш-таблицу с ключом по стандартному ID
+                            canByIdExtended->insert(canMessage.id_ext_32, arrayDATA); // новый id добавится, старый перезапишется
+
                         }
 
                     i=i+dataRead[i+2]+2; // перевод счетчика байт на начало следующего пакета минус 1

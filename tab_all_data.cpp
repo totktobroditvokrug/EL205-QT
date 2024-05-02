@@ -29,7 +29,8 @@ void MainWindow::readStream()
                                                             checkAnswer,
                                                             regNumList,
                                                             regDataArray,
-                                                            &canByID);
+                                                            &canByIdStandart,
+                                                            &canByIdExtended);
             if (parsingDataList.size() > 0){ // если ответ не нулевой, выводим его в текстовое поле регулируемой длины
                 ui->textEdit_dataRead->append(parsingDataList.join("\n"));
             }
@@ -143,15 +144,4 @@ void MainWindow::on_lineEdit_volumeTextRead_editingFinished()
 void MainWindow::on_lineEdit_freqSampl_editingFinished()
 {
     timer->setInterval((ui->lineEdit_freqSampl->text().toInt()));
-}
-
-void MainWindow::displayHashID()
-{
-    // qDebug() << "displayHashID";
-    ui->textEdit_hash->clear();
-    QHashIterator<QByteArray, QByteArray> iterator(canByID);
-    for (auto i = canByID.cbegin(), end = canByID.cend(); i != end; ++i){
-     //   qDebug() << "ID: " + QString::fromUtf8(i.key().toHex(' '));
-        ui->textEdit_hash->append(QString::fromUtf8(i.key().toHex(' ')) + " : " + QString::fromUtf8(i.value().toHex(' ')));
-    }
 }

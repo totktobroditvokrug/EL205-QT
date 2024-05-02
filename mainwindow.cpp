@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent)
         tempVector[i] = value;
     }
     regNumList = tempVector;  // инициализация списка регистров
-    adapterAnswerList.clear(); // ошибки адаптера и дежурные ответы
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
 
