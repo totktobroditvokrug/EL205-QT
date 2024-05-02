@@ -4,8 +4,6 @@
 #include <QList>
 #include <QStringList>
 
-
-
 //-------------- Добавление контрольной суммы для адаптера EL205-1 -------------
 QByteArray AddCRC(QString textCommand, int indexStartByte)
 {
@@ -38,7 +36,6 @@ quint8 calcCRC(QByteArray addCheckSum)
     for (int i = 0; i < SizeCMD; i++) // Начинаем считать для всех байт
         {
             checkSum ^= addCheckSum[i];  // контрольная сумма по исключающему ИЛИ
-//            qDebug() << "index: " << i << "data[i]=" << addCheckSum[i] << " checkSum= " << checkSum;
         }
     return checkSum;
 }
@@ -62,6 +59,7 @@ QString handleAdapterAnswer(QByteArray answerArrayID, quint8 lengthDataAnswer, Q
                    QString::fromUtf8(answerArrayDATA.toHex(' ')));
     return (str);
 }
+
 
 //-------------- Парсинг потока из адаптера EL205-1 -----------------------------
 QStringList handleUartParsing(
@@ -93,7 +91,7 @@ QStringList handleUartParsing(
                 case AD_COM_ID_CAN_1 :{  // это CAN сообщение
                     if ((i+AD_COM_LENGTH_MIN-1) > dataSize){ // проверка по минимальной длине
                         parsingDataList.append("-- Неполное CAN сообщение --");
-                        return (parsingDataList); // добавить склейку неполных сообщений!!!
+                        return (parsingDataList); // todo добавить склейку неполных сообщений!!!
                     }
                     else {
                         dataLength = quint8(dataRead[i+12]);
@@ -101,9 +99,8 @@ QStringList handleUartParsing(
                         if ((i+AD_COM_LENGTH_CAN-1+dataLength-8) > dataSize)
                         {
                           // qDebug() << "Неполное CAN сообщение";
-                          // ui->textEdit_dataRead->append("-- Неполное CAN сообщение --");
                            parsingDataList.append("-- Неполное CAN сообщение --");
-                           return (parsingDataList); // добавить склейку неполных сообщений!!!!!!!
+                           return (parsingDataList); // todo добавить склейку неполных сообщений!!!!!!!
                         }
 
                         //---------- подсчет контрольной суммы -------------
@@ -125,22 +122,21 @@ QStringList handleUartParsing(
                         QByteArray arrayDataFromCAN = dataRead.mid((i+7), 14); // 4 ID, 1 Flags, 1 Length, 8 DATA
                         QByteArray arrayID = dataRead.mid((i+7), 4); // ID сообщения 4 байта
 
-                        quint8 idBody = quint8(dataRead[i+7]);  // тело идентификатора
-                        quint8 idHdr = quint8(dataRead[i+8]);   // заголовок идентификатора
-                        quint8 id_1 = quint8(dataRead[i+9]);  // тело идентификатора
-                        quint8 id_0 = quint8(dataRead[i+10]);   // заголовок идентификатора
+                        quint8 id_1 = quint8(dataRead[i+7]);  // тело идентификатора
+                        quint8 id_2 = quint8(dataRead[i+8]);   // заголовок идентификатора
+                        quint8 id_3 = quint8(dataRead[i+9]);    // 3-й байт расширенного идентификатора
+                        quint8 id_4 = quint8(dataRead[i+10]);   // старший байт расширенного идентификатора
 
                         quint8 lengthDataCAN = quint8(dataRead[i+12]);  // длина сообщения
 
                         QByteArray arrayDATA = dataRead.mid((i+13), 8);
                         quint8 numberSerialMessage = quint8(dataRead[i+21]);  // номер сообщения
 
-
                         canMessage.numberSerialMessage = numberSerialMessage;
-                        canMessage.id_body = idBody;
-                        canMessage.id_hdr = idHdr;
                         canMessage.id_1 = id_1;
-                        canMessage.id_0 = id_0;
+                        canMessage.id_2 = id_2;
+                        canMessage.id_3 = id_3;
+                        canMessage.id_4 = id_4;
                         canMessage.data = arrayDATA;
                         canMessage.dataLen = lengthDataCAN;
 
@@ -148,7 +144,6 @@ QStringList handleUartParsing(
                         if(!(quint8(dataRead.at(i+11)) & AD_COM_EXT_CAN_FLAG)) // если стандартное сообщение
                         {
                          //  qDebug() << "Стандартное CAN сообщение №"; // QString::number(quint8(dataRead[i+21]), 10);
-                         //  QString standartFrame = handleStandartCAN(standartArrayID, lengthDataCAN, standartArrayDATA);
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX + checkCRC);
 
                             //------------ заполняем поля стандартного фрэйма ----------
@@ -167,11 +162,8 @@ QStringList handleUartParsing(
 
                             // заполняем хэш-таблицу с ключом по стандартному ID
                             canByIdExtended->insert(canMessage.id_ext_32, arrayDATA); // новый id добавится, старый перезапишется
-
                         }
-
                     i=i+dataRead[i+2]+2; // перевод счетчика байт на начало следующего пакета минус 1
-                   // qDebug() << "следующие два байта" << QString::number(quint8(dataRead[i+1]), 16)<< QString::number(quint8(dataRead[i+2]), 16);
                 } break;
                 case AD_COM_ID_ANS_1 :{
                     // qDebug() << "switch: Дежурный ответ";
@@ -229,6 +221,5 @@ QStringList handleUartParsing(
             }
         }
     }
-
     return (parsingDataList);
 }
