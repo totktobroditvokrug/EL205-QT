@@ -54,11 +54,7 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
         message = "Генерация списка измерений ПЧ";
     }
 
-    //regNumList = RegnumClass::regnumArray();
-    //regNumList = FcCanIdClass::fccanidArray();
-
     int sizeArray = numList.size();
-
     for (int i = 0; i < sizeArray; i++) {
        QListWidgetItem *item = new QListWidgetItem;
        item->setText(QString::number(i, 10) + ": " + numList.at(i));
@@ -70,22 +66,29 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
 }
 
 
-
 void MainWindow::on_pushButton_saveRegToFile_clicked()
 {
     QFileDialog dialogSave;
     QString pathSave = dialogSave.getSaveFileName(nullptr, "Выберите файл", workDirPath, "Текстовый файл (*.txt)");
- //   qDebug() << "записываем файл с картой регистров: " << pathSave;
+    QString message;
 
     QFile file(pathSave);
      // Открываем файл, создаем, если его не существует
     if((file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))){
         QTextStream stream(&file);
-        stream << ui->textEdit_selectedRegNum->toPlainText();
+        if(ui->radioButton_registers->isChecked()){
+            stream << ui->textEdit_selectedRegNum->toPlainText();
+            message = "Карта регистров записана в файл ";
+        }
+        else{
+           stream << ui->textEdit_selectedSampleNum->toPlainText();
+           message = "Карта измерений записана в файл ";
+        }
         file.close();
-        ui->statusbar->showMessage("Карта регистров записана в файл " + pathSave);
     }
-    else ui->statusbar->showMessage("Ошибка записи файла " + pathSave);
+    else message = "Ошибка записи файла ";
+
+    ui->statusbar->showMessage(message + pathSave);
 }
 
 void MainWindow::on_pushButton_readRegFromFile_clicked()
