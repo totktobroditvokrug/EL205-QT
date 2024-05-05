@@ -11,7 +11,7 @@ QStringList RegnumClass::regnumList() // вернет строку со спис
      QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("regnum"));
      int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
      int addEmpty = 0; // добавляем при пустых линиях enum
-     for (int i = 0; i <= (length + addEmpty) && i<= 255; i++){
+     for (int i = 0; i <= (length + addEmpty) && i< IREG_INV_ALL_END_REGISTERS; i++){
          QString value = metaEnum.valueToKey(i);
          if(metaEnum.valueToKey(i) == nullptr){
              value = "Reserved";
@@ -33,7 +33,7 @@ QVector<QString> RegnumClass::regnumArray()
      QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("regnum"));
      int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
      int addEmpty = 0; // добавляем при пустых линиях enum
-     for (int i = 0; i <= (length + addEmpty) && i<= 255; i++){
+     for (int i = 0; i <= (length + addEmpty) && i< IREG_INV_ALL_END_REGISTERS; i++){
          QString value = metaEnum.valueToKey(i);
          if(metaEnum.valueToKey(i) == nullptr){
              value = "Reserved";
@@ -56,7 +56,7 @@ QStringList FcCanIdClass::fccanidList(){
      QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("fccanid"));
      int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
      int addEmpty = 0; // добавляем при пустых линиях enum
-     for (int i = 0; i <= (length + addEmpty) && i<= 255; i++){
+     for (int i = 0; i <= (length + addEmpty) && i< CAN_END_SAMPLE_ID; i++){
          QString value = metaEnum.valueToKey(i);
          if(metaEnum.valueToKey(i) == nullptr){
              value = "Reserved";
@@ -78,7 +78,7 @@ QVector<QString> FcCanIdClass::fccanidArray(){
      QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("fccanid"));
      int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
      int addEmpty = 0; // добавляем при пустых линиях enum
-     for (int i = 0; i <= (length + addEmpty) && i<= 255; i++){
+     for (int i = 0; i <= (length + addEmpty) && i< CAN_END_SAMPLE_ID; i++){
          QString value = metaEnum.valueToKey(i);
          if(metaEnum.valueToKey(i) == nullptr){
              value = "Reserved";

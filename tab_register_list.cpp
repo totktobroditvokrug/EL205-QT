@@ -4,7 +4,7 @@
 
 // Выбор создания псевдонимов regisres/samles
 
-void MainWindow::on_radioButton_registers_clicked(bool checked)
+void MainWindow::on_radioButton_registers_clicked(bool checked) // выбор регистров
 {
     if(checked){
         ui->label_selectAlias->setStyleSheet(StyleHelper::getRegistersStyle());
@@ -14,7 +14,7 @@ void MainWindow::on_radioButton_registers_clicked(bool checked)
     }
 }
 
-void MainWindow::on_radioButton_samples_clicked(bool checked)
+void MainWindow::on_radioButton_samples_clicked(bool checked)  // выбор измерений
 {
     if(checked){
         ui->label_selectAlias->setStyleSheet(StyleHelper::getSamplesStyle());
@@ -41,7 +41,9 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
     //regNumList = RegnumClass::regnumArray();
     regNumList = FcCanIdClass::fccanidArray();
 
-    for (int i = 0; i < IREG_INV_ALL_END_REGISTERS; i++) {
+    int sizeArray = regNumList.size(); // IREG_INV_ALL_END_REGISTERS
+
+    for (int i = 0; i < sizeArray; i++) {
        QListWidgetItem *item = new QListWidgetItem;
        item->setText(QString::number(i, 10) + ": " + regNumList.at(i));
        item->setCheckState(Qt::Unchecked);
@@ -49,6 +51,8 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
     }
     ui->statusbar->showMessage("Генерация списка всех регистров ПЧ");
 }
+
+
 
 void MainWindow::on_pushButton_saveRegToFile_clicked()
 {
