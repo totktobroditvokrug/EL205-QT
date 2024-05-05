@@ -8,7 +8,6 @@
 #include <QString>
 #include <QStringList>
 #include <QList>
-#include "registers.h"
 
 // Установка регистра
 #define REGISTER_SET_ID    10

@@ -11,6 +11,8 @@ void MainWindow::on_radioButton_registers_clicked(bool checked) // выбор р
         ui->radioButton_samples->setStyleSheet(StyleHelper::getRadioButtonResetTextStyle());
         ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
         ui->label_selectAlias->setText("Selected registers");
+        ui->listWidget_sampleNum->hide();
+        ui->listWidget_regNum->show();
     }
 }
 
@@ -21,6 +23,8 @@ void MainWindow::on_radioButton_samples_clicked(bool checked)  // выбор и�
         ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonResetTextStyle());
         ui->radioButton_samples->setStyleSheet(StyleHelper::getRadioButtonSamplesStyle());
         ui->label_selectAlias->setText("Selected samples");
+        ui->listWidget_regNum->hide();
+        ui->listWidget_sampleNum->show();
     }
 }
 
@@ -37,19 +41,32 @@ void MainWindow::on_pushButton_workDir_clicked()
 // генерация списка регистров из перечисления в проекте инвертора
 void MainWindow::on_pushButton_genRegFromEnum_clicked()
 {
-    ui->listWidget_regNum->clear();
-    //regNumList = RegnumClass::regnumArray();
-    regNumList = FcCanIdClass::fccanidArray();
+    QVector<QString> numList; // формирование списка
+    QString message;
+    if(ui->radioButton_registers->isChecked()){
+      numList  = RegnumClass::regnumArray();
+      ui->listWidget_regNum->clear();
+      message = "Генерация списка всех регистров ПЧ";
+    }
+    else{
+        numList  = FcCanIdClass::fccanidArray();
+        ui->listWidget_sampleNum->clear();
+        message = "Генерация списка измерений ПЧ";
+    }
 
-    int sizeArray = regNumList.size(); // IREG_INV_ALL_END_REGISTERS
+    //regNumList = RegnumClass::regnumArray();
+    //regNumList = FcCanIdClass::fccanidArray();
+
+    int sizeArray = numList.size();
 
     for (int i = 0; i < sizeArray; i++) {
        QListWidgetItem *item = new QListWidgetItem;
-       item->setText(QString::number(i, 10) + ": " + regNumList.at(i));
+       item->setText(QString::number(i, 10) + ": " + numList.at(i));
        item->setCheckState(Qt::Unchecked);
-       ui->listWidget_regNum->addItem(item);
+       if(ui->radioButton_registers->isChecked()) ui->listWidget_regNum->addItem(item);
+       else ui->listWidget_sampleNum->addItem(item);
     }
-    ui->statusbar->showMessage("Генерация списка всех регистров ПЧ");
+    ui->statusbar->showMessage(message);
 }
 
 

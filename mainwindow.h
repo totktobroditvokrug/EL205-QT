@@ -27,7 +27,7 @@
 
 #include "stylehelper.h"
 #include "adapter_commands.h"
-#include <iface.h>
+#include "iface.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -152,7 +152,8 @@ private:
 
     QString workDirPath; //
     QVector<QString> regNumList; // формирование списка регистров
-    registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
+
+    registerFields regDataArray[RegnumClass::IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
     int emptyBufferCounter; // количество попыток связи с can
     int selectedComboBox;
 

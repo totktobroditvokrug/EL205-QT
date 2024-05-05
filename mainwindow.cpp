@@ -7,8 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    QVector<QString> tempVector(IREG_INV_ALL_END_REGISTERS);
-    for(int i=0; i<IREG_INV_ALL_END_REGISTERS; i++) {
+    QVector<QString> tempVector(RegnumClass::IREG_INV_ALL_END_REGISTERS);
+    for(int i=0; i<RegnumClass::IREG_INV_ALL_END_REGISTERS; i++) {
         QString value = "unknown";
         tempVector[i] = value;
     }
@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_workDir->setText(workDirPath);
 
     ui->radioButton_registers->setChecked(true);
+    ui->listWidget_sampleNum->hide();
     ui->label_selectAlias->setStyleSheet(StyleHelper::getRegistersStyle());
     ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
     ui->label_selectAlias->setText("Selected registers");

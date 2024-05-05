@@ -36,7 +36,6 @@ HEADERS += \
     invertor.h \
     mainwindow.h \
     measure.h \
-    registers.h \
     stylehelper.h
 
 FORMS += \

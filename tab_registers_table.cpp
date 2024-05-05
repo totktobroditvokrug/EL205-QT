@@ -637,9 +637,9 @@ void MainWindow::initComboBoxRegister()
     ui->comboBox_register_3->addItems(registersList);
 
 
-    ui->comboBox_register_1->setCurrentIndex(IREG_UOUT);
-    ui->comboBox_register_2->setCurrentIndex(IREG_IOUT);
-    ui->comboBox_register_3->setCurrentIndex(IREG_FREQ_REF);
+    ui->comboBox_register_1->setCurrentIndex(RegnumClass::IREG_UOUT);
+    ui->comboBox_register_2->setCurrentIndex(RegnumClass::IREG_IOUT);
+    ui->comboBox_register_3->setCurrentIndex(RegnumClass::IREG_FREQ_REF);
 
     ui->horizontalSlider->setEnabled(false);
     ui->lineEdit_registerValue_1->setEnabled(false);
@@ -652,7 +652,7 @@ void MainWindow::initComboBoxRegister()
 
  //------ расчет значение частоты
 void MainWindow::getFreqInv(){     
-      ui->lineEdit_currentFreq->setText(getRegisterInv(IREG_FREQ, regDataArray[IREG_FREQ].value.Reg16));
+      ui->lineEdit_currentFreq->setText(getRegisterInv(RegnumClass::IREG_FREQ, regDataArray[RegnumClass::IREG_FREQ].value.Reg16));
 }
 
 
@@ -720,7 +720,7 @@ void MainWindow::setRegistersCombobox(){
         ui->lineEdit_registerValue_3->setText(getRegisterInv(regNum_3, valueInt_3));
     }
 
-    ui->pushButton_showPanel->setText("     F = " + getRegisterInv(IREG_FREQ, regDataArray[IREG_FREQ].value.Reg16) +
+    ui->pushButton_showPanel->setText("     F = " + getRegisterInv(RegnumClass::IREG_FREQ, regDataArray[RegnumClass::IREG_FREQ].value.Reg16) +
                                       "      " + ui->comboBox_register_1->currentText() + " = " + getRegisterInv(regNum_1, valueInt_1) +
                                       "      " + ui->comboBox_register_2->currentText() + " = " + getRegisterInv(regNum_2, valueInt_2) +
                                       "      " + ui->comboBox_register_3->currentText() + " = " + getRegisterInv(regNum_3, valueInt_3));
@@ -783,7 +783,7 @@ void MainWindow::on_pushButton_alarmInv_clicked()
 void MainWindow::checkInvertorStatus()
 {
     QString currentStatus = "";
-    qint16 invStatus = regDataArray[IREG_INV_STATUS].value.Reg16;
+    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS].value.Reg16;
     if (invStatus & INV_STS_STARTED){
 
       if (invStatus & INV_STS_TO_STOP_MODE) {
