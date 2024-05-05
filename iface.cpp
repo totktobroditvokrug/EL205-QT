@@ -46,6 +46,51 @@ QVector<QString> RegnumClass::regnumArray()
      return (regnumArray);
 }
 
+QStringList FcCanIdClass::fccanidList(){
+    QStringList fc_can_idList;
+    fc_can_idList.clear();
+
+
+     QMetaObject metaObject = FcCanIdClass::staticMetaObject;
+
+     QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("fccanid"));
+     int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
+     int addEmpty = 0; // добавляем при пустых линиях enum
+     for (int i = 0; i <= (length + addEmpty) && i<= 255; i++){
+         QString value = metaEnum.valueToKey(i);
+         if(metaEnum.valueToKey(i) == nullptr){
+             value = "Reserved";
+             addEmpty++;
+         }
+
+         fc_can_idList.append(QString::number(i, 10) + ": " + value);
+         // qDebug() << value;
+     }
+     return (fc_can_idList);
+}
+
+
+QVector<QString> FcCanIdClass::fccanidArray(){
+    QVector<QString> fc_can_idArray(CAN_END_SAMPLE_ID);
+//    regnumArray.clear();
+
+     QMetaObject metaObject = FcCanIdClass::staticMetaObject;
+     QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("fccanid"));
+     int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
+     int addEmpty = 0; // добавляем при пустых линиях enum
+     for (int i = 0; i <= (length + addEmpty) && i<= 255; i++){
+         QString value = metaEnum.valueToKey(i);
+         if(metaEnum.valueToKey(i) == nullptr){
+             value = "Reserved";
+             addEmpty++;
+         }
+
+         fc_can_idArray[i] = value;
+       //  qDebug() << i << " " << value;
+     }
+     return (fc_can_idArray);
+}
+
 
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(

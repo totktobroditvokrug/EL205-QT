@@ -381,7 +381,7 @@ void MainWindow::addRowTableFromFile(QString lineFromFile)
 
 void MainWindow::on_pushButton_saveTable_clicked()
 {    QFileDialog dialogSave;
-     QString pathSave = dialogSave.getSaveFileName(nullptr, "Save file", "/", "table (*.csv)");
+     QString pathSave = dialogSave.getSaveFileName(nullptr, "Save file", workDirPath, "table (*.csv)");
 //     qDebug() << "записываем файл с таблицей регистров: " << pathSave;
 
      QFile file(pathSave);
@@ -421,7 +421,7 @@ void MainWindow::on_pushButton_loadTable_clicked()
 {
 //    qDebug() << "открываем файл со значениями регистров";
     QFileDialog dialogOpen;
-    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "table (*.csv)");
+    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", workDirPath, "table (*.csv)");
 //    qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
@@ -788,17 +788,17 @@ void MainWindow::checkInvertorStatus()
 
       if (invStatus & INV_STS_TO_STOP_MODE) {
           ui->pushButton_startInv->setStyleSheet(StyleHelper::getWaitButtonStyle());
-          ui->pushButton_showPanel->setIcon(QIcon(":/images/wait.png"));
+          ui->pushButton_showPanel->setIcon(QIcon(":/images/wait_small.png"));
       }
       else{
          ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartedButtonStyle());
-         ui->pushButton_showPanel->setIcon(QIcon(":/images/start.png"));
+         ui->pushButton_showPanel->setIcon(QIcon(":/images/start_small.png"));
       }
       currentStatus += ("Система запущена \n");
     }
     else{
       ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartButtonStyle());
-      ui->pushButton_showPanel->setIcon(QIcon(":/images/stop.png"));
+      ui->pushButton_showPanel->setIcon(QIcon(":/images/stop_small.png"));
       currentStatus += ("Система остановлена \n");
     }
     if (invStatus & INV_STS_WAIT_RECT_START) currentStatus += ("Ожидает запуска выпрямителя \n");

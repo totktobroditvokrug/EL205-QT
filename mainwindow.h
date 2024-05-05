@@ -25,6 +25,7 @@
 
 #include <QHash>
 
+#include "stylehelper.h"
 #include "adapter_commands.h"
 #include <iface.h>
 
@@ -136,12 +137,20 @@ private slots:
     void on_pushButton_hidePanel_clicked();
 
 
+    void on_pushButton_workDir_clicked();
+
+    void on_radioButton_registers_clicked(bool checked);
+
+    void on_radioButton_samples_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *serial;
     QTimer *timer;  // таймер опроса CAN адаптера
  //   QTimer *timerRegDisplay; // таймер вывода регистров на дисплей
+
+    QString workDirPath; //
     QVector<QString> regNumList; // формирование списка регистров
     registerFields regDataArray[IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
     int emptyBufferCounter; // количество попыток связи с can

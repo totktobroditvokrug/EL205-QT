@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/start.png</file>
-        <file>images/stop.png</file>
-        <file>images/wait.png</file>
+        <file>images/start_small.png</file>
+        <file>images/stop_small.png</file>
+        <file>images/wait_small.png</file>
     </qresource>
 </RCC>

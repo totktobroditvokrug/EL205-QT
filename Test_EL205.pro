@@ -52,5 +52,8 @@ RESOURCES += \
 
 DISTFILES += \
     images/start.png \
+    images/start_small.png \
     images/stop.png \
-    images/wait.png
+    images/stop_small.png \
+    images/wait.png \
+    images/wait_small.png

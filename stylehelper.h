@@ -23,6 +23,14 @@ public:
     static QString getSlidersSelectedStyle();
     static QString getRemoveSelectionStyle();
 
+    static QString getSamplesStyle();
+    static QString getRegistersStyle();
+    static QString getResetTextStyle();
+
+    static QString getRadioButtonSamplesStyle();
+    static QString getRadioButtonRegistersStyle();
+    static QString getRadioButtonResetTextStyle();
+
 };
 
 #endif // STYLEHELPER_H

@@ -108,4 +108,55 @@ QString StyleHelper::getRemoveSelectionStyle()
     return "QLineEdit {background-color: none;}";
 }
 
+QString StyleHelper::getSamplesStyle()
+{
+    return  "QLabel{"
+            "font-weight:600;"
+            "font-size:12pt;"
+            "color: rgb(0, 100, 0);"
+            "}";
+}
 
+QString StyleHelper::getRegistersStyle()
+{    return  "QLabel{"
+             "font-weight:600;"
+             "font-size:12pt;"
+             "color: rgb(100, 0, 0);"
+             "}";
+
+}
+
+QString StyleHelper::getResetTextStyle()
+{    return  "QLabel{"
+             "color: none;"
+             "}";
+
+}
+
+
+QString StyleHelper::getRadioButtonSamplesStyle()
+{
+    return  "QRadioButton{"
+            "font-weight:600;"
+            "font-size:12pt;"
+            "color: rgb(0, 100, 0);"
+            "}";
+}
+
+QString StyleHelper::getRadioButtonRegistersStyle()
+{    return  "QRadioButton{"
+            "font-weight:600;"
+            "font-size:12pt;"
+             "color: rgb(100, 0, 0);"
+             "}";
+
+}
+
+QString StyleHelper::getRadioButtonResetTextStyle()
+{    return  "QRadioButton{"
+            "font-weight:400;"
+            "font-size:8pt;"
+             "color: none;"
+             "}";
+
+}

@@ -49,3 +49,4 @@ void measure::readMeasureListFromFile()
 
     qDebug() << (message + fileName);
 }
+

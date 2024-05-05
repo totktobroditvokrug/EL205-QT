@@ -2,11 +2,44 @@
 #include "ui_mainwindow.h"
 
 
+// Выбор создания псевдонимов regisres/samles
+
+void MainWindow::on_radioButton_registers_clicked(bool checked)
+{
+    if(checked){
+        ui->label_selectAlias->setStyleSheet(StyleHelper::getRegistersStyle());
+        ui->radioButton_samples->setStyleSheet(StyleHelper::getRadioButtonResetTextStyle());
+        ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
+        ui->label_selectAlias->setText("Selected registers");
+    }
+}
+
+void MainWindow::on_radioButton_samples_clicked(bool checked)
+{
+    if(checked){
+        ui->label_selectAlias->setStyleSheet(StyleHelper::getSamplesStyle());
+        ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonResetTextStyle());
+        ui->radioButton_samples->setStyleSheet(StyleHelper::getRadioButtonSamplesStyle());
+        ui->label_selectAlias->setText("Selected samples");
+    }
+}
+
+
+// выбор домашней директории с файлами инвертора
+void MainWindow::on_pushButton_workDir_clicked()
+{
+    QString currentWorkDir = ui->lineEdit_workDir->text();
+    workDirPath = QFileDialog::getExistingDirectory(nullptr, "Directory Dialog", currentWorkDir);
+    if(!workDirPath.isEmpty()) ui->lineEdit_workDir->setText(workDirPath);
+    else workDirPath = currentWorkDir;
+}
+
 // генерация списка регистров из перечисления в проекте инвертора
 void MainWindow::on_pushButton_genRegFromEnum_clicked()
 {
     ui->listWidget_regNum->clear();
-    regNumList = RegnumClass::regnumArray();
+    //regNumList = RegnumClass::regnumArray();
+    regNumList = FcCanIdClass::fccanidArray();
 
     for (int i = 0; i < IREG_INV_ALL_END_REGISTERS; i++) {
        QListWidgetItem *item = new QListWidgetItem;
@@ -20,7 +53,7 @@ void MainWindow::on_pushButton_genRegFromEnum_clicked()
 void MainWindow::on_pushButton_saveRegToFile_clicked()
 {
     QFileDialog dialogSave;
-    QString pathSave = dialogSave.getSaveFileName(nullptr, "Выберите файл", "/", "Текстовый файл (*.txt)");
+    QString pathSave = dialogSave.getSaveFileName(nullptr, "Выберите файл", workDirPath, "Текстовый файл (*.txt)");
  //   qDebug() << "записываем файл с картой регистров: " << pathSave;
 
     QFile file(pathSave);
@@ -39,7 +72,7 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
   //  qDebug() << "открываем файл с картой регистров";
     QString message = "Прочитаны регистры из файла ";
     QFileDialog dialogOpen;
-    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", "/", "Текстовый файл (*.txt)");
+    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", workDirPath, "Текстовый файл (*.txt)");
 //    qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){

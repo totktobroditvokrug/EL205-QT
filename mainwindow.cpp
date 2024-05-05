@@ -25,6 +25,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     serial = new QSerialPort;  // объявляем serial
 
+    workDirPath = "C:/"; // инициализация рабочей директории
+    ui->lineEdit_workDir->setText(workDirPath);
+
+    ui->radioButton_registers->setChecked(true);
+    ui->label_selectAlias->setStyleSheet(StyleHelper::getRegistersStyle());
+    ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
+    ui->label_selectAlias->setText("Selected registers");
+
     on_pushButton_genRegFromEnum_clicked(); // заранее подгружаем список всех регистров инвертора
     initTabCan(); // установить активность кнопок
     createRegistersTable();

@@ -458,9 +458,6 @@ enum regnumExt {
     IREG_SAVED_PREHEAT_ON,
 /* Достигли максимального количества регистров CAN */
     IREG_INV_ALL_END_REGISTERS
-
 };
-
-
 
 #endif // REGISTERS_H

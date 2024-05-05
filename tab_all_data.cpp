@@ -32,7 +32,7 @@ void MainWindow::readStream()
                                                             &canByIdStandart,
                                                             &canByIdExtended);
             if (parsingDataList.size() > 0){ // если ответ не нулевой, выводим его в текстовое поле регулируемой длины
-                ui->textEdit_dataRead->append(parsingDataList.join("\n"));
+                if(ui->radioButton_byChekBox->isChecked()) ui->textEdit_dataRead->append(parsingDataList.join("\n"));
             }
 
             regDisplayTable();

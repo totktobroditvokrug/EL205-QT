@@ -119,6 +119,8 @@ void MainWindow::initTabCan(){
     ui->lineEdit_registerValue_1->setEnabled(false);
     ui->lineEdit_registerValue_2->setEnabled(false);
     ui->lineEdit_registerValue_3->setEnabled(false);
+
+    ui->radioButton_byChekBox->setChecked(true);
 }
 
 
