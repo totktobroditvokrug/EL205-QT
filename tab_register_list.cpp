@@ -94,7 +94,7 @@ void MainWindow::on_pushButton_saveRegToFile_clicked()
 void MainWindow::on_pushButton_readRegFromFile_clicked()
 {
   //  qDebug() << "открываем файл с картой регистров";
-    QString message = "Прочитаны регистры из файла ";
+    QString message;
     QFileDialog dialogOpen;
     QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", workDirPath, "Текстовый файл (*.txt)");
 //    qDebug() << "Выбранный файл: " << fileName;
@@ -102,27 +102,35 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
         QTextStream stream(&file);
         QString readStr = stream.readAll();
-
-        // заполняем данными из файла виджет с checkButton
-        ui->listWidget_regNum->clear();
         QStringList stringArray = readStr.split("\n");
         int length = stringArray.size();
+
+        if(ui->radioButton_registers->isChecked()) ui->listWidget_regNum->clear();
+        else ui->listWidget_sampleNum->clear();
+
         for (int i = 0; i < length; i++) {
            QListWidgetItem *item = new QListWidgetItem;
 
            QStringList separateNum = stringArray.at(i).split(":", QString::SkipEmptyParts); // разделяем номер и имя
            if (separateNum.size() != 2){
-              message = "Неверный формат списка регистров ";
+              message = "Неверный формат списка ";
            }
            else {
                quint8 index = quint8(separateNum[0].toInt()); // номер до :
-               QString regName = separateNum[1].simplified();              // строка после :
-
-               regNumList[index] = regName; // инициализируем имена регистров
-
+               QString name = separateNum[1].simplified();              // строка после :
                item->setText(stringArray.at(i));
                item->setCheckState(Qt::Unchecked);
-               ui->listWidget_regNum->addItem(item);
+
+               if(ui->radioButton_registers->isChecked()){ // заполняем данными из файла виджет с checkButton
+                   // инициализируем имена регистров !!! Непонятно, зачем. todo (если только пользователь хочет свои имена...)
+                   regNumList[index] = name;
+                   ui->listWidget_regNum->addItem(item);
+                   message = "Прочитаны регистры из файла ";
+               }
+                else{       // заполняем данными из файла виджет с checkButton
+                   ui->listWidget_sampleNum->addItem(item);
+                   message = "Прочитан список измерений из файла ";
+               }
            }
         }
         file.close();
@@ -168,6 +176,44 @@ void MainWindow::on_listWidget_regNum_itemClicked(QListWidgetItem *item)
     }
     else {
         deleteItemFromlistwidget(item, index);
+    }
+}
+
+//------- ручной выбор списка измерений для вывода на экран
+void MainWindow::on_listWidget_sampleNum_itemClicked(QListWidgetItem *item)
+{
+    QStringList separateNum = item->text().split(":", QString::SkipEmptyParts); // разделяем номер и имя
+    quint8 index = quint8(separateNum[0].toInt()); // номер до :
+    QString sampleName = separateNum[1].simplified();              // строка после :
+
+    if(item->checkState() == Qt::Checked) {
+        addSampleFromlistwidget(item, index, sampleName);
+    }
+    else {
+        deleteSampleFromlistwidget(item, index);
+    }
+}
+
+//-------- добавить выбранный элемент измерений  в таблицу и виджет просмотра
+void MainWindow::addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString regName){
+    item->setForeground(Qt::red);
+  //  regDataArray[index].displayed = true;
+    ui->textEdit_selectedSampleNum->append(item->text());
+//    addRowRegistersTable(index, regName); // добавляем выбранный регистр в таблицу
+}
+
+//-------- удалить выбранный элемент измерений  из таблицы и виджета просмотра
+void MainWindow::deleteSampleFromlistwidget(QListWidgetItem *item, quint8 index){
+    item->setForeground(Qt::black);
+  //  regDataArray[index].displayed = false;
+//    deleteRowRegistersTable(index);
+
+    // чудовищная по скоростиисполнения реализация!!!!!! переделать
+    ui->textEdit_selectedSampleNum->clear();
+    int countRegnum = ui->listWidget_sampleNum->count();
+    for(int i = 0; i < countRegnum; i++){
+        QListWidgetItem *itemRegNum = ui->listWidget_sampleNum->item(i);
+        if(itemRegNum->checkState() == Qt::Checked) ui->textEdit_selectedSampleNum->append(itemRegNum->text());
     }
 }
 

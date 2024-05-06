@@ -84,6 +84,11 @@ private slots:
     void deleteItemFromlistwidget(QListWidgetItem *item, quint8 index);
     void initComboBoxRegister();
 
+    // работа со списком измерений
+    void on_listWidget_sampleNum_itemClicked(QListWidgetItem *item);
+    void addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString regName);
+    void deleteSampleFromlistwidget(QListWidgetItem *item, quint8 index);
+
     // работа с таблицей регистров
     void createRegistersTable();
     void addRowRegistersTable(int index, QString regName);
