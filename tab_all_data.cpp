@@ -28,6 +28,7 @@ void MainWindow::readStream()
                                                             checkExtended,
                                                             checkAnswer,
                                                             regNumList,
+                                                            sampleNumList,
                                                             regDataArray,
                                                             sampleDataArray,
                                                             &canByIdStandart,

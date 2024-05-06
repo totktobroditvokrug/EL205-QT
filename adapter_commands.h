@@ -78,6 +78,7 @@ QStringList handleUartParsing(
         bool checkExtended,
         bool checkAnswer,
         QVector<QString> regNumList,
+        QVector<QString> sampleNumList,
         registerFields *regDataArray,
         samplesFields *sampleDataArray,
         QHash<quint16, QByteArray> *canByIdStandart,

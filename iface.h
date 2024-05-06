@@ -726,14 +726,6 @@ struct registerFields{
     quint8 flagReg; //  флаги регистров побитные
     bool flagNewData = false; // флаг получения обновленного значения
 
-    union{ // структура для сборки ID из байтов парсинга
-        quint16 Whole;
-        struct {
-            quint8 Body;
-            quint8 Hdr;
-        };
-    } id;
-
     union{          // значение регистра
        qint16 Reg16;
        struct {
@@ -830,7 +822,9 @@ struct standartID{
 void handleAllStandartDataCan(
         QByteArray arrayDataFromCAN,
         registerFields *regDataArray,
-        QVector<QString> regNumList
+        QVector<QString> regNumList,
+        samplesFields *sampleDataArray,
+        QVector<QString> sampleNumList
 );
 
 #endif // IFACE_H
