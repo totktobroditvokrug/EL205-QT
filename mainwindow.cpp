@@ -7,12 +7,17 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    QVector<QString> tempVector(RegnumClass::IREG_INV_ALL_END_REGISTERS);
-    for(int i=0; i<RegnumClass::IREG_INV_ALL_END_REGISTERS; i++) {
-        QString value = "unknown";
-        tempVector[i] = value;
-    }
-    regNumList = tempVector;  // инициализация списка регистров
+//    QVector<QString> tempVector(RegnumClass::IREG_INV_ALL_END_REGISTERS);
+//    for(int i=0; i < RegnumClass::IREG_INV_ALL_END_REGISTERS; i++) {
+//        QString value = "unknown";
+//        tempVector[i] = value;
+//    }
+ //   regNumList = tempVector;  // инициализация списка регистров todo переделать без участия tempVector
+
+    // объявление списка регистров и измерений с размерами, соответствующими enum
+    regNumList = QVector<QString>(RegnumClass::IREG_INV_ALL_END_REGISTERS);
+    sampleNumList = QVector<QString>(FcCanIdClass::CAN_END_SAMPLE_ID);
+
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
 
@@ -30,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->radioButton_registers->setChecked(true);
     ui->listWidget_sampleNum->hide();
+    ui->textEdit_selectedSampleNum->hide();
+
     ui->label_selectAlias->setStyleSheet(StyleHelper::getRegistersStyle());
     ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
     ui->label_selectAlias->setText("Selected registers");

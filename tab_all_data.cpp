@@ -29,6 +29,7 @@ void MainWindow::readStream()
                                                             checkAnswer,
                                                             regNumList,
                                                             regDataArray,
+                                                            sampleDataArray,
                                                             &canByIdStandart,
                                                             &canByIdExtended);
             if (parsingDataList.size() > 0){ // если ответ не нулевой, выводим его в текстовое поле регулируемой длины

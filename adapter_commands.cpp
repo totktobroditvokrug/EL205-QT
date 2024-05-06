@@ -68,7 +68,8 @@ QStringList handleUartParsing(
     bool checkExtended,   // флаг на вывод расширенных CAN сообщений
     bool checkAnswer,     // флаг на вывод ответов адаптера
     QVector<QString> regNumList,  // имена регистров, взятые из enum или из файла
-    registerFields *regDataArray,  // эти поля регистров надо заполнить (данные, масштабы)
+    registerFields *regDataArray,  // эти поля регистров надо заполнить (элиас, данные, масштабы)
+    samplesFields *sampleDataArray, // эти поля измерений надо заполнить (элиас, данные, масштабы)
     QHash<quint16, QByteArray> *canByIdStandart, // таблица стандартных CAN сообщений
     QHash<quint32, QByteArray> *canByIdExtended  // таблица расширенных CAN сообщений
 ) {
@@ -146,7 +147,7 @@ QStringList handleUartParsing(
                          //  qDebug() << "Стандартное CAN сообщение №"; // QString::number(quint8(dataRead[i+21]), 10);
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX + checkCRC);
 
-                            //------------ заполняем поля стандартного фрэйма ----------
+                            //------------ заполняем поля регистров стандартного фрэйма ----------
                            handleAllStandartDataCan(arrayDataFromCAN, regDataArray, regNumList);
 
                            // заполняем хэш-таблицу с ключом по стандартному ID

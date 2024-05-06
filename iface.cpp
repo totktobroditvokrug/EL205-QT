@@ -98,20 +98,20 @@ void handleAllStandartDataCan(
         registerFields *regDataArray,
         QVector<QString> regNumList     // таблица названия регистров 256 значений
 ){
-    //__________ Общие поля стандартного CAN____________
-    quint8 firstByteDATA = quint8(arrayDataFromCAN[6]);
+    standartID fieldStandartID;
 
-    //__________ Склеиваем два байта ID CAN____________
-    regDataArray[firstByteDATA].id.Body = quint8(arrayDataFromCAN[0]);
-    regDataArray[firstByteDATA].id.Hdr = quint8(arrayDataFromCAN[1]);
-    quint16 idWhole = regDataArray[firstByteDATA].id.Whole;
-    //__________________________________________________
+    //__________ Общие поля стандартного CAN____________
+
+    // склеиваем ID сообщения
+    fieldStandartID.id.Body = quint8(arrayDataFromCAN[0]);
+    fieldStandartID.id.Hdr = quint8(arrayDataFromCAN[1]);
+    quint16 idWhole = fieldStandartID.id.Whole;
 
     QString regName; // имя регистра по regNumList
-    quint8 regNum = quint8(arrayDataFromCAN[6]);
 
-    switch (idWhole) {  // проверяем пришедшие данные на принадлежность к SHOW, SCALES или SAMPLE
+    switch (idWhole) {  // проверяем пришедшие данные на принадлежность к SHOW, SCALES
         case REGISTER_SHOW_ID: { // если пришел show регистр
+            quint8 regNum = quint8(arrayDataFromCAN[6]); // если пришел регистр, то в этом месте будет его номер
             regName = regNumList[regNum].leftJustified(35, '_'); // у него будет имя из загруженного regNumList
             regDataArray[regNum].regData7 = arrayDataFromCAN.mid(7, 7); // и поле данных !!!!! проверить
             regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regData7[0]); // заполняем поле флагов
@@ -146,9 +146,12 @@ void handleAllStandartDataCan(
                 qint16 maxReg16 = regDataArray[regNum].max.Reg16;
                 regDataArray[regNum].displayString.append(" __max: " +  QString::number(maxReg16, 10));
             }
+            //---- обновим данные и по приходу шкалы и по приходу новых данных регистра
+            regDataArray[regNum].flagNewData = true; // флаг получения нового значения
             break;
          }
          case REGISTER_SHOW_SCALES_ID: { // если пришел scales регистр
+            quint8 regNum = quint8(arrayDataFromCAN[6]); // если пришел регистр, то в этом месте будет его номер
             regDataArray[regNum].regScales7 = arrayDataFromCAN.mid(7, 7); // заполняем поле масштабов
             regDataArray[regNum].flagReg = quint8(regDataArray[regNum].regScales7[0]);
             if(regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT){ // если есть шкала
@@ -159,17 +162,17 @@ void handleAllStandartDataCan(
              regDataArray[regNum].maxValue.UpperByte = quint8(regDataArray[regNum].regScales7[4]);
              regDataArray[regNum].maxValue.LowerByte = quint8(regDataArray[regNum].regScales7[3]);
             }
+            //---- обновим данные и по приходу шкалы и по приходу новых данных регистра
+            regDataArray[regNum].flagNewData = true; // флаг получения нового значения
             break;
          }
     }
 
 
-    QString data= "handleRegData. ID=" + QString::number(idWhole, 16).rightJustified(4, '0') +
-            " data=" + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
-            " i= "  +QString::number(regNum, 10) + " :" + regName;
+//    QString data= "handleRegData. ID=" + QString::number(idWhole, 16).rightJustified(4, '0') +
+//            " data=" + QString::fromUtf8(regDataArray[regNum].regData7.toHex(' ')) +
+//            " i= "  +QString::number(regNum, 10) + " :" + regName;
 
-    //---- обновим данные и по приходу шкалы и по приходу новых данных регистра
-    regDataArray[regNum].flagNewData = true; // флаг получения нового значения
 };
 
 

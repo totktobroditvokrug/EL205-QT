@@ -13,6 +13,8 @@ void MainWindow::on_radioButton_registers_clicked(bool checked) // выбор р
         ui->label_selectAlias->setText("Selected registers");
         ui->listWidget_sampleNum->hide();
         ui->listWidget_regNum->show();
+        ui->textEdit_selectedSampleNum->hide();
+        ui->textEdit_selectedRegNum->show();
     }
 }
 
@@ -25,6 +27,8 @@ void MainWindow::on_radioButton_samples_clicked(bool checked)  // выбор и�
         ui->label_selectAlias->setText("Selected samples");
         ui->listWidget_regNum->hide();
         ui->listWidget_sampleNum->show();
+        ui->textEdit_selectedSampleNum->show();
+        ui->textEdit_selectedRegNum->hide();
     }
 }
 
@@ -195,11 +199,11 @@ void MainWindow::on_listWidget_sampleNum_itemClicked(QListWidgetItem *item)
 }
 
 //-------- добавить выбранный элемент измерений  в таблицу и виджет просмотра
-void MainWindow::addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString regName){
+void MainWindow::addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString sampleName){
     item->setForeground(Qt::red);
   //  regDataArray[index].displayed = true;
     ui->textEdit_selectedSampleNum->append(item->text());
-//    addRowRegistersTable(index, regName); // добавляем выбранный регистр в таблицу
+//    addRowRegistersTable(index, sampleName); // добавляем выбранный регистр в таблицу
 }
 
 //-------- удалить выбранный элемент измерений  из таблицы и виджета просмотра
@@ -212,8 +216,8 @@ void MainWindow::deleteSampleFromlistwidget(QListWidgetItem *item, quint8 index)
     ui->textEdit_selectedSampleNum->clear();
     int countRegnum = ui->listWidget_sampleNum->count();
     for(int i = 0; i < countRegnum; i++){
-        QListWidgetItem *itemRegNum = ui->listWidget_sampleNum->item(i);
-        if(itemRegNum->checkState() == Qt::Checked) ui->textEdit_selectedSampleNum->append(itemRegNum->text());
+        QListWidgetItem *itemSampleNum = ui->listWidget_sampleNum->item(i);
+        if(itemSampleNum->checkState() == Qt::Checked) ui->textEdit_selectedSampleNum->append(itemSampleNum->text());
     }
 }
 

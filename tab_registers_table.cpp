@@ -729,6 +729,9 @@ void MainWindow::setRegistersCombobox(){
 
 //------ установить границы слайдера
 void MainWindow::setSelectedRegisterSlider(int regNum){
+    ui->horizontalSlider->setMinimum(-32767);
+    ui->horizontalSlider->setMaximum(32767);
+
     if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){
         ui->horizontalSlider->setMinimum(regDataArray[regNum].min.Reg16);
     }
@@ -736,9 +739,9 @@ void MainWindow::setSelectedRegisterSlider(int regNum){
     if(regDataArray[regNum].flagReg & IREGF_MAX_PRESENT){
         ui->horizontalSlider->setMaximum(regDataArray[regNum].max.Reg16);
     }
-    if(regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT){
-       ui->horizontalSlider->setMaximum(regDataArray[regNum].maxValue.Reg16);
-    }
+//    if(regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT){
+//       ui->horizontalSlider->setMaximum(regDataArray[regNum].maxValue.Reg16);
+//    }
 }
 
 

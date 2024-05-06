@@ -777,6 +777,55 @@ struct registerFields{
     bool displayed = false;
 };
 
+struct samplesFields{
+    QString displayString;
+    bool displayed = false;   // выводить значение в таблице
+    bool flagNewData = false; // флаг получения обновленного значения
+
+    union{          // значение регистра
+       qint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } value;
+
+    union{          // максимальное значение переменной
+       qint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } maxValue;
+
+    union{          // шкала регистра
+       qint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } scale;
+
+    union{          // ноль регистра (не используется)
+       qint16 Reg16;
+       struct {
+           quint8 LowerByte;
+           quint8 UpperByte;
+       };
+    } zero;
+};
+
+
+struct standartID{
+    union{ // структура для сборки ID из байтов парсинга
+        quint16 Whole;
+        struct {
+            quint8 Body;
+            quint8 Hdr;
+        };
+    } id;
+};
+
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(
         QByteArray arrayDataFromCAN,
