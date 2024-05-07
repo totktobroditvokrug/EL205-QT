@@ -32,7 +32,7 @@ void MainWindow::createRegistersTable()
     ui->tableRegister->setRowCount(0); // очистить предыдущую таблицу
     QStringList headers;
     headers << "№"
-            << "Name"
+            << "Register"
             << "min"
             << "max"
             << "scale"

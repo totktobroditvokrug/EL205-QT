@@ -36,7 +36,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="tab_7">
        <attribute name="title">
@@ -1261,14 +1261,26 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_11">
         <item row="0" column="0">
-         <widget class="QPushButton" name="pushButton_testMeasure">
-          <property name="text">
-           <string>Test Measure</string>
+         <widget class="QTableWidget" name="tableSamples">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>1000</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
           </property>
          </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QTextEdit" name="textEdit_hash"/>
         </item>
        </layout>
       </widget>

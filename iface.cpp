@@ -112,16 +112,20 @@ void handleAllStandartDataCan(
     //----------- Заполняем структуру samples стандартного CAN ----------
 
     if((idWhole >= FcCanIdClass::CAN_START_SAMPLE_ID) && (idWhole <= FcCanIdClass::CAN_END_SAMPLE_ID)){
-        sampleDataArray[idWhole].value.LowerByte = quint8(arrayDataFromCAN[3]);
-        sampleDataArray[idWhole].value.UpperByte = quint8(arrayDataFromCAN[4]);
-        sampleDataArray[idWhole].maxValue.LowerByte = quint8(arrayDataFromCAN[5]);
-        sampleDataArray[idWhole].maxValue.UpperByte = quint8(arrayDataFromCAN[6]);
-        sampleDataArray[idWhole].scale.LowerByte = quint8(arrayDataFromCAN[7]);
-        sampleDataArray[idWhole].scale.UpperByte = quint8(arrayDataFromCAN[8]);
-        sampleDataArray[idWhole].zero.LowerByte = quint8(arrayDataFromCAN[9]);
-        sampleDataArray[idWhole].zero.UpperByte = quint8(arrayDataFromCAN[10]);
-        sampleDataArray[idWhole].displayString = sampleNumList[idWhole] + " : " + QString::number(sampleDataArray[idWhole].value.Reg16, 10);
+
+        sampleDataArray[idWhole].value.LowerByte = quint8(arrayDataFromCAN[6]);
+        sampleDataArray[idWhole].value.UpperByte = quint8(arrayDataFromCAN[7]);
+        sampleDataArray[idWhole].maxValue.LowerByte = quint8(arrayDataFromCAN[8]);
+        sampleDataArray[idWhole].maxValue.UpperByte = quint8(arrayDataFromCAN[9]);
+        sampleDataArray[idWhole].scale.LowerByte = quint8(arrayDataFromCAN[10]);
+        sampleDataArray[idWhole].scale.UpperByte = quint8(arrayDataFromCAN[11]);
+        sampleDataArray[idWhole].zero.LowerByte = quint8(arrayDataFromCAN[12]);
+        sampleDataArray[idWhole].zero.UpperByte = quint8(arrayDataFromCAN[13]);
+        sampleDataArray[idWhole].displayString = sampleNumList[idWhole] + " : " + QString::number(sampleDataArray[idWhole].value.Reg16, 10) +
+                " maxValue: " + QString::number(sampleDataArray[idWhole].maxValue.Reg16, 10) +
+                " scale: " + QString::number(sampleDataArray[idWhole].scale.Reg16, 10);
         sampleDataArray[idWhole].flagNewData = true;
+      //  qDebug() << sampleDataArray[idWhole].displayString;
     }
 
     //----------- Заполняем структуру регистров ---------

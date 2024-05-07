@@ -95,13 +95,13 @@ void MainWindow::on_pushButton_saveRegToFile_clicked()
     ui->statusbar->showMessage(message + pathSave);
 }
 
+
+// прочитать из файла список измерений или регистров
 void MainWindow::on_pushButton_readRegFromFile_clicked()
 {
-  //  qDebug() << "открываем файл с картой регистров";
     QString message;
     QFileDialog dialogOpen;
     QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", workDirPath, "Текстовый файл (*.txt)");
-//    qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
         QTextStream stream(&file);
@@ -132,6 +132,7 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
                    message = "Прочитаны регистры из файла ";
                }
                 else{       // заполняем данными из файла виджет с checkButton
+                   sampleNumList[index] = name;
                    ui->listWidget_sampleNum->addItem(item);
                    message = "Прочитан список измерений из файла ";
                }
@@ -147,6 +148,7 @@ void MainWindow::on_pushButton_readRegFromFile_clicked()
 
 //-------- добавить выбранный регистр в таблицу и виджет просмотра
 void MainWindow::addItemFromlistwidget(QListWidgetItem *item, quint8 index, QString regName){
+
     item->setForeground(Qt::red);
     regDataArray[index].displayed = true;
     ui->textEdit_selectedRegNum->append(item->text());
@@ -201,16 +203,16 @@ void MainWindow::on_listWidget_sampleNum_itemClicked(QListWidgetItem *item)
 //-------- добавить выбранный элемент измерений  в таблицу и виджет просмотра
 void MainWindow::addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString sampleName){
     item->setForeground(Qt::red);
-  //  regDataArray[index].displayed = true;
+    sampleDataArray[index].displayed = true;
     ui->textEdit_selectedSampleNum->append(item->text());
-//    addRowRegistersTable(index, sampleName); // добавляем выбранный регистр в таблицу
+    addRowSamplesTable(index, sampleName); // добавляем выбранный регистр в таблицу
 }
 
 //-------- удалить выбранный элемент измерений  из таблицы и виджета просмотра
 void MainWindow::deleteSampleFromlistwidget(QListWidgetItem *item, quint8 index){
     item->setForeground(Qt::black);
-  //  regDataArray[index].displayed = false;
-//    deleteRowRegistersTable(index);
+    sampleDataArray[index].displayed = false;
+    deleteRowSamplesTable(index);
 
     // чудовищная по скоростиисполнения реализация!!!!!! переделать
     ui->textEdit_selectedSampleNum->clear();
@@ -236,6 +238,8 @@ void MainWindow::on_pushButton_selectAll_clicked()
         addItemFromlistwidget(item, index, regName);
     }
 }
+
+
 
 void MainWindow::on_pushButton_resetAll_clicked()
 {

@@ -41,9 +41,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
     ui->label_selectAlias->setText("Selected registers");
 
+    registersChecked = ui->radioButton_registers->isChecked();
+
     on_pushButton_genRegFromEnum_clicked(); // заранее подгружаем список всех регистров инвертора
     initTabCan(); // установить активность кнопок
     createRegistersTable();
+    createSamplesTable();
     initComboBoxRegister(); // три кастомных регистра в заголовке таблицы значений
     ui->checkBox_lossConnection->setChecked(true); // по умолчанию останавливаем процесс при потере связи
     on_pushButton_searchListPort_clicked(); // заранее загрузить доступные порты

@@ -85,9 +85,14 @@ private slots:
     void initComboBoxRegister();
 
     // работа со списком измерений
+    void createSamplesTable();
     void on_listWidget_sampleNum_itemClicked(QListWidgetItem *item);
     void addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString regName);
     void deleteSampleFromlistwidget(QListWidgetItem *item, quint8 index);
+    void addRowSamplesTable(int index, QString sampleName);
+    void deleteRowSamplesTable(int index);
+    void sampleDisplayTable();
+    void displayHashID();
 
     // работа с таблицей регистров
     void createRegistersTable();
@@ -100,8 +105,6 @@ private slots:
     void getFreqInv();
     QString getRegisterInv(int regNum, qint16 valueInt);
     void setRegistersCombobox();
-
-    void displayHashID();
 
     QString glueString(quint16 data, quint8 registerInv);
     QString glueAdapterHeader();
@@ -135,8 +138,6 @@ private slots:
 
     void on_horizontalSlider_sliderReleased();
 
-    void on_pushButton_testMeasure_clicked();
-
     void on_pushButton_showPanel_clicked();
 
     void on_pushButton_hidePanel_clicked();
@@ -147,6 +148,8 @@ private slots:
     void on_radioButton_registers_clicked(bool checked);
 
     void on_radioButton_samples_clicked(bool checked);
+
+
 
 private:
     Ui::MainWindow *ui;
@@ -167,5 +170,7 @@ private:
 
     QHash<quint16, QByteArray> canByIdStandart;  // хэш таблица стандартных ID (добавить архив)
     QHash<quint32, QByteArray> canByIdExtended;  // хэш таблица расширенных ID (добавить архив)
+
+    bool registersChecked;
 };
 #endif // MAINWINDOW_H

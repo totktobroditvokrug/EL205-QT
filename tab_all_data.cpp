@@ -38,6 +38,7 @@ void MainWindow::readStream()
             }
 
             regDisplayTable();
+            sampleDisplayTable();
             displayHashID();
 
             if(bytesFromAdapter > 60) { // переделать под настоящие ответы по CAN

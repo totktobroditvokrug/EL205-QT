@@ -15,8 +15,6 @@ class measure
 {
 public:
     measure();
-    static void debug();
-    static void readMeasureListFromFile();
 };
 
 
