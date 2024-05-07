@@ -30,10 +30,10 @@ void MainWindow::createSamplesTable()
     QStringList headers;
     headers << "№"
             << "Sample"
-            << "value"
             << "maxValue"
             << "scale"
             << "zero"
+            << "value"
             << "scaledValue";
     // добавить архив для data
 
@@ -60,28 +60,30 @@ void MainWindow::addRowSamplesTable(int sampleNum, QString sampleName)
     ui->tableSamples->insertRow(prevRowCount);
     ui->tableSamples->setItem(prevRowCount, 1, nameSample);
     ui->tableSamples->item(prevRowCount, 1)->setBackground(Qt::lightGray);
+    ui->tableSamples->item(prevRowCount, 1)->setForeground(Qt::black);
     ui->tableSamples->setColumnWidth(1, 220);
 
     ui->tableSamples->setItem(prevRowCount, 0, new QTableWidgetItem(QString::number(sampleNum, 10)));
     ui->tableSamples->item(prevRowCount, 0)->setBackground(Qt::lightGray);
+    ui->tableSamples->item(prevRowCount, 0)->setForeground(Qt::black);
     ui->tableSamples->setColumnWidth(0, 70);
 
-    QString value = "-";
     QString maxValue = "-";
     QString scaleValue = "-";
     QString zero = "-";
+    QString value = "-";
     QString scaledValue = "-";
 
-    QTableWidgetItem *currentSampleZero = new QTableWidgetItem(zero);
-    QTableWidgetItem *currentSampleScale = new QTableWidgetItem(scaleValue);
     QTableWidgetItem *currentSampleMaxValue = new QTableWidgetItem(maxValue);
+    QTableWidgetItem *currentSampleScale = new QTableWidgetItem(scaleValue);
+    QTableWidgetItem *currentSampleZero = new QTableWidgetItem(zero);
     QTableWidgetItem *currentSampleData = new QTableWidgetItem(value);
     QTableWidgetItem *currentSampleScaledValue = new QTableWidgetItem(scaledValue);
 
-    ui->tableSamples->setItem(prevRowCount, 2, currentSampleData);
-    ui->tableSamples->setItem(prevRowCount, 3, currentSampleMaxValue);
-    ui->tableSamples->setItem(prevRowCount, 4, currentSampleScale);
-    ui->tableSamples->setItem(prevRowCount, 5, currentSampleZero);
+    ui->tableSamples->setItem(prevRowCount, 2, currentSampleMaxValue );
+    ui->tableSamples->setItem(prevRowCount, 3, currentSampleScale);
+    ui->tableSamples->setItem(prevRowCount, 4, currentSampleZero);
+    ui->tableSamples->setItem(prevRowCount, 5, currentSampleData);
     ui->tableSamples->setItem(prevRowCount, 6, currentSampleScaledValue);
 
     // запрет редактирования и выбора ячеек по умолчанию
@@ -91,7 +93,11 @@ void MainWindow::addRowSamplesTable(int sampleNum, QString sampleName)
     ui->tableSamples->item(prevRowCount, 3)->setFlags(Qt::NoItemFlags);
     ui->tableSamples->item(prevRowCount, 4)->setFlags(Qt::NoItemFlags);
     ui->tableSamples->item(prevRowCount, 5)->setFlags(Qt::NoItemFlags);
-    ui->tableSamples->item(prevRowCount, 6)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+    ui->tableSamples->item(prevRowCount, 6)->setFlags(Qt::NoItemFlags);
+    ui->tableSamples->item(prevRowCount, 5)->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+    ui->tableSamples->item(prevRowCount, 6)->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+    ui->tableSamples->item(prevRowCount, 5)->setForeground(Qt::darkRed);
+    ui->tableSamples->item(prevRowCount, 6)->setForeground(Qt::darkBlue);
 //    ui->tableRegister->item(prevRowCount, 6)->setFlags(Qt::NoItemFlags);
 }
 
@@ -122,12 +128,8 @@ void MainWindow::sampleDisplayTable()
 
             if((sampleNum <= 0) & (sampleNum > FcCanIdClass::CAN_END_SAMPLE_ID)) qDebug() << "невалидный номер регистра. regNum=" << sampleNum;
 
-            if(true){ // если получили новое значение
-                //  qDebug() << "у регистра №" << regNum << " обновилось значение";
-
-                //  regDataArray[regNum].flagNewData = false; // сброс флага лишает возможности дублировать регистры
-
-
+            if(sampleDataArray[sampleNum].flagNewData){ // если получили новое значение
+                sampleDataArray[sampleNum].flagNewData = false; // сброс флага, чтобы сэкономить время прорисовки таблицы
 
                 //---- заполняем данные только если был флаг прихода нового значения регистра
                 qint16 valueInt = sampleDataArray[sampleNum].value.Reg16;
@@ -139,25 +141,24 @@ void MainWindow::sampleDisplayTable()
                 QString scaledValue = "-";
 
                 //------ расчет значение при наличии шкалы
-                qint32 scaledValueInt = 0;
+                double scaledValueInt = 0;
                 if((sampleDataArray[sampleNum].scale.Reg16 == 0) || (sampleDataArray[sampleNum].maxValue.Reg16 == 0)){
                     //  qDebug() << "деление на ноль";
-                    scaledValue = "Error";
+                    scaledValue = "(" + value + ")";
                 }
                 else{
-                    scaledValueInt = valueInt * sampleDataArray[sampleNum].scale.Reg16 / sampleDataArray[sampleNum].maxValue.Reg16;
-                    scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
+                    scaledValueInt = double(valueInt) * double(sampleDataArray[sampleNum].scale.Reg16) /
+                            double(sampleDataArray[sampleNum].maxValue.Reg16);
+                    scaledValue = QString::number(scaledValueInt, 'f',  2); // вывод с запятой
                 }
-                ui->tableSamples->item(i, 2)->setText(value);
-                ui->tableSamples->item(i, 3)->setText(maxValue);
-                ui->tableSamples->item(i, 4)->setText(scaleValue);
-                ui->tableSamples->item(i, 5)->setText(zero);
+                ui->tableSamples->item(i, 2)->setText(maxValue );
+                ui->tableSamples->item(i, 3)->setText(scaleValue);
+                ui->tableSamples->item(i, 4)->setText(zero);
+                ui->tableSamples->item(i, 5)->setText(value);
                 ui->tableSamples->item(i, 6)->setText(scaledValue);
             }
         }
     }
-
-
 }
 
 

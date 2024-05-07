@@ -43,8 +43,6 @@ void MainWindow::createRegistersTable()
 
     ui->tableRegister->setColumnCount(8); // Указываем число колонок
     ui->tableRegister->setShowGrid(true); // Включаем сетку
-    // Разрешаем выделение только одного элемента
-//    ui->tableRegister->setSelectionMode(QAbstractItemView::SingleSelection);
     // Разрешаем выделение построчно
  //   ui->tableRegister->setSelectionBehavior(QAbstractItemView::SelectRows);
     // Устанавливаем заголовки колонок
@@ -64,10 +62,12 @@ void MainWindow::addRowRegistersTable(int regNum, QString regName)
     ui->tableRegister->insertRow(prevRowCount);
     ui->tableRegister->setItem(prevRowCount, 1, nameReg);
     ui->tableRegister->item(prevRowCount, 1)->setBackground(Qt::lightGray);
+    ui->tableRegister->item(prevRowCount, 1)->setForeground(Qt::black);
     ui->tableRegister->setColumnWidth(1, 220);
 
     ui->tableRegister->setItem(prevRowCount, 0, new QTableWidgetItem(QString::number(regNum, 10)));
     ui->tableRegister->item(prevRowCount, 0)->setBackground(Qt::lightGray);
+    ui->tableRegister->item(prevRowCount, 0)->setForeground(Qt::black);
     ui->tableRegister->setColumnWidth(0, 70);
 
     QString min = "-";
@@ -100,6 +100,8 @@ void MainWindow::addRowRegistersTable(int regNum, QString regName)
     ui->tableRegister->item(prevRowCount, 5)->setFlags(Qt::NoItemFlags);
     ui->tableRegister->item(prevRowCount, 6)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
     ui->tableRegister->item(prevRowCount, 7)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+    ui->tableRegister->item(prevRowCount, 6)->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
+    ui->tableRegister->item(prevRowCount, 7)->setData(Qt::TextAlignmentRole,Qt::AlignCenter);
 //    ui->tableRegister->item(prevRowCount, 6)->setFlags(Qt::NoItemFlags);
 //    ui->tableRegister->item(prevRowCount, 7)->setFlags(Qt::NoItemFlags);
 }
@@ -209,15 +211,16 @@ void MainWindow::regDisplayTable()
                     }
 
                     //------ расчет значение при наличии шкалы
-                    qint32 scaledValueInt = 0;
+                    double scaledValueInt = 0;
                     if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
                        if((regDataArray[regNum].scale.Reg16 == 0) || (regDataArray[regNum].maxValue.Reg16 == 0)){
                          //  qDebug() << "деление на ноль";
                            scaledValue = "Error";
                        }
                        else{
-                           scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
-                           scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
+                           scaledValueInt = double(valueInt) * double(regDataArray[regNum].scale.Reg16) /
+                                   double(regDataArray[regNum].maxValue.Reg16);
+                           scaledValue = QString::number(scaledValueInt, 'f', 2); // вывод с запятой
                        }
                     }
 
@@ -292,16 +295,8 @@ void MainWindow::createTableFromFile()
 
     ui->tableFromFile->setColumnCount(9); // Указываем число колонок
     ui->tableFromFile->setShowGrid(true); // Включаем сетку
-    // Разрешаем выделение только одного элемента
-//    ui->tableRegister->setSelectionMode(QAbstractItemView::SingleSelection);
-    // Разрешаем выделение построчно
- //   ui->tableRegister->setSelectionBehavior(QAbstractItemView::SelectRows);
     // Устанавливаем заголовки колонок
     ui->tableFromFile->setHorizontalHeaderLabels(headers);
-//    ui->tableRegister->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    ui->tableRegister->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    // Растягиваем последнюю колонку на всё доступное пространство
- //   ui->tableRegister->horizontalHeader()->setStretchLastSection(true);
     ui->tableFromFile->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     ui->tableFromFile->blockSignals(true);
 }
@@ -317,7 +312,6 @@ void MainWindow::addRowTableFromFile(QString lineFromFile)
     }
 
     int prevRowCount = ui->tableFromFile->rowCount(); // определяем текущий размер таблицы
-//     qDebug() << prevRowCount << " - " << splitIntoColumns;
     ui->tableFromFile->insertRow(prevRowCount);
 
     QString regNumber = splitIntoColumns[0];
@@ -374,15 +368,12 @@ void MainWindow::addRowTableFromFile(QString lineFromFile)
     ui->tableFromFile->item(prevRowCount, 6)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
     ui->tableFromFile->item(prevRowCount, 7)->setFlags(Qt::NoItemFlags);
     ui->tableFromFile->item(prevRowCount, 8)->setFlags(Qt::NoItemFlags);
-//    ui->tableRegister->item(prevRowCount, 6)->setFlags(Qt::NoItemFlags);
-//    ui->tableRegister->item(prevRowCount, 7)->setFlags(Qt::NoItemFlags);
 }
 
 
 void MainWindow::on_pushButton_saveTable_clicked()
 {    QFileDialog dialogSave;
      QString pathSave = dialogSave.getSaveFileName(nullptr, "Save file", workDirPath, "table (*.csv)");
-//     qDebug() << "записываем файл с таблицей регистров: " << pathSave;
 
      QFile file(pathSave);
       // Открываем файл, создаем, если его не существует
@@ -419,13 +410,10 @@ void MainWindow::on_pushButton_saveTable_clicked()
 
 void MainWindow::on_pushButton_loadTable_clicked()
 {
-//    qDebug() << "открываем файл со значениями регистров";
     QFileDialog dialogOpen;
     QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", workDirPath, "table (*.csv)");
-//    qDebug() << "Выбранный файл: " << fileName;
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
-//        QTableWidget tabFromFile = ui->tableFromFile;
         createTableFromFile();
         QTextStream stream(&file);
         QString readStr = stream.readAll();
@@ -458,7 +446,6 @@ void MainWindow::checkValueRegister(int i, int value)   // запретить б
         else{
             qint16 valueInt = regDataArray[regNum].value.Reg16;
             QString currentValue = QString::number(valueInt, 10); //
- //           QTableWidgetItem *currentValue = ui->tableFromFile->item(i, 7); // ячейка текущего значения
             ui->tableFromFile->item(i, 7)->setText(currentValue);
             if(value != int(valueInt)){
                 ui->tableFromFile->item(i, 7)->setBackground(Qt::red);
@@ -480,7 +467,6 @@ void MainWindow::on_pushButton_checkRegistersFromFile_clicked()
             int max = ui->tableFromFile->item(i, 3)->text().toInt();
             int value = ui->tableFromFile->item(i, 6)->text().toInt();
             checkValueRegister(i, value);
-         //   qDebug() << "проверка диапазона: " << min << " < " << value << " < " << max;
             if((value >= min) && (value <= max)){
                  ui->tableFromFile->item(i, 6)->setForeground(Qt::darkGreen);
                  ui->tableFromFile->item(i, 1)->setBackground(Qt::green);
@@ -551,9 +537,6 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 // по сигналу отпускания слайдера делаем запись его значения в регистр
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
-
-  //  qDebug() << "slider released. Value = " << ui->horizontalSlider->value();
-
     int regNum = 0;
     switch (selectedComboBox) {
     case 1:{
@@ -577,9 +560,8 @@ void MainWindow::on_horizontalSlider_sliderReleased()
     writeSerialPort(commandString);
 }
 
-void MainWindow::on_lineEdit_registerValue_1_selectionChanged()
+void MainWindow::on_lineEdit_registerValue_1_selectionChanged() //  было выбрано поле №1
 {
-  //  qDebug() << "было выбрано поле №1 ";
     int regNum = ui->comboBox_register_1->currentIndex();
     selectedComboBox = 1;
 
@@ -593,9 +575,8 @@ void MainWindow::on_lineEdit_registerValue_1_selectionChanged()
     }
 }
 
-void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
+void MainWindow::on_lineEdit_registerValue_2_selectionChanged() //  было выбрано поле №2
 {
- //   qDebug() << "было выбрано поле №2";
     int regNum = ui->comboBox_register_2->currentIndex();
     selectedComboBox = 2;
 
@@ -610,9 +591,8 @@ void MainWindow::on_lineEdit_registerValue_2_selectionChanged()
 }
 
 
-void MainWindow::on_lineEdit_registerValue_3_selectionChanged()
+void MainWindow::on_lineEdit_registerValue_3_selectionChanged()  // было выбрано поле №3
 {
-  //  qDebug() << "было выбрано поле №3";
     int regNum = ui->comboBox_register_3->currentIndex();
     selectedComboBox = 3;
 
@@ -659,7 +639,7 @@ void MainWindow::getFreqInv(){
 //------ расчет значения регистра с учетом шкалы
 QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
     //------ расчет значение при наличии шкалы
-    qint32 scaledValueInt = 0;
+    double scaledValueInt = 0;
     QString scaledValue = "--";
    // qint16 valueInt = regDataArray[regNum].value.Reg16;
 
@@ -669,8 +649,9 @@ QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
            scaledValue = "Error";
        }
        else{
-           scaledValueInt = valueInt * regDataArray[regNum].scale.Reg16 / regDataArray[regNum].maxValue.Reg16;
-           scaledValue = QString::number(scaledValueInt, 10); // вывод с плавающей запятой!!!!!!!
+           scaledValueInt = double(valueInt) * double(regDataArray[regNum].scale.Reg16) /
+                   double(regDataArray[regNum].maxValue.Reg16);
+           scaledValue = QString::number(scaledValueInt, 'f', 1); // вывод с плавающей запятой!!!!!!!
        }
        return scaledValue;  // с учетом шкалы
      }
