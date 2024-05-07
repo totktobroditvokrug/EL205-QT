@@ -41,9 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
     ui->label_selectAlias->setText("Selected registers");
 
-    registersChecked = ui->radioButton_registers->isChecked();
-
+    ui->radioButton_registers->isChecked();
     on_pushButton_genRegFromEnum_clicked(); // заранее подгружаем список всех регистров инвертора
+
     initTabCan(); // установить активность кнопок
     createRegistersTable();
     createSamplesTable();

@@ -170,7 +170,5 @@ private:
 
     QHash<quint16, QByteArray> canByIdStandart;  // хэш таблица стандартных ID (добавить архив)
     QHash<quint32, QByteArray> canByIdExtended;  // хэш таблица расширенных ID (добавить архив)
-
-    bool registersChecked;
 };
 #endif // MAINWINDOW_H
