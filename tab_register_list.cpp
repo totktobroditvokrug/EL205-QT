@@ -253,11 +253,8 @@ void MainWindow::on_pushButton_selectAll_clicked()
     }
 }
 
-
-
 void MainWindow::on_pushButton_resetAll_clicked()
 {
-
     int countNum;
     if(ui->radioButton_registers->isChecked()) countNum = ui->listWidget_regNum->count();
     else countNum = ui->listWidget_sampleNum->count();

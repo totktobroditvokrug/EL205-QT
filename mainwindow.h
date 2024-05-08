@@ -109,6 +109,8 @@ private slots:
     QString glueString(quint16 data, quint8 registerInv);
     QString glueAdapterHeader();
 
+    QString scaledValue(qint16 value, qint16 scale, qint16 max);
+
     void on_pushButton_sendCommand_clicked();
 
     void on_pushButton_startInv_clicked();
@@ -170,5 +172,7 @@ private:
 
     QHash<quint16, QByteArray> canByIdStandart;  // хэш таблица стандартных ID (добавить архив)
     QHash<quint32, QByteArray> canByIdExtended;  // хэш таблица расширенных ID (добавить архив)
+
+    static QString currentTime;
 };
 #endif // MAINWINDOW_H

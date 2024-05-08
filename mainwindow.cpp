@@ -1,18 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDesktopWidget>
+// #include <QDateTime>
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-//    QVector<QString> tempVector(RegnumClass::IREG_INV_ALL_END_REGISTERS);
-//    for(int i=0; i < RegnumClass::IREG_INV_ALL_END_REGISTERS; i++) {
-//        QString value = "unknown";
-//        tempVector[i] = value;
-//    }
- //   regNumList = tempVector;  // инициализация списка регистров todo переделать без участия tempVector
 
     // объявление списка регистров и измерений с размерами, соответствующими enum
     regNumList = QVector<QString>(RegnumClass::IREG_INV_ALL_END_REGISTERS);
@@ -50,6 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
     initComboBoxRegister(); // три кастомных регистра в заголовке таблицы значений
     ui->checkBox_lossConnection->setChecked(true); // по умолчанию останавливаем процесс при потере связи
     on_pushButton_searchListPort_clicked(); // заранее загрузить доступные порты
+//    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
+    ui->statusbar->showMessage("ver. 07-05-2024");
+
 }
 
 MainWindow::~MainWindow()

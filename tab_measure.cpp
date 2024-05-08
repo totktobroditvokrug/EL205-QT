@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "measure.h"
-
 // Поле хэш-таблиц стандартного и расширенного CAN
 void MainWindow::displayHashID()
 {
@@ -24,7 +22,6 @@ void MainWindow::displayHashID()
 
 void MainWindow::createSamplesTable()
 {
-
     ui->tableSamples->clear();
     ui->tableSamples->setRowCount(0); // очистить предыдущую таблицу
     QStringList headers;
@@ -133,24 +130,15 @@ void MainWindow::sampleDisplayTable()
 
                 //---- заполняем данные только если был флаг прихода нового значения регистра
                 qint16 valueInt = sampleDataArray[sampleNum].value.Reg16;
+                qint16 scaleInt = sampleDataArray[sampleNum].scale.Reg16;
+                qint16 maxInt = sampleDataArray[sampleNum].maxValue.Reg16;
 
                 QString zero = QString::number(sampleDataArray[sampleNum].zero.Reg16, 10);
-                QString scaleValue = QString::number(sampleDataArray[sampleNum].scale.Reg16, 10);
-                QString maxValue = QString::number(sampleDataArray[sampleNum].maxValue.Reg16, 10);
-                QString value = QString::number(valueInt, 10); //
-                QString scaledValue = "-";
+                QString scaleValue = QString::number(scaleInt, 10);
+                QString maxValue = QString::number(maxInt, 10);
+                QString value = QString::number(valueInt, 10);
+                QString scaledValue = MainWindow::scaledValue(valueInt, scaleInt, maxInt);
 
-                //------ расчет значение при наличии шкалы
-                double scaledValueInt = 0;
-                if((sampleDataArray[sampleNum].scale.Reg16 == 0) || (sampleDataArray[sampleNum].maxValue.Reg16 == 0)){
-                    //  qDebug() << "деление на ноль";
-                    scaledValue = "(" + value + ")";
-                }
-                else{
-                    scaledValueInt = double(valueInt) * double(sampleDataArray[sampleNum].scale.Reg16) /
-                            double(sampleDataArray[sampleNum].maxValue.Reg16);
-                    scaledValue = QString::number(scaledValueInt, 'f',  2); // вывод с запятой
-                }
                 ui->tableSamples->item(i, 2)->setText(maxValue );
                 ui->tableSamples->item(i, 3)->setText(scaleValue);
                 ui->tableSamples->item(i, 4)->setText(zero);

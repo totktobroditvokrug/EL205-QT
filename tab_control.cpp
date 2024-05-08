@@ -40,3 +40,19 @@ QString MainWindow::glueAdapterHeader(){
     return writeADHeader;
 }
 
+QString MainWindow::scaledValue(qint16 value, qint16 scale, qint16 max)
+{
+    //------ расчет значение при наличии шкалы
+    double scaledValueInt = 0;
+    if((scale == 0) || (max == 0)){
+        return "(" + QString::number(value, 10) + ")";
+    }
+    else{
+        scaledValueInt = double(value) * double(scale) / double(max);
+        int prec = 1;
+        if (scaledValueInt >= 1000) prec = 0;
+        if (scaledValueInt < 10) prec = 2;
+        return QString::number(scaledValueInt, 'f',  prec); // вывод с запятой
+    }
+}
+

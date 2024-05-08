@@ -211,17 +211,8 @@ void MainWindow::regDisplayTable()
                     }
 
                     //------ расчет значение при наличии шкалы
-                    double scaledValueInt = 0;
                     if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
-                       if((regDataArray[regNum].scale.Reg16 == 0) || (regDataArray[regNum].maxValue.Reg16 == 0)){
-                         //  qDebug() << "деление на ноль";
-                           scaledValue = "Error";
-                       }
-                       else{
-                           scaledValueInt = double(valueInt) * double(regDataArray[regNum].scale.Reg16) /
-                                   double(regDataArray[regNum].maxValue.Reg16);
-                           scaledValue = QString::number(scaledValueInt, 'f', 2); // вывод с запятой
-                       }
+                        scaledValue = MainWindow::scaledValue(valueInt, regDataArray[regNum].scale.Reg16, regDataArray[regNum].maxValue.Reg16);
                     }
 
                     ui->tableRegister->item(i, 2)->setText(min);
@@ -638,22 +629,8 @@ void MainWindow::getFreqInv(){
 
 //------ расчет значения регистра с учетом шкалы
 QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
-    //------ расчет значение при наличии шкалы
-    double scaledValueInt = 0;
-    QString scaledValue = "--";
-   // qint16 valueInt = regDataArray[regNum].value.Reg16;
-
     if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
-       if((regDataArray[regNum].scale.Reg16 == 0) || (regDataArray[regNum].maxValue.Reg16 == 0)){
-         //  qDebug() << "деление на ноль";
-           scaledValue = "Error";
-       }
-       else{
-           scaledValueInt = double(valueInt) * double(regDataArray[regNum].scale.Reg16) /
-                   double(regDataArray[regNum].maxValue.Reg16);
-           scaledValue = QString::number(scaledValueInt, 'f', 1); // вывод с плавающей запятой!!!!!!!
-       }
-       return scaledValue;  // с учетом шкалы
+        return MainWindow::scaledValue(valueInt, regDataArray[regNum].scale.Reg16, regDataArray[regNum].maxValue.Reg16);
      }
      return QString::number(valueInt, 10); // без учета шкалы
 }
