@@ -4,6 +4,7 @@
 #include "iface.h"
 #include "stylehelper.h"
 
+
 // функция смены младший-старший байт
 
 qint16 changeHiLowBytes(qint16 dataIn){
@@ -70,7 +71,7 @@ void MainWindow::addRowRegistersTable(int regNum, QString regName)
     ui->tableRegister->item(prevRowCount, 0)->setForeground(Qt::black);
     ui->tableRegister->setColumnWidth(0, 70);
 
-    ui->tableRegister->setColumnWidth(7, 155);
+    ui->tableRegister->setColumnWidth(7, 160);
 
     QString min = "-";
     QString max = "-";
@@ -213,9 +214,13 @@ void MainWindow::regDisplayTable()
                     scaledValue = MainWindow::scaledValue(valueInt, regDataArray[regNum].scale.Reg16, regDataArray[regNum].maxValue.Reg16);
                 }
 
-             //   qDebug() << "regNum=" << regNum  << " regNumList[regNum]=" << regNumList[regNum];
-                if(regNumList[regNum].contains("STATUS", Qt::CaseSensitive))
-                    scaledValue = QString::number(valueInt, 2).leftJustified(16, '0').insert(8, " ");
+             //   если это регистры статуса, выдаем в scaledValue двоичными тетрадами
+                if(regNumList[regNum].contains("STATUS", Qt::CaseSensitive)){
+                     scaledValue = QString::number(valueInt, 2).rightJustified(16, '0');
+                     scaledValue.insert(4, " ").insert(9, " ").insert(14, " ");
+                }
+
+
 
                 ui->tableRegister->item(i, 2)->setText(min);
                 ui->tableRegister->item(i, 3)->setText(max);
