@@ -58,6 +58,7 @@ void MainWindow::createRegistersTable()
 
 void MainWindow::addRowRegistersTable(int regNum, QString regName)
 {
+    if(regName.contains("Reserved", Qt::CaseSensitive)) return;
     QTableWidgetItem *nameReg = new QTableWidgetItem(regName);
     int prevRowCount = ui->tableRegister->rowCount(); // определяем текущий размер таблицы
     ui->tableRegister->insertRow(prevRowCount);

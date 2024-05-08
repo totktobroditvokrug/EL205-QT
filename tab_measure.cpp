@@ -52,6 +52,7 @@ void MainWindow::createSamplesTable()
 
 void MainWindow::addRowSamplesTable(int sampleNum, QString sampleName)
 {
+    if(sampleName.contains("Reserved", Qt::CaseSensitive)) return;
     QTableWidgetItem *nameSample = new QTableWidgetItem(sampleName);
     int prevRowCount = ui->tableSamples->rowCount(); // определяем текущий размер таблицы
     ui->tableSamples->insertRow(prevRowCount);

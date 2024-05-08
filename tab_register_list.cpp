@@ -72,7 +72,7 @@ void MainWindow::genSampleFromEnum()
     sampleNumList  = SampleCanIdClass::fccanidArray();
     ui->listWidget_sampleNum->clear();
     int sizeArray = sampleNumList.size();
-    for (int i = SampleCanIdClass::CAN_START_SAMPLE_ID; i < sizeArray; i++) {
+    for (int i = SampleCanIdClass::CAN_START_SAMPLE_ID; i < sizeArray; i++) { // отображать только samples
         QListWidgetItem *item = new QListWidgetItem;
         item->setText(QString::number(i, 10) + ": " + sampleNumList.at(i));
         item->setCheckState(Qt::Unchecked);
