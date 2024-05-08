@@ -113,12 +113,9 @@ void MainWindow::deleteRowSamplesTable(int index)
 //------------------Вывод значений регистров в таблицу-----------------
 void MainWindow::sampleDisplayTable()
 {
-//    qDebug() << "Вывод измерений";
     for(int i = 0; i <= ui->tableSamples->rowCount(); i++){
-//qDebug() << sampleDataArray[i].displayString;
 
         QTableWidgetItem *currentSampleNum = ui->tableSamples->item(i, 0); // номер измерения из нулевого столбца
-//        qDebug() << currentSampleNum->text();
 
         if (!!currentSampleNum) { // если ячейка не NULL
             int sampleNum = currentSampleNum->text().toInt();
@@ -138,8 +135,6 @@ void MainWindow::sampleDisplayTable()
                 QString maxValue = QString::number(maxInt, 10);
                 QString value = QString::number(valueInt, 10);
                 QString scaledValue = MainWindow::scaledValue(valueInt, scaleInt, maxInt);
-//                if(sampleNumList[sampleNum].contains("STATUS", Qt::CaseSensitive))
-//                    scaledValue = QString::number(valueInt, 2);
 
                 ui->tableSamples->item(i, 2)->setText(maxValue );
                 ui->tableSamples->item(i, 3)->setText(scaleValue);

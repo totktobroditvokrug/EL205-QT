@@ -668,7 +668,7 @@
                <number>10</number>
               </property>
               <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_genRegFromEnum">
+               <widget class="QPushButton" name="pushButton_genFromEnum">
                 <property name="text">
                  <string>Generate from enum</string>
                 </property>

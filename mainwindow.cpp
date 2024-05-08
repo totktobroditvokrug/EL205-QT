@@ -37,7 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->label_selectAlias->setText("Selected registers");
 
     ui->radioButton_registers->isChecked();
-    on_pushButton_genRegFromEnum_clicked(); // заранее подгружаем список всех регистров инвертора
+    genRegFromEnum(); // заранее подгружаем список всех регистров инвертора
+    genSampleFromEnum(); // заранее подгружаем список измерений инвертора
 
     initTabCan(); // установить активность кнопок
     createRegistersTable();
@@ -55,4 +56,3 @@ MainWindow::~MainWindow()
     serial->close(); // освободить порт при закрытии программы
     delete ui;
 }
-

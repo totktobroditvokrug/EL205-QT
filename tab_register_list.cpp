@@ -44,28 +44,39 @@ void MainWindow::on_pushButton_workDir_clicked()
 
 
 // генерация списка регистров из перечисления в проекте инвертора
-void MainWindow::on_pushButton_genRegFromEnum_clicked()
-{
-    QVector<QString> numList; // формирование списка
-    QString message;
-    if(ui->radioButton_registers->isChecked()){
-      numList  = RegnumClass::regnumArray();
-      ui->listWidget_regNum->clear();
-      message = "Генерация списка всех регистров ПЧ";
-    }
-    else{
-        numList  = FcCanIdClass::fccanidArray();
-        ui->listWidget_sampleNum->clear();
-        message = "Генерация списка измерений ПЧ";
-    }
 
-    int sizeArray = numList.size();
+void MainWindow::on_pushButton_genFromEnum_clicked()
+{
+    if(ui->radioButton_registers->isChecked()) genRegFromEnum();
+    else genSampleFromEnum();
+}
+
+void MainWindow::genRegFromEnum()
+{
+    QString message = "Генерация списка всех регистров ПЧ";
+    regNumList = RegnumClass::regnumArray();
+    ui->listWidget_regNum->clear();
+    int sizeArray = regNumList.size();
     for (int i = 0; i < sizeArray; i++) {
-       QListWidgetItem *item = new QListWidgetItem;
-       item->setText(QString::number(i, 10) + ": " + numList.at(i));
-       item->setCheckState(Qt::Unchecked);
-       if(ui->radioButton_registers->isChecked()) ui->listWidget_regNum->addItem(item);
-       else ui->listWidget_sampleNum->addItem(item);
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setText(QString::number(i, 10) + ": " + regNumList.at(i));
+        item->setCheckState(Qt::Unchecked);
+        ui->listWidget_regNum->addItem(item);
+    }
+    ui->statusbar->showMessage(message);
+}
+
+void MainWindow::genSampleFromEnum()
+{
+    QString message = "Генерация списка измерений ПЧ";
+    sampleNumList  = FcCanIdClass::fccanidArray();
+    ui->listWidget_sampleNum->clear();
+    int sizeArray = sampleNumList.size();
+    for (int i = 0; i < sizeArray; i++) {
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setText(QString::number(i, 10) + ": " + sampleNumList.at(i));
+        item->setCheckState(Qt::Unchecked);
+        ui->listWidget_sampleNum->addItem(item);
     }
     ui->statusbar->showMessage(message);
 }
@@ -161,8 +172,6 @@ void MainWindow::deleteItemFromlistwidget(QListWidgetItem *item, quint8 index){
     item->setForeground(Qt::black);
     regDataArray[index].displayed = false;
     deleteRowRegistersTable(index);
-
-    // чудовищная по скоростиисполнения реализация!!!!!! переделать todo
     ui->textEdit_selectedRegNum->clear();
     int countRegnum = ui->listWidget_regNum->count();
     for(int i = 0; i < countRegnum; i++){
@@ -191,7 +200,7 @@ void MainWindow::on_listWidget_regNum_itemClicked(QListWidgetItem *item)
 void MainWindow::on_listWidget_sampleNum_itemClicked(QListWidgetItem *item)
 {
     QStringList separateNum = item->text().split(":", QString::SkipEmptyParts); // разделяем номер и имя
-    quint8 index = quint8(separateNum[0].toInt()); // номер до :
+    int index = separateNum[0].toInt(); // номер до :
     QString sampleName = separateNum[1].simplified();              // строка после :
 
     if(item->checkState() == Qt::Checked) {
@@ -203,7 +212,7 @@ void MainWindow::on_listWidget_sampleNum_itemClicked(QListWidgetItem *item)
 }
 
 //-------- добавить выбранный элемент измерений  в таблицу и виджет просмотра
-void MainWindow::addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString sampleName){
+void MainWindow::addSampleFromlistwidget(QListWidgetItem *item, int index, QString sampleName){
     item->setForeground(Qt::red);
     sampleDataArray[index].displayed = true;
     ui->textEdit_selectedSampleNum->append(item->text());
@@ -211,7 +220,7 @@ void MainWindow::addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QS
 }
 
 //-------- удалить выбранный элемент измерений  из таблицы и виджета просмотра
-void MainWindow::deleteSampleFromlistwidget(QListWidgetItem *item, quint8 index){
+void MainWindow::deleteSampleFromlistwidget(QListWidgetItem *item, int index){
     item->setForeground(Qt::black);
     sampleDataArray[index].displayed = false;
     deleteRowSamplesTable(index);
@@ -239,12 +248,12 @@ void MainWindow::on_pushButton_selectAll_clicked()
         else currentItem = ui->listWidget_sampleNum->item(i);
 
         QStringList separateNum = currentItem->text().split(":", QString::SkipEmptyParts); // разделяем номер и имя
-        quint8 index = quint8(separateNum[0].toInt()); // номер до :
+        int index = separateNum[0].toInt(); // номер до :
         QString name = separateNum[1].simplified(); // строка после :
 
         if(ui->radioButton_registers->isChecked()){
             ui->listWidget_regNum->item(i)->setCheckState(Qt::Checked);
-            addItemFromlistwidget(currentItem, index, name);
+            addItemFromlistwidget(currentItem, quint8(index), name);
         }
         else{
           ui->listWidget_sampleNum->item(i)->setCheckState(Qt::Checked);

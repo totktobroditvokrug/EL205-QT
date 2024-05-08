@@ -74,7 +74,7 @@ private slots:
     void on_actionCreate_register_map_triggered();
 
     // загрузка списка регистров
-    void on_pushButton_genRegFromEnum_clicked(); // сгенерировать из enum
+    void genRegFromEnum(); // сгенерировать из enum
     void on_pushButton_saveRegToFile_clicked();
     void on_pushButton_readRegFromFile_clicked();
     void on_listWidget_regNum_itemClicked(QListWidgetItem *item);
@@ -85,10 +85,11 @@ private slots:
     void initComboBoxRegister();
 
     // работа со списком измерений
+    void genSampleFromEnum();
     void createSamplesTable();
     void on_listWidget_sampleNum_itemClicked(QListWidgetItem *item);
-    void addSampleFromlistwidget(QListWidgetItem *item, quint8 index, QString regName);
-    void deleteSampleFromlistwidget(QListWidgetItem *item, quint8 index);
+    void addSampleFromlistwidget(QListWidgetItem *item, int index, QString regName);
+    void deleteSampleFromlistwidget(QListWidgetItem *item, int index);
     void addRowSamplesTable(int index, QString sampleName);
     void deleteRowSamplesTable(int index);
     void sampleDisplayTable();
@@ -152,6 +153,8 @@ private slots:
     void on_radioButton_samples_clicked(bool checked);
 
 
+
+    void on_pushButton_genFromEnum_clicked();
 
 private:
     Ui::MainWindow *ui;
