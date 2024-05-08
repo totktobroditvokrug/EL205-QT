@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // объявление списка регистров и измерений с размерами, соответствующими enum
     regNumList = QVector<QString>(RegnumClass::IREG_INV_ALL_END_REGISTERS);
-    sampleNumList = QVector<QString>(FcCanIdClass::CAN_END_SAMPLE_ID);
+    sampleNumList = QVector<QString>(SampleCanIdClass::CAN_END_SAMPLE_ID);
 
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));

@@ -46,12 +46,12 @@ QVector<QString> RegnumClass::regnumArray()
      return (regnumArray);
 }
 
-QStringList FcCanIdClass::fccanidList(){
+QStringList SampleCanIdClass::fccanidList(){
     QStringList fc_can_idList;
     fc_can_idList.clear();
 
 
-     QMetaObject metaObject = FcCanIdClass::staticMetaObject;
+     QMetaObject metaObject = SampleCanIdClass::staticMetaObject;
 
      QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("fccanid"));
      int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
@@ -70,11 +70,11 @@ QStringList FcCanIdClass::fccanidList(){
 }
 
 
-QVector<QString> FcCanIdClass::fccanidArray(){
+QVector<QString> SampleCanIdClass::fccanidArray(){
     QVector<QString> fc_can_idArray(CAN_END_SAMPLE_ID);
 //    regnumArray.clear();
 
-     QMetaObject metaObject = FcCanIdClass::staticMetaObject;
+     QMetaObject metaObject = SampleCanIdClass::staticMetaObject;
      QMetaEnum metaEnum = metaObject.enumerator(metaObject.indexOfEnumerator("fccanid"));
      int length = metaEnum.keyCount(); // без пустых строк. Так нельзя, пропускаем последние строки
      int addEmpty = 0; // добавляем при пустых линиях enum
@@ -111,7 +111,7 @@ void handleAllStandartDataCan(
 
     //----------- Заполняем структуру samples стандартного CAN ----------
 
-    if((idWhole >= FcCanIdClass::CAN_START_SAMPLE_ID) && (idWhole <= FcCanIdClass::CAN_END_SAMPLE_ID)){
+    if((idWhole >= SampleCanIdClass::CAN_START_SAMPLE_ID) && (idWhole <= SampleCanIdClass::CAN_END_SAMPLE_ID)){
 
         sampleDataArray[idWhole].value.LowerByte = quint8(arrayDataFromCAN[6]);
         sampleDataArray[idWhole].value.UpperByte = quint8(arrayDataFromCAN[7]);

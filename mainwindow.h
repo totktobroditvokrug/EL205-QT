@@ -168,7 +168,7 @@ private:
     QVector<QString> sampleNumList; // формирование списка регистров
 
     registerFields regDataArray[RegnumClass::IREG_INV_ALL_END_REGISTERS]; // все данные по регистрам
-    samplesFields sampleDataArray[FcCanIdClass::CAN_END_SAMPLE_ID]; // все данные по списку измерений
+    samplesFields sampleDataArray[SampleCanIdClass::CAN_END_SAMPLE_ID]; // все данные по списку измерений
 
     int emptyBufferCounter; // количество попыток связи с can
     int selectedComboBox;

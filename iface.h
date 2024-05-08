@@ -539,7 +539,7 @@ private:
 
 };
 
-class FcCanIdClass : public QObject
+class SampleCanIdClass : public QObject
 {
  Q_OBJECT
  Q_ENUMS(fccanid)
@@ -547,15 +547,6 @@ public:
 
     /* типы сообщений по CAN-шине */
     enum fccanid{
-
-        /* Установка регистра */
-        DEF_CAN_CONST(CAN_SET_REGISTER, 10)
-        /* Передача содержимого регистра */
-        DEF_CAN_CONST(CAN_SHOW_REGISTER, 20)
-        /* передача масштабов к регистру */
-        DEF_CAN_CONST(CAN_SHOW_REGISTER_SCALES, 30)
-        /* запрос содержимого регистра */
-        DEF_CAN_CONST(CAN_REGISTER_REQUEST, 40)
 
         /* ===================== измерения, передаваемые по CAN ======== */
         DEF_CAN_CONST(CAN_START_SAMPLE_ID, 100)
@@ -715,7 +706,7 @@ static QStringList fccanidList(void);
 static QVector<QString> fccanidArray(void);
 
 private:
- FcCanIdClass() = delete;
+ SampleCanIdClass() = delete;
 
 };
 

@@ -69,10 +69,10 @@ void MainWindow::genRegFromEnum()
 void MainWindow::genSampleFromEnum()
 {
     QString message = "Генерация списка измерений ПЧ";
-    sampleNumList  = FcCanIdClass::fccanidArray();
+    sampleNumList  = SampleCanIdClass::fccanidArray();
     ui->listWidget_sampleNum->clear();
     int sizeArray = sampleNumList.size();
-    for (int i = 0; i < sizeArray; i++) {
+    for (int i = SampleCanIdClass::CAN_START_SAMPLE_ID; i < sizeArray; i++) {
         QListWidgetItem *item = new QListWidgetItem;
         item->setText(QString::number(i, 10) + ": " + sampleNumList.at(i));
         item->setCheckState(Qt::Unchecked);

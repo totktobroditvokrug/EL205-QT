@@ -120,7 +120,7 @@ void MainWindow::sampleDisplayTable()
         if (!!currentSampleNum) { // если ячейка не NULL
             int sampleNum = currentSampleNum->text().toInt();
 
-            if((sampleNum <= 0) & (sampleNum > FcCanIdClass::CAN_END_SAMPLE_ID)) qDebug() << "невалидный номер регистра. regNum=" << sampleNum;
+            if((sampleNum <= 0) & (sampleNum > SampleCanIdClass::CAN_END_SAMPLE_ID)) qDebug() << "невалидный номер регистра. regNum=" << sampleNum;
 
             if(sampleDataArray[sampleNum].flagNewData){ // если получили новое значение
                 sampleDataArray[sampleNum].flagNewData = false; // сброс флага, чтобы сэкономить время прорисовки таблицы
