@@ -40,6 +40,8 @@ QString MainWindow::glueAdapterHeader(){
     return writeADHeader;
 }
 
+
+// вывод значения с учетом шкалы и с регулируемой запятой
 QString MainWindow::scaledValue(qint16 value, qint16 scale, qint16 max)
 {
     //------ расчет значение при наличии шкалы
@@ -52,7 +54,7 @@ QString MainWindow::scaledValue(qint16 value, qint16 scale, qint16 max)
         int prec = 1;
         if (scaledValueInt >= 1000) prec = 0;
         if (scaledValueInt < 10) prec = 2;
-        return QString::number(scaledValueInt, 'f',  prec); // вывод с запятой
+        return QString::number(scaledValueInt, 'f',  prec);
     }
 }
 

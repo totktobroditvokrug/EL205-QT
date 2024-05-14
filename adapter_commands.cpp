@@ -124,6 +124,11 @@ QStringList handleUartParsing(
                         QByteArray arrayDataFromCAN = dataRead.mid((i+7), 14); // 4 ID, 1 Flags, 1 Length, 8 DATA
                         QByteArray arrayID = dataRead.mid((i+7), 4); // ID сообщения 4 байта
 
+                        quint8 time_stamp_1 = quint8(dataRead[i+3]);  // младший байт метки времени
+                        quint8 time_stamp_2 = quint8(dataRead[i+4]);   // 2-й байт метки времени
+                        quint8 time_stamp_3 = quint8(dataRead[i+5]);    // 3-й байт метки времени
+                        quint8 time_stamp_4 = quint8(dataRead[i+6]);   // старший байт метки времени
+
                         quint8 id_1 = quint8(dataRead[i+7]);  // тело идентификатора
                         quint8 id_2 = quint8(dataRead[i+8]);   // заголовок идентификатора
                         quint8 id_3 = quint8(dataRead[i+9]);    // 3-й байт расширенного идентификатора
@@ -134,6 +139,11 @@ QStringList handleUartParsing(
                         QByteArray arrayDATA = dataRead.mid((i+13), 8);
                         quint8 numberSerialMessage = quint8(dataRead[i+21]);  // номер сообщения
 
+                        canMessage.time_stamp_1 = time_stamp_1;
+                        canMessage.time_stamp_2 = time_stamp_2;
+                        canMessage.time_stamp_3 = time_stamp_3;
+                        canMessage.time_stamp_4 = time_stamp_4;
+                        quint32 time_stamp_32 = canMessage.time_stamp_32;
                         canMessage.numberSerialMessage = numberSerialMessage;
                         canMessage.id_1 = id_1;
                         canMessage.id_2 = id_2;
@@ -149,7 +159,7 @@ QStringList handleUartParsing(
                             QString standartFrame = handleCAN(canMessage, STD_PREFIX + checkCRC);
 
                             //------------ заполняем поля регистров стандартного фрэйма ----------
-                           handleAllStandartDataCan(arrayDataFromCAN, regDataArray, regNumList, sampleDataArray, sampleNumList);
+                           handleAllStandartDataCan(time_stamp_32, arrayDataFromCAN, regDataArray, regNumList, sampleDataArray, sampleNumList);
 
                            // заполняем хэш-таблицу с ключом по стандартному ID
                            canByIdStandart->insert(canMessage.id_std_16, arrayDATA); // новый id добавится, старый перезапишется

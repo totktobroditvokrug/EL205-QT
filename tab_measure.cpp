@@ -31,10 +31,11 @@ void MainWindow::createSamplesTable()
             << "scale"
             << "zero"
             << "value"
-            << "scaledValue";
+            << "scaledValue"
+            << "time";
     // добавить архив для data
 
-    ui->tableSamples->setColumnCount(7); // Указываем число колонок
+    ui->tableSamples->setColumnCount(8); // Указываем число колонок
     ui->tableSamples->setShowGrid(true); // Включаем сетку
     // Разрешаем выделение только одного элемента
 //    ui->tableRegister->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -48,41 +49,47 @@ void MainWindow::createSamplesTable()
  //   ui->tableRegister->horizontalHeader()->setStretchLastSection(true);
     ui->tableSamples->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     ui->tableSamples->blockSignals(true);
+    ui->tableSamples->setColumnWidth(1, 250);
+    ui->tableSamples->setColumnWidth(0, 70);
 }
 
 void MainWindow::addRowSamplesTable(int sampleNum, QString sampleName)
 {
     if(sampleName.contains("Reserved", Qt::CaseSensitive)) return;
+
     QTableWidgetItem *nameSample = new QTableWidgetItem(sampleName);
     int prevRowCount = ui->tableSamples->rowCount(); // определяем текущий размер таблицы
     ui->tableSamples->insertRow(prevRowCount);
     ui->tableSamples->setItem(prevRowCount, 1, nameSample);
     ui->tableSamples->item(prevRowCount, 1)->setBackground(Qt::lightGray);
     ui->tableSamples->item(prevRowCount, 1)->setForeground(Qt::black);
-    ui->tableSamples->setColumnWidth(1, 220);
+
 
     ui->tableSamples->setItem(prevRowCount, 0, new QTableWidgetItem(QString::number(sampleNum, 10)));
     ui->tableSamples->item(prevRowCount, 0)->setBackground(Qt::lightGray);
     ui->tableSamples->item(prevRowCount, 0)->setForeground(Qt::black);
-    ui->tableSamples->setColumnWidth(0, 70);
+
 
     QString maxValue = "-";
     QString scaleValue = "-";
     QString zero = "-";
     QString value = "-";
     QString scaledValue = "-";
+    QString time = "----";
 
     QTableWidgetItem *currentSampleMaxValue = new QTableWidgetItem(maxValue);
     QTableWidgetItem *currentSampleScale = new QTableWidgetItem(scaleValue);
     QTableWidgetItem *currentSampleZero = new QTableWidgetItem(zero);
     QTableWidgetItem *currentSampleData = new QTableWidgetItem(value);
     QTableWidgetItem *currentSampleScaledValue = new QTableWidgetItem(scaledValue);
+    QTableWidgetItem *timeStamp = new QTableWidgetItem(time);
 
     ui->tableSamples->setItem(prevRowCount, 2, currentSampleMaxValue );
     ui->tableSamples->setItem(prevRowCount, 3, currentSampleScale);
     ui->tableSamples->setItem(prevRowCount, 4, currentSampleZero);
     ui->tableSamples->setItem(prevRowCount, 5, currentSampleData);
     ui->tableSamples->setItem(prevRowCount, 6, currentSampleScaledValue);
+    ui->tableSamples->setItem(prevRowCount, 7, timeStamp);
 
     // запрет редактирования и выбора ячеек по умолчанию
     ui->tableSamples->item(prevRowCount, 0)->setFlags(Qt::NoItemFlags);
@@ -136,12 +143,14 @@ void MainWindow::sampleDisplayTable()
                 QString maxValue = QString::number(maxInt, 10);
                 QString value = QString::number(valueInt, 10);
                 QString scaledValue = MainWindow::scaledValue(valueInt, scaleInt, maxInt);
+                QString time = QString::number(sampleDataArray[sampleNum].time_stamp_32, 10);
 
                 ui->tableSamples->item(i, 2)->setText(maxValue );
                 ui->tableSamples->item(i, 3)->setText(scaleValue);
                 ui->tableSamples->item(i, 4)->setText(zero);
                 ui->tableSamples->item(i, 5)->setText(value);
                 ui->tableSamples->item(i, 6)->setText(scaledValue);
+                ui->tableSamples->item(i, 7)->setText(time);
             }
         }
     }

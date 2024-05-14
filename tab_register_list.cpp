@@ -84,8 +84,11 @@ void MainWindow::genSampleFromEnum()
 
 void MainWindow::on_pushButton_saveRegToFile_clicked()
 {
+    QString helperFile;
+    if(ui->radioButton_registers->isChecked()) helperFile = "Сохраняется файл РЕГИСТРОВ";
+    else helperFile = "Сохраняется файл ИЗМЕРЕНИЙ";
     QFileDialog dialogSave;
-    QString pathSave = dialogSave.getSaveFileName(nullptr, "Выберите файл", workDirPath, "Текстовый файл (*.txt)");
+    QString pathSave = dialogSave.getSaveFileName(nullptr, helperFile, workDirPath, "Текстовый файл (*.txt)");
     QString message;
 
     QFile file(pathSave);
@@ -111,9 +114,12 @@ void MainWindow::on_pushButton_saveRegToFile_clicked()
 // прочитать из файла список измерений или регистров
 void MainWindow::on_pushButton_readRegFromFile_clicked()
 {
+    QString helperFile;
+    if(ui->radioButton_registers->isChecked()) helperFile = "Выберите файл РЕГИСТРОВ";
+    else helperFile = "Выберите файл ИЗМЕРЕНИЙ";
     QString message;
     QFileDialog dialogOpen;
-    QString fileName = dialogOpen.getOpenFileName(nullptr, "Выберите файл", workDirPath, "Текстовый файл (*.txt)");
+    QString fileName = dialogOpen.getOpenFileName(nullptr, helperFile, workDirPath, "Текстовый файл (*.txt)");
     QFile file(fileName);
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
         QTextStream stream(&file);

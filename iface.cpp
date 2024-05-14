@@ -94,8 +94,9 @@ QVector<QString> SampleCanIdClass::fccanidArray(){
 
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(
+        quint32 time_stamp_32,
         QByteArray arrayDataFromCAN,
-        registerFields *regDataArray,
+        registerFields *regDataArray,      
         QVector<QString> regNumList,     // таблица названия регистров 256 значений
         samplesFields *sampleDataArray,
         QVector<QString> sampleNumList
@@ -112,7 +113,7 @@ void handleAllStandartDataCan(
     //----------- Заполняем структуру samples стандартного CAN ----------
 
     if((idWhole >= SampleCanIdClass::CAN_START_SAMPLE_ID) && (idWhole <= SampleCanIdClass::CAN_END_SAMPLE_ID)){
-
+        sampleDataArray[idWhole].time_stamp_32 = time_stamp_32; // метка времени
         sampleDataArray[idWhole].value.LowerByte = quint8(arrayDataFromCAN[6]);
         sampleDataArray[idWhole].value.UpperByte = quint8(arrayDataFromCAN[7]);
         sampleDataArray[idWhole].maxValue.LowerByte = quint8(arrayDataFromCAN[8]);
@@ -131,6 +132,7 @@ void handleAllStandartDataCan(
     //----------- Заполняем структуру регистров ---------
     switch (idWhole) {  // проверяем пришедшие данные на принадлежность к SHOW, SCALES
     case REGISTER_SHOW_ID: { // если пришел show регистр
+        regDataArray[idWhole].time_stamp_32 = time_stamp_32; // метка времени
         QString regName; // имя регистра по regNumList
         quint8 regNum = quint8(arrayDataFromCAN[6]); // если пришел регистр, то в этом месте будет его номер
         regName = regNumList[regNum].leftJustified(35, '_'); // у него будет имя из загруженного regNumList

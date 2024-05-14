@@ -1,4 +1,4 @@
-QT       += core gui serialport
+QT       += core gui serialport printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,11 +21,13 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     menu.cpp \
+    plot/qcustomplot.cpp \
     stylehelper.cpp \
     tab_all_data.cpp \
     tab_can_adapter.cpp \
     tab_control.cpp \
     tab_measure.cpp \
+    tab_plot.cpp \
     tab_register_list.cpp \
     tab_registers_table.cpp
 
@@ -34,7 +36,9 @@ HEADERS += \
     iface.h \
     invertor.h \
     mainwindow.h \
-    stylehelper.h
+    plot/qcustomplot.h \
+    stylehelper.h \
+    tab_plot.h
 
 FORMS += \
     mainwindow.ui

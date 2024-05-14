@@ -54,25 +54,25 @@ void MainWindow::createRegistersTable()
  //   ui->tableRegister->horizontalHeader()->setStretchLastSection(true);
     ui->tableRegister->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     ui->tableRegister->blockSignals(true);
+    ui->tableRegister->setColumnWidth(1, 250);
+    ui->tableRegister->setColumnWidth(0, 70);
+    ui->tableRegister->setColumnWidth(7, 160);
 }
 
 void MainWindow::addRowRegistersTable(int regNum, QString regName)
 {
     if(regName.contains("Reserved", Qt::CaseSensitive)) return;
+
     QTableWidgetItem *nameReg = new QTableWidgetItem(regName);
     int prevRowCount = ui->tableRegister->rowCount(); // определяем текущий размер таблицы
     ui->tableRegister->insertRow(prevRowCount);
     ui->tableRegister->setItem(prevRowCount, 1, nameReg);
     ui->tableRegister->item(prevRowCount, 1)->setBackground(Qt::lightGray);
     ui->tableRegister->item(prevRowCount, 1)->setForeground(Qt::black);
-    ui->tableRegister->setColumnWidth(1, 220);
 
     ui->tableRegister->setItem(prevRowCount, 0, new QTableWidgetItem(QString::number(regNum, 10)));
     ui->tableRegister->item(prevRowCount, 0)->setBackground(Qt::lightGray);
     ui->tableRegister->item(prevRowCount, 0)->setForeground(Qt::black);
-    ui->tableRegister->setColumnWidth(0, 70);
-
-    ui->tableRegister->setColumnWidth(7, 160);
 
     QString min = "-";
     QString max = "-";
@@ -124,7 +124,6 @@ void MainWindow::on_tableRegister_cellDoubleClicked(int row, int column)
 
 void MainWindow::on_tableRegister_cellChanged(int row, int column)
 {
-
     if((row == selectedRow) && (column == selectedColumn)){
         if((!!(ui->tableRegister->item(1, column))) && (!!(ui->tableRegister->item(row, column)))){
             ui->tableRegister->item(row, column)->setForeground(Qt::green);
@@ -630,8 +629,21 @@ void MainWindow::initComboBoxRegister()
 }
 
  //------ расчет значение частоты
-void MainWindow::getFreqInv(){     
-      ui->lineEdit_currentFreq->setText(getRegisterInv(RegnumClass::IREG_FREQ, regDataArray[RegnumClass::IREG_FREQ].value.Reg16));
+void MainWindow::getFreqInv(){
+    QString currentFreq = getRegisterInv(RegnumClass::IREG_FREQ, regDataArray[RegnumClass::IREG_FREQ].value.Reg16);
+      ui->lineEdit_currentFreq->setText(currentFreq);
+      quint32 time_stamp_32 = regDataArray[RegnumClass::IREG_FREQ].time_stamp_32;
+      if(startTimeStamp == 0) {
+          startTimeStamp = time_stamp_32; // стартовый отрезок времени с каждым запуском программы
+          qDebug() << "стартуем с отметки " << startTimeStamp;
+      }
+      // todo тестовый вывод графика частоты
+      double y = currentFreq.toDouble();
+    //  double x = double(regDataArray[RegnumClass::IREG_FREQ].time_stamp_32);
+      double x = double(xPlot.back() + 1);
+      xPlot.push_back(x);
+      yPlot.push_back(y);
+      addPointToGraph(xPlot, yPlot);
 }
 
 

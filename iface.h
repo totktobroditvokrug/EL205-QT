@@ -711,6 +711,7 @@ private:
 };
 
 struct registerFields{
+    quint32 time_stamp_32;
     QString displayString;
     QByteArray regData7{7, Qt::Uninitialized}; // поле данных
     QByteArray regScales7{7, Qt::Uninitialized}; // поле масштабов
@@ -761,6 +762,7 @@ struct registerFields{
 };
 
 struct samplesFields{
+    quint32 time_stamp_32;
     QString displayString;
     bool displayed = false;   // выводить значение в таблице
     bool flagNewData = false; // флаг получения обновленного значения
@@ -811,8 +813,9 @@ struct standartID{
 
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(
+        quint32 time_stamp_32,
         QByteArray arrayDataFromCAN,
-        registerFields *regDataArray,
+        registerFields *regDataArray,       
         QVector<QString> regNumList,
         samplesFields *sampleDataArray,
         QVector<QString> sampleNumList

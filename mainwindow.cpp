@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDesktopWidget>
 // #include <QDateTime>
+#include "plot/qcustomplot.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -46,8 +47,18 @@ MainWindow::MainWindow(QWidget *parent)
     initComboBoxRegister(); // три кастомных регистра в заголовке таблицы значений
     ui->checkBox_lossConnection->setChecked(true); // по умолчанию останавливаем процесс при потере связи
     on_pushButton_searchListPort_clicked(); // заранее загрузить доступные порты
+
+
+    //работа с осциллограммами
+    xPlot.clear();
+    xPlot.push_back(0);
+    yPlot.clear();
+    yPlot.push_back(0);
+    addGraph();
+    startTimeStamp = 0; // пока ноль, пытаемся присвоить пришедшее значение из адаптера
+
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 07-05-2024");
+    ui->statusbar->showMessage("ver. 08-05-2024");
 
 }
 

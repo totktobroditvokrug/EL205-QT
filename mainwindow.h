@@ -156,6 +156,11 @@ private slots:
 
     void on_pushButton_genFromEnum_clicked();
 
+    // работа с графиками
+    void addGraph();
+    void addPointToGraph( QVector<double> x,  QVector<double> y);
+
+
 private:
     Ui::MainWindow *ui;
 
@@ -177,5 +182,9 @@ private:
     QHash<quint32, QByteArray> canByIdExtended;  // хэш таблица расширенных ID (добавить архив)
 
     static QString currentTime;
+
+    // осциллограммы
+    QVector<double> xPlot, yPlot;
+    quint32 startTimeStamp;  // первое пришедшее значение метки времени
 };
 #endif // MAINWINDOW_H
