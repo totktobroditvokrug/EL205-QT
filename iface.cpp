@@ -142,7 +142,18 @@ void handleAllStandartDataCan(
             regDataArray[regNum].value.LowerByte = quint8(regDataArray[regNum].regData7[1]);
             regDataArray[regNum].time_stamp_32 = time_stamp_32; // метка времени по номеру регистра
 
-            qint16 valueReg16 = regDataArray[regNum].value.Reg16;
+            qint16 valueReg16 = regDataArray[regNum].value.Reg16; // значение регистра
+
+            // формируем данные для плоттера
+            if(regDataArray[regNum].counterRegPlot < PLOT_MAX_SIZE_ARR){
+                regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot] = time_stamp_32;
+                regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] = valueReg16;
+            //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
+                regDataArray[regNum].counterRegPlot++;
+                if(regDataArray[regNum].counterRegPlot >= PLOT_MAX_SIZE_ARR) regDataArray[regNum].counterRegPlot = 0;
+            }
+
+
             // формируем строку дисплея регистра
             regDataArray[regNum].displayString = regName + " data: " + QString::number(valueReg16, 10);
 

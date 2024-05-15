@@ -50,10 +50,12 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //работа с осциллограммами
-    xPlot.clear();
-    xPlot.push_back(0);
-    yPlot.clear();
-    yPlot.push_back(0);
+    xPlot = QVector<double>(PLOT_MAX_SIZE_ARR);
+    yPlot = QVector<double>(PLOT_MAX_SIZE_ARR);
+//    xPlot.clear();
+//    xPlot.push_back(0);
+//    yPlot.clear();
+//    yPlot.push_back(0);
     addGraph();
     startTimeStamp = 0; // пока ноль, пытаемся присвоить пришедшее значение из адаптера
 

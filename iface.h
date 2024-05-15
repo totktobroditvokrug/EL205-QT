@@ -9,6 +9,8 @@
 #include <QStringList>
 #include <QList>
 
+#include <QVector>
+
 // Установка регистра
 #define REGISTER_SET_ID    10
 //Передача содержимого регистра
@@ -19,6 +21,7 @@
 #define REGISTER_REQUEST_ID 40
 // измерения
 #define SAMPLE_ID 100
+
 
 //--------- флаги регистров ---------
 #define IREGF_SCALE_PRESENT	(1 << 0)
@@ -65,6 +68,9 @@
 #ifndef DEF_CAN_ENUM
 #define DEF_CAN_ENUM		typedef enum
 #endif
+
+// максимальный размер буфера осциллограммы
+const int PLOT_MAX_SIZE_ARR = 250;
 
 class RegnumClass : public QObject
 {
@@ -710,12 +716,19 @@ private:
 
 };
 
+
+
 struct registerFields{
     quint32 time_stamp_32;
     QString displayString;
     QByteArray regData7{7, Qt::Uninitialized}; // поле данных
     QByteArray regScales7{7, Qt::Uninitialized}; // поле масштабов
     quint8 flagReg; //  флаги регистров побитные
+    // архив для плоттера
+    QVector<qint16> regValue = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
+    QVector<quint32> regTime = (QVector<quint32>(PLOT_MAX_SIZE_ARR+10));
+    int counterRegPlot = 0; // счетчик элементов плоттера
+
     bool flagNewData = false; // флаг получения обновленного значения
 
     union{          // значение регистра
