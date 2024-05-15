@@ -139,12 +139,14 @@ QStringList handleUartParsing(
                         QByteArray arrayDATA = dataRead.mid((i+13), 8);
                         quint8 numberSerialMessage = quint8(dataRead[i+21]);  // номер сообщения
 
-                        canMessage.time_stamp_1 = time_stamp_1;
+                        canMessage.time_stamp_1 = time_stamp_1;  // формируем 32-х разрядную метку времени
                         canMessage.time_stamp_2 = time_stamp_2;
                         canMessage.time_stamp_3 = time_stamp_3;
                         canMessage.time_stamp_4 = time_stamp_4;
                         quint32 time_stamp_32 = canMessage.time_stamp_32;
-                        canMessage.numberSerialMessage = numberSerialMessage;
+                     //   qDebug() << "метка времени: " << time_stamp_32;
+
+                        canMessage.numberSerialMessage = numberSerialMessage; // todo вывести обработку из handleAllStandartDataCan
                         canMessage.id_1 = id_1;
                         canMessage.id_2 = id_2;
                         canMessage.id_3 = id_3;

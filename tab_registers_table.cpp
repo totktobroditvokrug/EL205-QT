@@ -39,10 +39,11 @@ void MainWindow::createRegistersTable()
             << "scale"
             << "maxValue"
             << "value"
-            << "scaledValue";
+            << "scaledValue"
+            << "time"; // todo с этим изменится формат записи в файл
     // добавить архив для data
 
-    ui->tableRegister->setColumnCount(8); // Указываем число колонок
+    ui->tableRegister->setColumnCount(9); // Указываем число колонок
     ui->tableRegister->setShowGrid(true); // Включаем сетку
     // Разрешаем выделение построчно
  //   ui->tableRegister->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -80,6 +81,7 @@ void MainWindow::addRowRegistersTable(int regNum, QString regName)
     QString maxValue = "-";
     QString value = "-";
     QString scaledValue = "-";
+    QString time = "----";
 
     QTableWidgetItem *currentRegMin = new QTableWidgetItem(min);
     QTableWidgetItem *currentRegMax = new QTableWidgetItem(max);
@@ -87,6 +89,7 @@ void MainWindow::addRowRegistersTable(int regNum, QString regName)
     QTableWidgetItem *currentRegMaxValue = new QTableWidgetItem(maxValue);
     QTableWidgetItem *currentRegData = new QTableWidgetItem(value);
     QTableWidgetItem *currentRegScaledValue = new QTableWidgetItem(scaledValue);
+    QTableWidgetItem *timeStamp = new QTableWidgetItem(time);
 
     ui->tableRegister->setItem(prevRowCount, 2, currentRegMin);
     ui->tableRegister->setItem(prevRowCount, 3, currentRegMax);
@@ -94,6 +97,7 @@ void MainWindow::addRowRegistersTable(int regNum, QString regName)
     ui->tableRegister->setItem(prevRowCount, 5, currentRegMaxValue);
     ui->tableRegister->setItem(prevRowCount, 6, currentRegData);
     ui->tableRegister->setItem(prevRowCount, 7, currentRegScaledValue);
+    ui->tableRegister->setItem(prevRowCount, 8, timeStamp);
 
     // запрет редактирования и выбора ячеек по умолчанию
     ui->tableRegister->item(prevRowCount, 0)->setFlags(Qt::NoItemFlags);
@@ -193,6 +197,7 @@ void MainWindow::regDisplayTable()
                 QString maxValue = "-";
                 QString value = QString::number(valueInt, 10); //
                 QString scaledValue = "-";
+                QString time = QString::number(regDataArray[regNum].time_stamp_32, 10);
 
                 // проверка на наличие соответствующего регистру шкалы и диапазонов
                 if(regDataArray[regNum].flagReg & IREGF_MIN_PRESENT){
@@ -226,6 +231,7 @@ void MainWindow::regDisplayTable()
                 ui->tableRegister->item(i, 3)->setText(max);
                 ui->tableRegister->item(i, 4)->setText(scaleValue);
                 ui->tableRegister->item(i, 5)->setText(maxValue);
+                 ui->tableRegister->item(i, 8)->setText(time);
 
                 //------ определить, можно ли редактировать регистр
                 if(!(regDataArray[regNum].flagReg & IREGF_READONLY)){
