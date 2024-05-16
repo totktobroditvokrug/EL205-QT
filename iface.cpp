@@ -105,7 +105,7 @@ void handleAllStandartDataCan(
 
     //__________ Общие поля стандартного CAN____________
 
-    // склеиваем ID сообщения
+    // склеиваем ID сообщения todo перенести до вызова функции
     fieldStandartID.id.Body = quint8(arrayDataFromCAN[0]);
     fieldStandartID.id.Hdr = quint8(arrayDataFromCAN[1]);
     quint16 idWhole = fieldStandartID.id.Whole;
@@ -150,7 +150,11 @@ void handleAllStandartDataCan(
                 regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] = valueReg16;
             //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
                 regDataArray[regNum].counterRegPlot++;
-                if(regDataArray[regNum].counterRegPlot >= PLOT_MAX_SIZE_ARR) regDataArray[regNum].counterRegPlot = 0;
+                if(regDataArray[regNum].counterRegPlot >= PLOT_MAX_SIZE_ARR){
+                    regDataArray[regNum].flagFullBuffer = true; // буфер заполнен полностью
+                    regDataArray[regNum].counterRegPlot = 0;    // включаем перезапись буфера
+                }
+
             }
 
 

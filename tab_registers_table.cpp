@@ -638,28 +638,6 @@ void MainWindow::initComboBoxRegister()
 void MainWindow::getFreqInv(){
     QString currentFreq = getRegisterInv(RegnumClass::IREG_FREQ, regDataArray[RegnumClass::IREG_FREQ].value.Reg16);
       ui->lineEdit_currentFreq->setText(currentFreq);
-
-   //   double x, y;
-      quint32 time_stamp_32 = regDataArray[RegnumClass::IREG_FREQ].time_stamp_32;
-      if(startTimeStamp == 0) {
-          startTimeStamp = time_stamp_32; // стартовый отрезок времени с каждым запуском программы
-          qDebug() << "стартуем с отметки " << startTimeStamp;
-      }
-      // todo тестовый вывод графика частоты
-      for(int i = 0; i < PLOT_MAX_SIZE_ARR; i++){
-  //
-          xPlot[i] = double(i);
-          yPlot[i] = double(regDataArray[RegnumClass::IREG_FREQ].regValue[i]) * double(regDataArray[RegnumClass::IREG_FREQ].scale.Reg16) /
-                 double(regDataArray[RegnumClass::IREG_FREQ].maxValue.Reg16);
-
-//          xPlot[i] = double(regDataArray[RegnumClass::IREG_FREQ].regTime[i] );
-      }
-
-   //   y = currentFreq.toDouble();
-   //  double x = double(regDataArray[RegnumClass::IREG_FREQ].time_stamp_32);
-   //   x = double(xPlot.back() + time_stamp_32 - startTimeStamp);
-
-      addPointToGraph(xPlot, yPlot);
 }
 
 

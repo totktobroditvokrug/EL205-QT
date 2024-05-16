@@ -134,39 +134,33 @@ private slots:
     void setSelectedRegisterSlider(int regNum);
 
     void on_lineEdit_registerValue_1_selectionChanged();
-
     void on_lineEdit_registerValue_2_selectionChanged();
-
     void on_lineEdit_registerValue_3_selectionChanged();
-
     void on_horizontalSlider_sliderReleased();
-
     void on_pushButton_showPanel_clicked();
-
     void on_pushButton_hidePanel_clicked();
 
-
     void on_pushButton_workDir_clicked();
-
     void on_radioButton_registers_clicked(bool checked);
-
     void on_radioButton_samples_clicked(bool checked);
-
-
 
     void on_pushButton_genFromEnum_clicked();
 
     // работа с графиками
     void addGraph();
-    void addPointToGraph( QVector<double> x,  QVector<double> y);
+    void addPointToGraph();
 
+
+    void on_pushButton_holdPlot_clicked();
+
+    void on_pushButton_restartPlot_clicked();
 
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *serial;
     QTimer *timer;  // таймер опроса CAN адаптера
- //   QTimer *timerRegDisplay; // таймер вывода регистров на дисплей
+    QTimer *timerPlotter; // таймер вывода регистров на дисплей
 
     QString workDirPath; //
     QVector<QString> regNumList; // формирование списка регистров

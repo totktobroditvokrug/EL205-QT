@@ -77,7 +77,9 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     ui->pushButton_startRead->setEnabled(false);
     ui->pushButton_disconnect->setEnabled(false);
 
-    timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных
+    timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данныхlineEdit_freqPlot
+
+    timerPlotter->start((ui->lineEdit_freqPlot->text().toInt())); // чтение данных
 
     ui->pushButton_startInv->setEnabled(true);
     ui->pushButton_stopInv->setEnabled(true);
@@ -101,6 +103,7 @@ void MainWindow::on_pushButton_readOnce_clicked()
 void MainWindow::on_pushButton_stopRead_clicked()
 {
     timer->stop();
+    timerPlotter->stop();
     emptyBufferCounter = 0; // запускать таймер проверки связи с нуля
     // разрешить менять настройки CAN
     ui->comboBox_canFreq->setEnabled(true);

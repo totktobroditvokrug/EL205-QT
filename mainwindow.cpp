@@ -69,3 +69,4 @@ MainWindow::~MainWindow()
     serial->close(); // освободить порт при закрытии программы
     delete ui;
 }
+
