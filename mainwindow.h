@@ -149,11 +149,8 @@ private slots:
     // работа с графиками
     void addGraph();
     void addPointToGraph();
-
-
     void on_pushButton_holdPlot_clicked();
 
-    void on_pushButton_restartPlot_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -179,6 +176,6 @@ private:
 
     // осциллограммы
     QVector<double> xPlot, yPlot;
-    quint32 startTimeStamp;  // первое пришедшее значение метки времени
+    int startTimeStamp;  // первое пришедшее значение метки времени
 };
 #endif // MAINWINDOW_H

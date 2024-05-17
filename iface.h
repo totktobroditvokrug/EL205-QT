@@ -70,7 +70,7 @@
 #endif
 
 // максимальный размер буфера осциллограммы
-const int PLOT_MAX_SIZE_ARR = 50;
+const int PLOT_MAX_SIZE_ARR = 500;
 
 class RegnumClass : public QObject
 {
@@ -724,9 +724,12 @@ struct registerFields{
     QByteArray regData7{7, Qt::Uninitialized}; // поле данных
     QByteArray regScales7{7, Qt::Uninitialized}; // поле масштабов
     quint8 flagReg; //  флаги регистров побитные
+
+    double regValueScaled; // попробуем сразу вычислять масштабированное значение
     // архив для плоттера
-    QVector<qint16> regValue = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
-    QVector<quint32> regTime = (QVector<quint32>(PLOT_MAX_SIZE_ARR+10));
+    QVector<qint16> regValueArr = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
+    QVector<double> regValueScaledArr = (QVector<double>(PLOT_MAX_SIZE_ARR+10));
+    QVector<quint32> regTimeArr = (QVector<quint32>(PLOT_MAX_SIZE_ARR+10));
     int counterRegPlot = 0; // счетчик элементов плоттера
     bool flagFullBuffer = false; // флаг заполнения буфера
 

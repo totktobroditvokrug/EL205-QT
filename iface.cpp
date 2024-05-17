@@ -144,10 +144,21 @@ void handleAllStandartDataCan(
 
             qint16 valueReg16 = regDataArray[regNum].value.Reg16; // значение регистра
 
+            // вычисляем отмасштабированное значение регистра
+            if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT)){
+                qint16 scaleReg16 = regDataArray[regNum].scale.Reg16;
+                qint16 maxReg16 = regDataArray[regNum].maxValue.Reg16;
+                if ((scaleReg16 == 0) || (maxReg16 == 0)) regDataArray[regNum].regValueScaled = double(valueReg16);
+                else regDataArray[regNum].regValueScaled = double(valueReg16) * double(scaleReg16) / double(maxReg16);
+            }
+            else regDataArray[regNum].regValueScaled = double(valueReg16);
+
+
             // формируем данные для плоттера
             if(regDataArray[regNum].counterRegPlot < PLOT_MAX_SIZE_ARR){
-                regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot] = time_stamp_32;
-                regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] = valueReg16;
+                regDataArray[regNum].regTimeArr[regDataArray[regNum].counterRegPlot] = time_stamp_32;
+                regDataArray[regNum].regValueArr[regDataArray[regNum].counterRegPlot] = valueReg16;
+                regDataArray[regNum].regValueScaledArr[regDataArray[regNum].counterRegPlot] = regDataArray[regNum].regValueScaled;
             //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
                 regDataArray[regNum].counterRegPlot++;
                 if(regDataArray[regNum].counterRegPlot >= PLOT_MAX_SIZE_ARR){
