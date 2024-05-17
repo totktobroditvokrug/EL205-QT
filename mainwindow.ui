@@ -20,7 +20,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QGridLayout" name="gridLayout_10">
+   <layout class="QGridLayout" name="gridLayout_23">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget_registerWidget">
       <property name="sizePolicy">
@@ -1320,11 +1320,21 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_25">
             <item>
-             <layout class="QFormLayout" name="formLayout_14">
+             <layout class="QGridLayout" name="gridLayout_10">
               <item row="0" column="0">
                <widget class="QComboBox" name="comboBox_plot1"/>
               </item>
               <item row="0" column="1">
+               <widget class="QLineEdit" name="lineEdit_yAxis_1">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
                <widget class="QCheckBox" name="checkBox_plot1">
                 <property name="text">
                  <string/>
@@ -1335,6 +1345,16 @@
                <widget class="QComboBox" name="comboBox_plot2"/>
               </item>
               <item row="1" column="1">
+               <widget class="QLineEdit" name="lineEdit_yAxis_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
                <widget class="QCheckBox" name="checkBox_plot2">
                 <property name="text">
                  <string/>
@@ -1345,6 +1365,16 @@
                <widget class="QComboBox" name="comboBox_plot3"/>
               </item>
               <item row="2" column="1">
+               <widget class="QLineEdit" name="lineEdit_yAxis_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
                <widget class="QCheckBox" name="checkBox_plot3">
                 <property name="text">
                  <string/>
@@ -1355,6 +1385,16 @@
                <widget class="QComboBox" name="comboBox_plot4"/>
               </item>
               <item row="3" column="1">
+               <widget class="QLineEdit" name="lineEdit_yAxis_4">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
                <widget class="QCheckBox" name="checkBox_plot4">
                 <property name="text">
                  <string/>

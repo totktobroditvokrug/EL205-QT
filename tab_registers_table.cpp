@@ -643,10 +643,15 @@ void MainWindow::getFreqInv(){
 
 //------ расчет значения регистра с учетом шкалы
 QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
-    if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
-        return MainWindow::scaledValue(valueInt, regDataArray[regNum].scale.Reg16, regDataArray[regNum].maxValue.Reg16);
-     }
-     return QString::number(valueInt, 10); // без учета шкалы
+//    if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
+//        return MainWindow::scaledValue(valueInt, regDataArray[regNum].scale.Reg16, regDataArray[regNum].maxValue.Reg16);
+//     }
+//     return QString::number(valueInt, 10); // без учета шкалы
+    double scaledValueInt = regDataArray[regNum].regValueScaled;
+    int prec = 1;
+    if (scaledValueInt >= 1000) prec = 0;
+    if (scaledValueInt < 10) prec = 2;
+    return QString::number(scaledValueInt, 'f',  prec);
 }
 
 
