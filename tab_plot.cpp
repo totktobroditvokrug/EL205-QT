@@ -15,16 +15,25 @@ void MainWindow::addGraph(){
     timerPlotter = new QTimer;
     connect(timerPlotter, SIGNAL(timeout()), this, SLOT(addPointToGraph()));
 
-    ui->widget_plot->addGraph();
-    ui->widget_plot->addGraph();
-    ui->widget_plot->addGraph();
-    ui->widget_plot->addGraph();
+    ui->widget_plot_1->addGraph();
+    ui->widget_plot_1->addGraph(ui->widget_plot_1->xAxis, ui->widget_plot_1->yAxis2);
+    ui->widget_plot_1->graph(0)->setPen(QPen(Qt::blue));
+    ui->widget_plot_1->graph(1)->setPen(QPen(Qt::green));
+    ui->widget_plot_1->yAxis->setLabel("label1");
 
-    ui->widget_plot->graph(0)->setPen(QPen(Qt::blue));
-    ui->widget_plot->graph(1)->setPen(QPen(Qt::green));
-    ui->widget_plot->graph(2)->setPen(QPen(Qt::red));
-    ui->widget_plot->graph(3)->setPen(QPen(Qt::black));
+    ui->widget_plot_1->yAxis2->setVisible(true);
+    ui->widget_plot_1->yAxis2->setTickLabels(true);
+    ui->widget_plot_1->yAxis2->setLabel("label2");
 
+    ui->widget_plot_2->addGraph();
+    ui->widget_plot_2->addGraph(ui->widget_plot_2->xAxis, ui->widget_plot_2->yAxis2);
+    ui->widget_plot_2->graph(0)->setPen(QPen(Qt::red));
+    ui->widget_plot_2->graph(1)->setPen(QPen(Qt::black));
+    ui->widget_plot_2->yAxis->setLabel("label1");
+
+    ui->widget_plot_2->yAxis2->setVisible(true);
+    ui->widget_plot_2->yAxis2->setTickLabels(true);
+    ui->widget_plot_2->yAxis2->setLabel("label2");
 
     ui->comboBox_plot1->addItems(registersList);
     ui->comboBox_plot2->addItems(registersList);
@@ -58,51 +67,73 @@ void MainWindow::addPointToGraph(){
 
     int regNum_1 = ui->comboBox_plot1->currentIndex();
     int regNum_2 = ui->comboBox_plot2->currentIndex();
+    int regNum_plot1[2] = {regNum_1, regNum_2};
+
     int regNum_3 = ui->comboBox_plot3->currentIndex();
     int regNum_4 = ui->comboBox_plot4->currentIndex();
-    int regNum[4] = {regNum_1, regNum_2, regNum_3, regNum_4};
+    int regNum_plot2[2] = {regNum_3, regNum_4};
+
 
     int yAxis_1 = ui->lineEdit_yAxis_1->text().toInt();
     int yAxis_2 = ui->lineEdit_yAxis_2->text().toInt();
     int yAxis_3 = ui->lineEdit_yAxis_3->text().toInt();
     int yAxis_4 = ui->lineEdit_yAxis_4->text().toInt();
-    int yAxis[4] = {yAxis_1, yAxis_2, yAxis_3, yAxis_4};
 
     QStringList dataPlotList;
     dataPlotList.clear();
 
     // тестовая функция с выводом частоты двигателя
     int windowWide = ui->lineEdit_scalePlot->text().toInt(); // размер экрана плоттера
+    int lengthBuffer = PLOT_MAX_SIZE_ARR; // размер буфера парсинга данных
 
-    for(int i = 0; i < 4; i++){
-        ui->widget_plot->yAxis->setRange(-10, yAxis[i] +10);
-        ui->widget_plot->yAxis->setLabel(regNumList[regNum[i]]);
+    // первый график с двумя осями
+    ui->widget_plot_1->yAxis->setRange(-10, yAxis_1 +10);
+    ui->widget_plot_1->yAxis->setLabel(regNumList[regNum_plot1[0]]);
 
+    ui->widget_plot_1->yAxis2->setRange(-10, yAxis_2 +10);
+    ui->widget_plot_1->yAxis2->setLabel(regNumList[regNum_plot1[1]]);
+
+
+    for(int i = 0; i < 2; i++){
         xPlot.clear();
         yPlot.clear();
-
-        int lengthBuffer = PLOT_MAX_SIZE_ARR;
-        if (!regDataArray[regNum[i]].flagFullBuffer) lengthBuffer = regDataArray[regNum[i]].counterRegPlot;
-    //    dataPlotList.append("lengthBuffer = " + QString::number(lengthBuffer, 10)); // количество данных в буфере
+        if (!regDataArray[regNum_plot1[i]].flagFullBuffer) lengthBuffer = regDataArray[regNum_plot1[i]].counterRegPlot;
 
         for(int j = 0; j < lengthBuffer; j++){ // заполняем массив на выдачу плоттера
-            yPlot.push_back(double(regDataArray[regNum[i]].regValueScaledArr[j]));
-            int deltaTime = int(regDataArray[regNum[i]].regTimeArr[j]) - (startTimeStamp + windowWide);
+            yPlot.push_back(double(regDataArray[regNum_plot1[i]].regValueScaledArr[j]));
+            int deltaTime = int(regDataArray[regNum_plot1[i]].regTimeArr[j]) - (startTimeStamp + windowWide);
             if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
 
-            xPlot.push_back(double(regDataArray[regNum[i]].regTimeArr[j]));
-
-//            dataPlotList.append(QString::number(i, 10).leftJustified(5, ' ') + ": Y=" + QString::number(int(yPlot[i]), 10) +
-//                                ": X=" + QString::number(int(xPlot[j]-double(startTimeStamp)), 10));
+            xPlot.push_back(double(regDataArray[regNum_plot1[i]].regTimeArr[j]));
         }
-        ui->widget_plot->xAxis->setRange(startTimeStamp, startTimeStamp + windowWide);
-
-    //    ui->textEdit_dataPlot->setText(dataPlotList.join('\n')); // дежурный список. Убрать!!!
-
-        ui->widget_plot->graph(i)->setData(xPlot, yPlot, false);
+        ui->widget_plot_1->xAxis->setRange(startTimeStamp, startTimeStamp + windowWide);
+        ui->widget_plot_1->graph(i)->setData(xPlot, yPlot, false);
     }
+    ui->widget_plot_1->replot();
 
-    ui->widget_plot->replot();
+// второй график с двумя осями
+    ui->widget_plot_2->yAxis->setRange(-10, yAxis_3 +10);
+    ui->widget_plot_2->yAxis->setLabel(regNumList[regNum_plot2[0]]);
+
+    ui->widget_plot_2->yAxis2->setRange(-10, yAxis_4 +10);
+    ui->widget_plot_2->yAxis2->setLabel(regNumList[regNum_plot2[1]]);
+
+    for(int i = 0; i < 2; i++){
+        xPlot.clear();
+        yPlot.clear();
+        if (!regDataArray[regNum_plot2[i]].flagFullBuffer) lengthBuffer = regDataArray[regNum_plot2[i]].counterRegPlot;
+
+        for(int j = 0; j < lengthBuffer; j++){ // заполняем массив на выдачу плоттера
+            yPlot.push_back(double(regDataArray[regNum_plot2[i]].regValueScaledArr[j]));
+            int deltaTime = int(regDataArray[regNum_plot2[i]].regTimeArr[j]) - (startTimeStamp + windowWide);
+            if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
+
+            xPlot.push_back(double(regDataArray[regNum_plot2[i]].regTimeArr[j]));
+        }
+        ui->widget_plot_2->xAxis->setRange(startTimeStamp, startTimeStamp + windowWide);
+        ui->widget_plot_2->graph(i)->setData(xPlot, yPlot, false);
+    }
+    ui->widget_plot_2->replot();
 }
 
 void MainWindow::on_pushButton_holdPlot_clicked()
