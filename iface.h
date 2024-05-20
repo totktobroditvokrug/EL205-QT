@@ -784,6 +784,14 @@ struct samplesFields{
     bool displayed = false;   // выводить значение в таблице
     bool flagNewData = false; // флаг получения обновленного значения
 
+    double sampleValueScaled; // попробуем сразу вычислять масштабированное значение
+    // архив для плоттера
+    QVector<qint16> sampleValueArr = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
+    QVector<double> sampleValueScaledArr = (QVector<double>(PLOT_MAX_SIZE_ARR+10));
+    QVector<quint32> sampleTimeArr = (QVector<quint32>(PLOT_MAX_SIZE_ARR+10));
+    int counterSamplePlot = 0; // счетчик элементов плоттера
+    bool flagFullBuffer = false; // флаг заполнения буфера
+
     union{          // значение регистра
        qint16 Reg16;
        struct {

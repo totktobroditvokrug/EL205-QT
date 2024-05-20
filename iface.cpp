@@ -125,6 +125,21 @@ void handleAllStandartDataCan(
         sampleDataArray[idWhole].displayString = sampleNumList[idWhole] + " : " + QString::number(sampleDataArray[idWhole].value.Reg16, 10) +
                 " maxValue: " + QString::number(sampleDataArray[idWhole].maxValue.Reg16, 10) +
                 " scale: " + QString::number(sampleDataArray[idWhole].scale.Reg16, 10);
+
+        // формируем данные для плоттера
+        qint16 valueSample16 = sampleDataArray[idWhole].value.Reg16; // значение измерения
+        if(sampleDataArray[idWhole].counterSamplePlot < PLOT_MAX_SIZE_ARR){
+            sampleDataArray[idWhole].sampleTimeArr[sampleDataArray[idWhole].counterSamplePlot] = time_stamp_32;
+            sampleDataArray[idWhole].sampleValueArr[sampleDataArray[idWhole].counterSamplePlot] = valueSample16;
+            sampleDataArray[idWhole].sampleValueScaledArr[sampleDataArray[idWhole].counterSamplePlot] = sampleDataArray[idWhole].sampleValueScaled;
+        //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
+            sampleDataArray[idWhole].counterSamplePlot++;
+            if(sampleDataArray[idWhole].counterSamplePlot >= PLOT_MAX_SIZE_ARR){
+                sampleDataArray[idWhole].flagFullBuffer = true; // буфер заполнен полностью
+                sampleDataArray[idWhole].counterSamplePlot = 0;    // включаем перезапись буфера
+            }
+        }
+
         sampleDataArray[idWhole].flagNewData = true;
       //  qDebug() << sampleDataArray[idWhole].displayString;
     }
@@ -165,7 +180,6 @@ void handleAllStandartDataCan(
                     regDataArray[regNum].flagFullBuffer = true; // буфер заполнен полностью
                     regDataArray[regNum].counterRegPlot = 0;    // включаем перезапись буфера
                 }
-
             }
 
 
