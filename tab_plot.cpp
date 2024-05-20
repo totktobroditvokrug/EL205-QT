@@ -12,7 +12,7 @@ tab_plot::tab_plot()
 
 void MainWindow::addGraph(){
     QStringList registersList = RegnumClass::regnumList();
-    QStringList samplesList = SampleCanIdClass::fccanidList();
+    QStringList samplesList = SampleCanIdClass::fccanidList().mid(SampleCanIdClass::CAN_START_SAMPLE_ID);
     timerPlotter = new QTimer;
     connect(timerPlotter, SIGNAL(timeout()), this, SLOT(addPointToGraph()));
 
@@ -43,8 +43,8 @@ void MainWindow::addGraph(){
 
     ui->comboBox_plot1->setCurrentIndex(RegnumClass::IREG_UOUT);
     ui->comboBox_plot2->setCurrentIndex(RegnumClass::IREG_IOUT);
-    ui->comboBox_plot3->setCurrentIndex(SampleCanIdClass::CAN_DR0_PH0_T1);
-    ui->comboBox_plot4->setCurrentIndex(SampleCanIdClass::CAN_INV_IA);
+    ui->comboBox_plot3->setCurrentIndex(SampleCanIdClass::CAN_DR0_PH0_T1 - SampleCanIdClass::CAN_START_SAMPLE_ID);
+    ui->comboBox_plot4->setCurrentIndex(SampleCanIdClass::CAN_INV_IA - SampleCanIdClass::CAN_START_SAMPLE_ID);
 
     ui->lineEdit_yAxis_1->setText("500");
     ui->lineEdit_yAxis_2->setText("500");
@@ -75,8 +75,8 @@ void MainWindow::addPointToGraph(){
     int yAxis_1 = ui->lineEdit_yAxis_1->text().toInt();
     int yAxis_2 = ui->lineEdit_yAxis_2->text().toInt();
 
-    int sampleNum_1 = ui->comboBox_plot3->currentIndex();
-    int sampleNum_2 = ui->comboBox_plot4->currentIndex();
+    int sampleNum_1 = ui->comboBox_plot3->currentIndex() + SampleCanIdClass::CAN_START_SAMPLE_ID;
+    int sampleNum_2 = ui->comboBox_plot4->currentIndex() + SampleCanIdClass::CAN_START_SAMPLE_ID;
     int sampleNum_plot2[2] = {sampleNum_1, sampleNum_2};
 
     int yAxis_3 = ui->lineEdit_yAxis_3->text().toInt();
