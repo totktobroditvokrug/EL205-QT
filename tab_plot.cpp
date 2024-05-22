@@ -89,7 +89,7 @@ void MainWindow::addPointToGraph(){
     int windowWide = ui->lineEdit_scalePlot->text().toInt(); // размер экрана плоттера
 
 
-    // первый график с двумя осями
+    //----------------- первый график с двумя осями
     ui->widget_plot_1->yAxis->setRange(0, yAxis_1);
     ui->widget_plot_1->yAxis->setLabel(regNumList[regNum_plot1[0]]);
 
@@ -97,24 +97,19 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_1->yAxis2->setLabel(regNumList[regNum_plot1[1]]);
 
     for(int i = 0; i < 2; i++){
-        int lengthBuffer_1 = PLOT_MAX_SIZE_ARR; // размер буфера парсинга данных
-        xPlot.clear();
-        yPlot.clear();
-        if (!regDataArray[regNum_plot1[i]].flagFullBuffer) lengthBuffer_1 = regDataArray[regNum_plot1[i]].counterRegPlot;
+        int regCounter = regDataArray[regNum_plot1[i]].counterRegPlot; // положение счетчика буфера парсинга данных
+        if (regCounter > 0) regCounter--;
+        int deltaTime = int(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]) - startTimeStamp;
+        // qDebug() << "шкала времени. regCounter=" << regCounter << " deltaTime=" << deltaTime;
+        if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
 
-        for(int j = 0; j < lengthBuffer_1; j++){ // заполняем массив на выдачу плоттера
-            yPlot.push_back(double(regDataArray[regNum_plot1[i]].regValueScaledArr[j]));
-            int deltaTime = int(regDataArray[regNum_plot1[i]].regTimeArr[j]) - (startTimeStamp + windowWide);
-            if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
+        ui->widget_plot_1->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);
 
-            xPlot.push_back(double(regDataArray[regNum_plot1[i]].regTimeArr[j]));
-        }
-        ui->widget_plot_1->xAxis->setRange(startTimeStamp, startTimeStamp + windowWide);
-        ui->widget_plot_1->graph(i)->setData(xPlot, yPlot, false);
+        ui->widget_plot_1->graph(i)->setData(regDataArray[regNum_plot1[i]].regTimeArr, regDataArray[regNum_plot1[i]].regValueScaledArr, false);
     }
     ui->widget_plot_1->replot();
 
-// второй график с двумя осями
+    //------------ второй график с двумя осями
     ui->widget_plot_2->yAxis->setRange(0, yAxis_3);
     ui->widget_plot_2->yAxis->setLabel(sampleNumList[sampleNum_plot2[0]]);
 
@@ -122,23 +117,15 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_2->yAxis2->setLabel(sampleNumList[sampleNum_plot2[1]]);
 
     for(int i = 0; i < 2; i++){
-        int lengthBuffer_2 = PLOT_MAX_SIZE_ARR; // размер буфера парсинга измерений
-        xPlot.clear();
-        yPlot.clear();
-        if (!sampleDataArray[sampleNum_plot2[i]].flagFullBuffer) lengthBuffer_2 = sampleDataArray[sampleNum_plot2[i]].counterSamplePlot;
+        int sampleCounter = sampleDataArray[regNum_plot1[i]].counterSamplePlot; // положение счетчика буфера парсинга измерений
+        if (sampleCounter > 0) sampleCounter--;
+        int deltaTime = int(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]) - startTimeStamp;
+        if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
 
-        for(int j = 0; j < lengthBuffer_2; j++){ // заполняем массив на выдачу плоттера
-            yPlot.push_back(double(sampleDataArray[sampleNum_plot2[i]].sampleValueScaledArr[j]));
-            int deltaTime = int(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[j]) - (startTimeStamp + windowWide);
-            if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
-
-            xPlot.push_back(double(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[j]));
-        }
-        ui->widget_plot_2->xAxis->setRange(startTimeStamp, startTimeStamp + windowWide);
-        ui->widget_plot_2->graph(i)->setData(xPlot, yPlot, false);
+        ui->widget_plot_2->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);
+        ui->widget_plot_2->graph(i)->setData(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr, sampleDataArray[sampleNum_plot2[i]].sampleValueScaledArr, false);
     }
     ui->widget_plot_2->replot();
-
 }
 
 void MainWindow::on_pushButton_holdPlot_clicked()

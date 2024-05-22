@@ -727,9 +727,9 @@ struct registerFields{
 
     double regValueScaled; // попробуем сразу вычислять масштабированное значение
     // архив для плоттера
-    QVector<qint16> regValueArr = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
-    QVector<double> regValueScaledArr = (QVector<double>(PLOT_MAX_SIZE_ARR+10));
-    QVector<quint32> regTimeArr = (QVector<quint32>(PLOT_MAX_SIZE_ARR+10));
+   // QVector<qint16> regValueArr = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
+    QVector<double> regValueScaledArr = (QVector<double>(PLOT_MAX_SIZE_ARR));
+    QVector<double> regTimeArr = (QVector<double>(PLOT_MAX_SIZE_ARR));
     int counterRegPlot = 0; // счетчик элементов плоттера
     bool flagFullBuffer = false; // флаг заполнения буфера
 
@@ -786,9 +786,9 @@ struct samplesFields{
 
     double sampleValueScaled; // попробуем сразу вычислять масштабированное значение
     // архив для плоттера
-    QVector<qint16> sampleValueArr = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
-    QVector<double> sampleValueScaledArr = (QVector<double>(PLOT_MAX_SIZE_ARR+10));
-    QVector<quint32> sampleTimeArr = (QVector<quint32>(PLOT_MAX_SIZE_ARR+10));
+   // QVector<qint16> sampleValueArr = (QVector<qint16>(PLOT_MAX_SIZE_ARR+10));
+    QVector<double> sampleValueScaledArr = (QVector<double>(PLOT_MAX_SIZE_ARR));
+    QVector<double> sampleTimeArr = (QVector<double>(PLOT_MAX_SIZE_ARR));
     int counterSamplePlot = 0; // счетчик элементов плоттера
     bool flagFullBuffer = false; // флаг заполнения буфера
 

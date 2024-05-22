@@ -94,7 +94,7 @@ QVector<QString> SampleCanIdClass::fccanidArray(){
 
 //-----------------Все данные стандартного CAN из парсинга uart-----------
 void handleAllStandartDataCan(
-        quint32 time_stamp_32,
+        quint32 time_stamp_32,   // метка времени EL205
         QByteArray arrayDataFromCAN,
         registerFields *regDataArray,      
         QVector<QString> regNumList,     // таблица названия регистров 256 значений
@@ -126,12 +126,18 @@ void handleAllStandartDataCan(
                 " maxValue: " + QString::number(sampleDataArray[idWhole].maxValue.Reg16, 10) +
                 " scale: " + QString::number(sampleDataArray[idWhole].scale.Reg16, 10);
 
-        // формируем данные для плоттера
+        //---------------- формируем данные для плоттера ---------------
         qint16 valueSample16 = sampleDataArray[idWhole].value.Reg16; // значение измерения
+        qint16 scaleSample16 = sampleDataArray[idWhole].scale.Reg16;
+        qint16 maxSample16 = sampleDataArray[idWhole].maxValue.Reg16;
+        if ((scaleSample16 == 0) || (maxSample16 == 0)) sampleDataArray[idWhole].sampleValueScaled = double(valueSample16);
+        else sampleDataArray[idWhole].sampleValueScaled = double(valueSample16) * double(scaleSample16) / double(maxSample16);
+
         if(sampleDataArray[idWhole].counterSamplePlot < PLOT_MAX_SIZE_ARR){
-            sampleDataArray[idWhole].sampleTimeArr[sampleDataArray[idWhole].counterSamplePlot] = time_stamp_32;
-            sampleDataArray[idWhole].sampleValueArr[sampleDataArray[idWhole].counterSamplePlot] = valueSample16;
-            sampleDataArray[idWhole].sampleValueScaledArr[sampleDataArray[idWhole].counterSamplePlot] = sampleDataArray[idWhole].sampleValueScaled;
+            sampleDataArray[idWhole].sampleTimeArr[sampleDataArray[idWhole].counterSamplePlot] = double(time_stamp_32);
+          //  sampleDataArray[idWhole].sampleValueArr[sampleDataArray[idWhole].counterSamplePlot] = valueSample16;
+            sampleDataArray[idWhole].sampleValueScaledArr[sampleDataArray[idWhole].counterSamplePlot] =
+                    sampleDataArray[idWhole].sampleValueScaled;
         //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
             sampleDataArray[idWhole].counterSamplePlot++;
             if(sampleDataArray[idWhole].counterSamplePlot >= PLOT_MAX_SIZE_ARR){
@@ -169,10 +175,10 @@ void handleAllStandartDataCan(
             else regDataArray[regNum].regValueScaled = double(valueReg16);
 
 
-            // формируем данные для плоттера
+            //------------------- формируем данные для плоттера ---------------
             if(regDataArray[regNum].counterRegPlot < PLOT_MAX_SIZE_ARR){
-                regDataArray[regNum].regTimeArr[regDataArray[regNum].counterRegPlot] = time_stamp_32;
-                regDataArray[regNum].regValueArr[regDataArray[regNum].counterRegPlot] = valueReg16;
+                regDataArray[regNum].regTimeArr[regDataArray[regNum].counterRegPlot] = double(time_stamp_32);
+             //   regDataArray[regNum].regValueArr[regDataArray[regNum].counterRegPlot] = valueReg16;
                 regDataArray[regNum].regValueScaledArr[regDataArray[regNum].counterRegPlot] = regDataArray[regNum].regValueScaled;
             //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
                 regDataArray[regNum].counterRegPlot++;
