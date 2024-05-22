@@ -150,15 +150,13 @@ private slots:
     void addGraph();
     void addPointToGraph();
     void on_pushButton_holdPlot_clicked();
-
-
     void on_comboBox_plot1_currentIndexChanged(int index);
-
     void on_comboBox_plot2_currentIndexChanged(int index);
-
     void on_comboBox_plot3_currentIndexChanged(int index);
-
     void on_comboBox_plot4_currentIndexChanged(int index);
+
+    // работа со статусами инвертора
+    void checkStatus();
 
 private:
     Ui::MainWindow *ui;

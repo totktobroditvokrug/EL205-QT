@@ -37,9 +37,10 @@ void MainWindow::readStream()
                 if(ui->radioButton_byChekBox->isChecked()) ui->textEdit_dataRead->append(parsingDataList.join("\n"));
             }
 
-            regDisplayTable();
-            sampleDisplayTable();
-            displayHashID();
+            regDisplayTable(); // вывод таблицы регистров
+            sampleDisplayTable(); // вывод таблицы измерений
+            displayHashID();  // вывод принятых пакетов по ID
+            checkStatus(); // вывод статуса инвертора
 
             if(bytesFromAdapter > 60) { // переделать под настоящие ответы по CAN
                ui->pushButton_setRegistersFromFile->setEnabled(true);

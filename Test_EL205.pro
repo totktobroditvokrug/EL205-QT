@@ -29,7 +29,8 @@ SOURCES += \
     tab_measure.cpp \
     tab_plot.cpp \
     tab_register_list.cpp \
-    tab_registers_table.cpp
+    tab_registers_table.cpp \
+    tab_status.cpp
 
 HEADERS += \
     adapter_commands.h \
