@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     addGraph();  // 2 графика с двумя осями
 
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 21-05-2024");
+    ui->statusbar->showMessage("ver. 22-05-2024");
 
 }
 
@@ -65,4 +65,3 @@ MainWindow::~MainWindow()
     serial->close(); // освободить порт при закрытии программы
     delete ui;
 }
-

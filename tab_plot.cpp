@@ -19,21 +19,27 @@ void MainWindow::addGraph(){
     ui->widget_plot_1->addGraph();
     ui->widget_plot_1->addGraph(ui->widget_plot_1->xAxis, ui->widget_plot_1->yAxis2);
     ui->widget_plot_1->graph(0)->setPen(QPen(Qt::blue));
-    ui->widget_plot_1->graph(1)->setPen(QPen(Qt::green));
+    ui->widget_plot_1->yAxis->setTickLabelColor(Qt::blue);
+
     ui->widget_plot_1->yAxis->setLabel("label1");
 
     ui->widget_plot_1->yAxis2->setVisible(true);
     ui->widget_plot_1->yAxis2->setTickLabels(true);
+    ui->widget_plot_1->graph(1)->setPen(QPen(Qt::green));
+    ui->widget_plot_1->yAxis2->setTickLabelColor(Qt::green);
     ui->widget_plot_1->yAxis2->setLabel("label2");
 
     ui->widget_plot_2->addGraph();
     ui->widget_plot_2->addGraph(ui->widget_plot_2->xAxis, ui->widget_plot_2->yAxis2);
     ui->widget_plot_2->graph(0)->setPen(QPen(Qt::red));
-    ui->widget_plot_2->graph(1)->setPen(QPen(Qt::black));
+
+    ui->widget_plot_2->yAxis->setTickLabelColor(Qt::red);
     ui->widget_plot_2->yAxis->setLabel("label1");
 
     ui->widget_plot_2->yAxis2->setVisible(true);
     ui->widget_plot_2->yAxis2->setTickLabels(true);
+    ui->widget_plot_2->graph(1)->setPen(QPen(Qt::darkYellow));
+    ui->widget_plot_2->yAxis2->setTickLabelColor(Qt::darkYellow);
     ui->widget_plot_2->yAxis2->setLabel("label2");
 
     ui->comboBox_plot1->addItems(registersList);
@@ -56,7 +62,7 @@ void MainWindow::addGraph(){
     ui->lineEdit_yAxis_2->setStyleSheet("color: green");
 
     ui->lineEdit_yAxis_3->setStyleSheet("color: red");
-    ui->lineEdit_yAxis_4->setStyleSheet("color: black");
+    ui->lineEdit_yAxis_4->setStyleSheet("color: #808000");
 }
 
 void MainWindow::addPointToGraph(){
@@ -82,10 +88,6 @@ void MainWindow::addPointToGraph(){
     int yAxis_3 = ui->lineEdit_yAxis_3->text().toInt();
     int yAxis_4 = ui->lineEdit_yAxis_4->text().toInt();
 
-    QStringList dataPlotList;
-    dataPlotList.clear();
-
-    // тестовая функция с выводом частоты двигателя
     int windowWide = ui->lineEdit_scalePlot->text().toInt(); // размер экрана плоттера
 
 
@@ -139,3 +141,40 @@ void MainWindow::on_pushButton_holdPlot_clicked()
         ui->pushButton_holdPlot->setText("HOLD");
     }
 }
+
+void MainWindow::on_comboBox_plot1_currentIndexChanged(int index)
+{
+    QString maxScale = "99";
+    if(regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT){
+        maxScale = QString::number(regDataArray[index].maxValue.Reg16, 10);
+    }
+    else maxScale = QString::number(regDataArray[index].max.Reg16, 10);
+    if(maxScale.toInt() <= 0) maxScale = "999";
+    ui->lineEdit_yAxis_1->setText(maxScale);
+}
+
+void MainWindow::on_comboBox_plot2_currentIndexChanged(int index)
+{
+    QString maxScale = "99";
+    if(regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT){
+        maxScale = QString::number(regDataArray[index].maxValue.Reg16, 10);
+    }
+    else maxScale = QString::number(regDataArray[index].max.Reg16, 10);
+    if(maxScale.toInt() <= 0) maxScale = "999";
+    ui->lineEdit_yAxis_2->setText(maxScale);
+}
+
+void MainWindow::on_comboBox_plot3_currentIndexChanged(int index)
+{
+    QString maxScale = QString::number(sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16, 10);
+    if(maxScale.toInt() <= 0 ) maxScale = "999";
+    ui->lineEdit_yAxis_3->setText(maxScale);
+}
+
+void MainWindow::on_comboBox_plot4_currentIndexChanged(int index)
+{
+    QString maxScale = QString::number(sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16, 10);
+    if(maxScale.toInt() <= 0) maxScale = "999";
+    ui->lineEdit_yAxis_4->setText(maxScale);
+}
+

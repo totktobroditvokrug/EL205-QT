@@ -152,6 +152,14 @@ private slots:
     void on_pushButton_holdPlot_clicked();
 
 
+    void on_comboBox_plot1_currentIndexChanged(int index);
+
+    void on_comboBox_plot2_currentIndexChanged(int index);
+
+    void on_comboBox_plot3_currentIndexChanged(int index);
+
+    void on_comboBox_plot4_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
 
