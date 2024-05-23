@@ -9,7 +9,6 @@ tab_plot::tab_plot()
 }
 
 
-
 void MainWindow::addGraph(){
     QStringList registersList = RegnumClass::regnumList();
     QStringList samplesList = SampleCanIdClass::fccanidList().mid(SampleCanIdClass::CAN_START_SAMPLE_ID);
@@ -52,17 +51,21 @@ void MainWindow::addGraph(){
     ui->comboBox_plot3->setCurrentIndex(SampleCanIdClass::CAN_DR0_PH0_T1 - SampleCanIdClass::CAN_START_SAMPLE_ID);
     ui->comboBox_plot4->setCurrentIndex(SampleCanIdClass::CAN_INV_IA - SampleCanIdClass::CAN_START_SAMPLE_ID);
 
-    ui->lineEdit_yAxis_1->setText("500");
-    ui->lineEdit_yAxis_2->setText("500");
-
-    ui->lineEdit_yAxis_3->setText("150");
-    ui->lineEdit_yAxis_4->setText("500");
+    on_comboBox_plot1_currentIndexChanged(ui->comboBox_plot1->currentIndex());
+    on_comboBox_plot2_currentIndexChanged(ui->comboBox_plot2->currentIndex());
+    on_comboBox_plot3_currentIndexChanged(ui->comboBox_plot3->currentIndex());
+    on_comboBox_plot4_currentIndexChanged(ui->comboBox_plot4->currentIndex());
 
     ui->lineEdit_yAxis_1->setStyleSheet("color: blue");
     ui->lineEdit_yAxis_2->setStyleSheet("color: green");
 
     ui->lineEdit_yAxis_3->setStyleSheet("color: red");
     ui->lineEdit_yAxis_4->setStyleSheet("color: #808000");
+
+    ui->lineEdit_scalePlot->setText(QString::number(MAX_PLOT_SCALE/10, 10));
+    ui->horizontalSlider_scalePlot->setMaximum(MAX_PLOT_SCALE);
+    ui->horizontalSlider_scalePlot->setMinimum(0);
+    ui->horizontalSlider_scalePlot->setValue(MAX_PLOT_SCALE/10);
 }
 
 void MainWindow::addPointToGraph(){
@@ -80,6 +83,8 @@ void MainWindow::addPointToGraph(){
 
     int yAxis_1 = ui->lineEdit_yAxis_1->text().toInt();
     int yAxis_2 = ui->lineEdit_yAxis_2->text().toInt();
+    int yAxis_1_min = ui->lineEdit_yAxis_1_min->text().toInt();
+    int yAxis_2_min = ui->lineEdit_yAxis_2_min->text().toInt();
 
     int sampleNum_1 = ui->comboBox_plot3->currentIndex() + SampleCanIdClass::CAN_START_SAMPLE_ID;
     int sampleNum_2 = ui->comboBox_plot4->currentIndex() + SampleCanIdClass::CAN_START_SAMPLE_ID;
@@ -87,15 +92,17 @@ void MainWindow::addPointToGraph(){
 
     int yAxis_3 = ui->lineEdit_yAxis_3->text().toInt();
     int yAxis_4 = ui->lineEdit_yAxis_4->text().toInt();
+    int yAxis_3_min = ui->lineEdit_yAxis_3_min->text().toInt();
+    int yAxis_4_min = ui->lineEdit_yAxis_4_min->text().toInt();
 
     int windowWide = ui->lineEdit_scalePlot->text().toInt(); // размер экрана плоттера
 
 
     //----------------- первый график с двумя осями
-    ui->widget_plot_1->yAxis->setRange(0, yAxis_1);
+    ui->widget_plot_1->yAxis->setRange(yAxis_1_min, yAxis_1);
     ui->widget_plot_1->yAxis->setLabel(regNumList[regNum_plot1[0]]);
 
-    ui->widget_plot_1->yAxis2->setRange(0, yAxis_2);
+    ui->widget_plot_1->yAxis2->setRange(yAxis_2_min, yAxis_2);
     ui->widget_plot_1->yAxis2->setLabel(regNumList[regNum_plot1[1]]);
 
     for(int i = 0; i < 2; i++){
@@ -112,10 +119,10 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_1->replot();
 
     //------------ второй график с двумя осями
-    ui->widget_plot_2->yAxis->setRange(0, yAxis_3);
+    ui->widget_plot_2->yAxis->setRange(yAxis_3_min, yAxis_3);
     ui->widget_plot_2->yAxis->setLabel(sampleNumList[sampleNum_plot2[0]]);
 
-    ui->widget_plot_2->yAxis2->setRange(0, yAxis_4);
+    ui->widget_plot_2->yAxis2->setRange(yAxis_4_min, yAxis_4);
     ui->widget_plot_2->yAxis2->setLabel(sampleNumList[sampleNum_plot2[1]]);
 
     for(int i = 0; i < 2; i++){
@@ -144,37 +151,78 @@ void MainWindow::on_pushButton_holdPlot_clicked()
 
 void MainWindow::on_comboBox_plot1_currentIndexChanged(int index)
 {
-    QString maxScale = "99";
+    int maxScale = 99;
     if(regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT){
-        maxScale = QString::number(regDataArray[index].maxValue.Reg16, 10);
+        maxScale = regDataArray[index].maxValue.Reg16;
     }
-    else maxScale = QString::number(regDataArray[index].max.Reg16, 10);
-    if(maxScale.toInt() <= 0) maxScale = "999";
-    ui->lineEdit_yAxis_1->setText(maxScale);
+    else maxScale = regDataArray[index].max.Reg16;
+    if(maxScale <= 0) maxScale = 999;
+    ui->lineEdit_yAxis_1->setText(QString::number(maxScale, 10));
+
+    ui->horizontalSlider_max_axis_1->setMinimum(0);
+    ui->horizontalSlider_max_axis_1->setMaximum(maxScale);
+    ui->horizontalSlider_max_axis_1->setValue(maxScale);
 }
 
 void MainWindow::on_comboBox_plot2_currentIndexChanged(int index)
 {
-    QString maxScale = "99";
+    int maxScale = 99;
     if(regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT){
-        maxScale = QString::number(regDataArray[index].maxValue.Reg16, 10);
+        maxScale = regDataArray[index].maxValue.Reg16;
     }
-    else maxScale = QString::number(regDataArray[index].max.Reg16, 10);
-    if(maxScale.toInt() <= 0) maxScale = "999";
-    ui->lineEdit_yAxis_2->setText(maxScale);
+    else maxScale = regDataArray[index].max.Reg16;
+    if(maxScale <= 0) maxScale = 999;
+    ui->lineEdit_yAxis_2->setText(QString::number(maxScale, 10));
+
+    ui->horizontalSlider_max_axis_2->setMinimum(0);
+    ui->horizontalSlider_max_axis_2->setMaximum(maxScale);
+    ui->horizontalSlider_max_axis_2->setValue(maxScale);
 }
 
 void MainWindow::on_comboBox_plot3_currentIndexChanged(int index)
 {
-    QString maxScale = QString::number(sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16, 10);
-    if(maxScale.toInt() <= 0 ) maxScale = "999";
-    ui->lineEdit_yAxis_3->setText(maxScale);
+    int maxScale = sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16;
+    if(maxScale <= 0 ) maxScale = 999;
+    ui->lineEdit_yAxis_3->setText( QString::number(maxScale, 10));
+
+    ui->horizontalSlider_max_axis_3->setMinimum(0);
+    ui->horizontalSlider_max_axis_3->setMaximum(maxScale);
+    ui->horizontalSlider_max_axis_3->setValue(maxScale);
 }
 
 void MainWindow::on_comboBox_plot4_currentIndexChanged(int index)
 {
-    QString maxScale = QString::number(sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16, 10);
-    if(maxScale.toInt() <= 0) maxScale = "999";
-    ui->lineEdit_yAxis_4->setText(maxScale);
+    int maxScale = sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16;
+    if(maxScale <= 0 ) maxScale = 999;
+    ui->lineEdit_yAxis_4->setText( QString::number(maxScale, 10));
+
+    ui->horizontalSlider_max_axis_4->setMinimum(0);
+    ui->horizontalSlider_max_axis_4->setMaximum(maxScale);
+    ui->horizontalSlider_max_axis_4->setValue(maxScale);
 }
 
+void MainWindow::on_horizontalSlider_max_axis_1_valueChanged(int value)
+{
+    ui->lineEdit_yAxis_1->setText(QString::number(value, 10));
+}
+
+void MainWindow::on_horizontalSlider_max_axis_2_valueChanged(int value)
+{
+    ui->lineEdit_yAxis_2->setText(QString::number(value, 10));
+}
+
+void MainWindow::on_horizontalSlider_max_axis_3_valueChanged(int value)
+{
+    ui->lineEdit_yAxis_3->setText(QString::number(value, 10));
+}
+
+void MainWindow::on_horizontalSlider_max_axis_4_valueChanged(int value)
+{
+    ui->lineEdit_yAxis_4->setText(QString::number(value, 10));
+}
+
+
+void MainWindow::on_horizontalSlider_scalePlot_valueChanged(int value)
+{
+    ui->lineEdit_scalePlot->setText(QString::number(value, 10));
+}

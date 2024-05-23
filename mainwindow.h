@@ -154,9 +154,19 @@ private slots:
     void on_comboBox_plot2_currentIndexChanged(int index);
     void on_comboBox_plot3_currentIndexChanged(int index);
     void on_comboBox_plot4_currentIndexChanged(int index);
+    void on_horizontalSlider_max_axis_1_valueChanged(int value);
+    void on_horizontalSlider_max_axis_2_valueChanged(int value);
+    void on_horizontalSlider_max_axis_3_valueChanged(int value);
+    void on_horizontalSlider_max_axis_4_valueChanged(int value);
+
 
     // работа со статусами инвертора
     void checkStatus();
+
+
+
+
+    void on_horizontalSlider_scalePlot_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
