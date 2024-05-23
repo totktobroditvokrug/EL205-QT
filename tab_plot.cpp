@@ -51,17 +51,6 @@ void MainWindow::addGraph(){
     ui->comboBox_plot3->setCurrentIndex(SampleCanIdClass::CAN_DR0_PH0_T1 - SampleCanIdClass::CAN_START_SAMPLE_ID);
     ui->comboBox_plot4->setCurrentIndex(SampleCanIdClass::CAN_INV_IA - SampleCanIdClass::CAN_START_SAMPLE_ID);
 
-    on_comboBox_plot1_currentIndexChanged(ui->comboBox_plot1->currentIndex());
-    on_comboBox_plot2_currentIndexChanged(ui->comboBox_plot2->currentIndex());
-    on_comboBox_plot3_currentIndexChanged(ui->comboBox_plot3->currentIndex());
-    on_comboBox_plot4_currentIndexChanged(ui->comboBox_plot4->currentIndex());
-
-    ui->lineEdit_yAxis_1->setStyleSheet("color: blue");
-    ui->lineEdit_yAxis_2->setStyleSheet("color: green");
-
-    ui->lineEdit_yAxis_3->setStyleSheet("color: red");
-    ui->lineEdit_yAxis_4->setStyleSheet("color: #808000");
-
     ui->lineEdit_scalePlot->setText(QString::number(MAX_PLOT_SCALE/10, 10));
     ui->horizontalSlider_scalePlot->setMaximum(MAX_PLOT_SCALE);
     ui->horizontalSlider_scalePlot->setMinimum(0);
@@ -73,6 +62,7 @@ void MainWindow::addPointToGraph(){
     if(startTimeStamp == 0) {
         startTimeStamp = int(time_stamp_32); // стартовый отрезок времени с каждым запуском программы
         qDebug() << "стартуем с отметки " << startTimeStamp;
+        QTimer::singleShot(5000, this, SLOT(init_scale()));
         return;
     }
     // по выбранным в комбобоксе регистрам смотрим их значения
@@ -81,8 +71,8 @@ void MainWindow::addPointToGraph(){
     int regNum_2 = ui->comboBox_plot2->currentIndex();
     int regNum_plot1[2] = {regNum_1, regNum_2};
 
-    int yAxis_1 = ui->lineEdit_yAxis_1->text().toInt();
-    int yAxis_2 = ui->lineEdit_yAxis_2->text().toInt();
+    int yAxis_1 = ui->horizontalSlider_max_axis_1->value(); // ui->lineEdit_yAxis_1->text().toInt();
+    int yAxis_2 = ui->horizontalSlider_max_axis_2->value(); // ui->lineEdit_yAxis_2->text().toInt();
     int yAxis_1_min = ui->lineEdit_yAxis_1_min->text().toInt();
     int yAxis_2_min = ui->lineEdit_yAxis_2_min->text().toInt();
 
@@ -90,12 +80,12 @@ void MainWindow::addPointToGraph(){
     int sampleNum_2 = ui->comboBox_plot4->currentIndex() + SampleCanIdClass::CAN_START_SAMPLE_ID;
     int sampleNum_plot2[2] = {sampleNum_1, sampleNum_2};
 
-    int yAxis_3 = ui->lineEdit_yAxis_3->text().toInt();
-    int yAxis_4 = ui->lineEdit_yAxis_4->text().toInt();
+    int yAxis_3 = ui->horizontalSlider_max_axis_3->value(); // ui->lineEdit_yAxis_3->text().toInt();
+    int yAxis_4 = ui->horizontalSlider_max_axis_4->value(); // ui->lineEdit_yAxis_4->text().toInt();
     int yAxis_3_min = ui->lineEdit_yAxis_3_min->text().toInt();
     int yAxis_4_min = ui->lineEdit_yAxis_4_min->text().toInt();
 
-    int windowWide = ui->lineEdit_scalePlot->text().toInt(); // размер экрана плоттера
+    int windowWide = ui->horizontalSlider_scalePlot->value(); // ui->lineEdit_scalePlot->text().toInt(); // размер экрана плоттера
 
 
     //----------------- первый график с двумя осями
@@ -221,8 +211,47 @@ void MainWindow::on_horizontalSlider_max_axis_4_valueChanged(int value)
     ui->lineEdit_yAxis_4->setText(QString::number(value, 10));
 }
 
+void MainWindow::on_lineEdit_yAxis_1_editingFinished()
+{
+  ui->horizontalSlider_max_axis_1->setValue(ui->lineEdit_yAxis_1->text().toInt());
+}
+
+void MainWindow::on_lineEdit_yAxis_2_editingFinished()
+{
+  ui->horizontalSlider_max_axis_2->setValue(ui->lineEdit_yAxis_2->text().toInt());
+}
+
+void MainWindow::on_lineEdit_yAxis_3_editingFinished()
+{
+  ui->horizontalSlider_max_axis_3->setValue(ui->lineEdit_yAxis_3->text().toInt());
+}
+
+void MainWindow::on_lineEdit_yAxis_4_editingFinished()
+{
+  ui->horizontalSlider_max_axis_4->setValue(ui->lineEdit_yAxis_4->text().toInt());
+}
+
 
 void MainWindow::on_horizontalSlider_scalePlot_valueChanged(int value)
 {
     ui->lineEdit_scalePlot->setText(QString::number(value, 10));
+}
+
+void MainWindow::on_lineEdit_scalePlot_editingFinished()
+{
+    ui->horizontalSlider_scalePlot->setValue(ui->lineEdit_scalePlot->text().toInt());
+}
+
+
+
+void MainWindow::init_scale(){
+    ui->lineEdit_yAxis_1->setStyleSheet("color: blue");
+    ui->lineEdit_yAxis_2->setStyleSheet("color: green");
+    ui->lineEdit_yAxis_3->setStyleSheet("color: red");
+    ui->lineEdit_yAxis_4->setStyleSheet("color: #808000");
+
+    on_comboBox_plot1_currentIndexChanged(ui->comboBox_plot1->currentIndex());
+    on_comboBox_plot2_currentIndexChanged(ui->comboBox_plot2->currentIndex());
+    on_comboBox_plot3_currentIndexChanged(ui->comboBox_plot3->currentIndex());
+    on_comboBox_plot4_currentIndexChanged(ui->comboBox_plot4->currentIndex());
 }

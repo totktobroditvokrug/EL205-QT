@@ -158,6 +158,11 @@ private slots:
     void on_horizontalSlider_max_axis_2_valueChanged(int value);
     void on_horizontalSlider_max_axis_3_valueChanged(int value);
     void on_horizontalSlider_max_axis_4_valueChanged(int value);
+    void on_lineEdit_yAxis_1_editingFinished();
+    void on_lineEdit_yAxis_2_editingFinished();
+    void on_lineEdit_yAxis_3_editingFinished();
+    void on_lineEdit_yAxis_4_editingFinished();
+    void init_scale();
 
 
     // работа со статусами инвертора
@@ -167,6 +172,10 @@ private slots:
 
 
     void on_horizontalSlider_scalePlot_valueChanged(int value);
+
+
+
+    void on_lineEdit_scalePlot_editingFinished();
 
 private:
     Ui::MainWindow *ui;
