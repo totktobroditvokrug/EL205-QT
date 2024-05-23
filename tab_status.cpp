@@ -7,7 +7,15 @@
 //---------- проверка статуса работы инвертора
 void MainWindow::checkStatus()
 {
-    QString currentStatus = "---";
+    checkInvStatus();
+    checkInvStatus_2();
+    checkInvStatus_3();
+
+}
+
+void MainWindow::checkInvStatus()
+{
+    QString currentStatus = "--> ";
     QString valueStatus = "-";
 
     qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS].value.Reg16;
@@ -34,52 +42,74 @@ void MainWindow::checkStatus()
     ui->textEdit_status->setText(currentStatus);
 }
 
-//----------- для дальнейшего отображения статуса инвертора!!!!
-/* система запущена */
-//#define INV_STS_STARTED			(1 << 0)
+void MainWindow::checkInvStatus_2()
+{
+    QString currentStatus = "--> ";
+    QString valueStatus = "-";
 
-/* ожидает запуска выпрямителя */
-//#define INV_STS_WAIT_RECT_START		(1 << 1)
+    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS2].value.Reg16;
 
-/* Инвертор остановлен по изменению какого-либо важного регистра */
-//#define INV_STS_STOPPED_REGISTERS	(1 << 2)
+    valueStatus = QString::number(invStatus, 2).rightJustified(16, '0');
+    valueStatus.insert(4, " ").insert(9, " ").insert(14, " ");
+    ui->lineEdit_status_2->setText(valueStatus);
 
-/* Инвертор остановлен по команде извне (CAN, Modbus) */
-//#define INV_STS_STOPPED_EXTERNAL	(1 << 3)
+    if (invStatus & INV_STS2_FC_IT_ERR) currentStatus += ("Токовая защита инвертора \n");
+    if (invStatus & INV_STS2_AST_ERR)  currentStatus += ("Ошибка автонастройки \n");
+    if (invStatus & INV_STS2_I_LIMIT_FAST) currentStatus += ("Флаг срабатывания токоограничения - свободен \n");
+    if (invStatus & INV_STS2_CURRENT_OPT) currentStatus += ("Оптимизация по току \n");
+    if (invStatus & INV_STS2_POWER_OPT)  currentStatus += ("Оптимизация по мощности \n");
+    if (invStatus & INV_STS2_OPT_DONE) currentStatus += ("Оптимизация выполнена \n");
+    if (invStatus & INV_STS2_FLSH_RD_ERR) currentStatus += ("Ошибка чтения флеш уставок \n");
+    if (invStatus & INV_STS2_FLSH_WR_ERR) currentStatus += ("Ошибка записи флеш уставок \n");
+    if (invStatus & INV_STS2_DISCHARGE_ON) currentStatus += ("Включить разряд емкости (останов турбины для вентильного мотора) \n");
+    if (invStatus & INV_STS2_DISCHARGE) currentStatus += ("Идет разряд емкости \n");
+    if (invStatus & INV_STS2_DISCHARGE_ERR) currentStatus += ("Ошибка разряда емкости (останова турбины вентильного мотора) \n");
+    if (invStatus & INV_STS2_VC_ERR) currentStatus += ("Ошибка векторного алгоритма \n");
+    if (invStatus & INV_STS2_M_IFAST_ERR) currentStatus += ("Остановлен по КЗ от выпрямителя \n");
+    if (invStatus & INV_STS2_M_I2T_ERR) currentStatus += ("Быстрая токовая защита двигателя \n");
+    if (invStatus & INV_STS2_I_LIM_ERR) currentStatus += ("Защита ПЧ по токоограничению \n");
+    if (invStatus & INV_STS2_FLSH_VAL_ERR) currentStatus += ("Ошибка диапазона уставок флеш \n");
 
-/* ожидает останова выпрямителя */
-//#define INV_STS_WAIT_RECT_STOP		(1 << 4)
+    ui->textEdit_status_2->setText(currentStatus);
+}
 
-/* Остановлен по причине FAULT */
-//#define INV_STS_FAULT_STOPPED		(1 << 5)
+void MainWindow::checkInvStatus_3()
+{
+    QString currentStatus = "--> ";
+    QString valueStatus = "-";
 
-/* Фактическое направление вращения */
-//#define INV_STS_RIGHT_DIR			(1 << 6)
+    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS3].value.Reg16;
 
-/* Токоограничение */
-//#define INV_STS_I_LIMIT				(1 << 7)
+    valueStatus = QString::number(invStatus, 2).rightJustified(16, '0');
+    valueStatus.insert(4, " ").insert(9, " ").insert(14, " ");
+    ui->lineEdit_status_3->setText(valueStatus);
 
-/* Недостаточно напряжения */
-//#define INV_STS_ULOW				(1 << 8)
+    if (invStatus & INV_STS3_RIGHT_DIR) currentStatus += ("Правое направление вращения \n");
+    if (invStatus & INV_STS3_OVERPWM1)  currentStatus += ("ОверШИМ тип 1 \n");
+    if (invStatus & INV_STS3_OVERPWM2) currentStatus += ("ОверШИМ тип 2 \n");
+    if (invStatus & INV_STS3_M_TYPE) currentStatus += ("Тип двигателя - 1 \n");
+    else currentStatus += ("Тип двигателя - 0 \n");
+    if (invStatus & INV_STS3_PMM_DIS)  currentStatus += ("Запрет вентильного двигателя \n");
+    if (invStatus & INV_STS3_RES_TYPE0) currentStatus += ("ОС для подавления резонанса TYPE0 \n");
+    if (invStatus & INV_STS3_RES_TYPE1) currentStatus += ("ОС для подавления резонанса TYPE1 \n");
+    if (invStatus & INV_STS3_DT_SINGLE) currentStatus += ("Режим контроля связи с термодатчиками - хоть один \n");
+    else currentStatus += ("Режим контроля связи с термодатчиками - все \n");
+    if (invStatus & INV_STS3_DT_CRITIC) currentStatus += ("Критический температурный режим \n");
+    if (invStatus & INV_STS3_PW_ERR_ON) currentStatus += ("Включение мониторов питания \n");
+    else currentStatus += ("Выключение мониторов питания \n");
+    if (invStatus & INV_STS3_LX_USE) currentStatus += ("Использовать выходную индуктивность Lx \n");
+    else currentStatus += ("Не использовать выходную индуктивность Lx \n");
+    if (invStatus & INV_STS3_DT_SU) currentStatus += ("Датчик тока на выходе СУ (после фильтра) \n");
+    else currentStatus += ("Датчик тока на выходе инвертора (до фильтра) \n");
+    if (invStatus & INV_STS3_ZERO_UDROP) currentStatus += ("Включить разрешение сброса напряженя до нуля \n");
+    else currentStatus += ("Выключить разрешение сброса напряженя до нуля \n");
+    if (invStatus & INV_STS3_NORM_MV_FREF) currentStatus += ("Включен нормированный разгон - торможение \n");
+    else currentStatus += ("Выключен нормированный разгон - торможение \n");
+    if (invStatus & INV_STS3_HARM_CALC_OFF) currentStatus += ("Выключить гармонический анализ \n");
+    else currentStatus += ("Включить гармонический анализ \n");
+    if (invStatus & INV_STS3_RMS_POWER) currentStatus += ("Мощность из действ. значения \n");
+    else currentStatus += ("Мощность откуда-то \n");
 
-/* остановлен аварийной кнопкой */
-//#define INV_STS_STOPPED_ALARM		(1 << 9)
+    ui->textEdit_status_3->setText(currentStatus);
+}
 
-/* остановлен по снижению напряжения на шине */
-//#define INV_STS_UD_LOW_FAULT		(1 << 10)
-
-/* остановлен по снижению напряжения на шине */
-//#define INV_STS_UD_HIGH_FAULT		(1 << 11)
-
-/* напряжение не в норме так или эдак */
-//#define INV_STS_UD_FAULT \
-//	(INV_STS_UD_LOW_FAULT | INV_STS_UD_HIGH_FAULT)
-
-/* режим плавной остановки инвертора */
-//#define INV_STS_TO_STOP_MODE		(1 << 12)
-
-/* Активный режим (R, D - "1"; P, N - "0") */
-//#define INV_STS_RUN					(1 << 13)
-
-/* остановлен по КЗ зареганному от выпрямителя */
-//#define INV_STS_URECT_SHORTCIRCUIT	(1 << 14)

@@ -130,7 +130,7 @@ void handleAllStandartDataCan(
         qint16 valueSample16 = sampleDataArray[idWhole].value.Reg16; // значение измерения
         qint16 scaleSample16 = sampleDataArray[idWhole].scale.Reg16;
         qint16 maxSample16 = sampleDataArray[idWhole].maxValue.Reg16;
-        if ((scaleSample16 == 0) || (maxSample16 == 0)) sampleDataArray[idWhole].sampleValueScaled = double(valueSample16);
+        if ((scaleSample16 == 0) || (maxSample16 == 0)) sampleDataArray[idWhole].sampleValueScaled = NULL; //double(valueSample16);
         else sampleDataArray[idWhole].sampleValueScaled = double(valueSample16) * double(scaleSample16) / double(maxSample16);
 
         if(sampleDataArray[idWhole].counterSamplePlot < PLOT_MAX_SIZE_ARR){
@@ -169,7 +169,7 @@ void handleAllStandartDataCan(
             if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT)){
                 qint16 scaleReg16 = regDataArray[regNum].scale.Reg16;
                 qint16 maxReg16 = regDataArray[regNum].maxValue.Reg16;
-                if ((scaleReg16 == 0) || (maxReg16 == 0)) regDataArray[regNum].regValueScaled = double(valueReg16);
+                if ((scaleReg16 == 0) || (maxReg16 == 0)) regDataArray[regNum].regValueScaled = NULL; // double(valueReg16);
                 else regDataArray[regNum].regValueScaled = double(valueReg16) * double(scaleReg16) / double(maxReg16);
             }
             else regDataArray[regNum].regValueScaled = double(valueReg16);

@@ -163,19 +163,14 @@ private slots:
     void on_lineEdit_yAxis_3_editingFinished();
     void on_lineEdit_yAxis_4_editingFinished();
     void init_scale();
-
+    void on_horizontalSlider_scalePlot_valueChanged(int value);
+    void on_lineEdit_scalePlot_editingFinished();
 
     // работа со статусами инвертора
     void checkStatus();
-
-
-
-
-    void on_horizontalSlider_scalePlot_valueChanged(int value);
-
-
-
-    void on_lineEdit_scalePlot_editingFinished();
+    void checkInvStatus();
+    void checkInvStatus_2();
+    void checkInvStatus_3();
 
 private:
     Ui::MainWindow *ui;
