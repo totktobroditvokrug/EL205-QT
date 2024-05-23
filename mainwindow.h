@@ -171,6 +171,8 @@ private slots:
     void checkInvStatus();
     void checkInvStatus_2();
     void checkInvStatus_3();
+    void checkInvStatus_flt();
+    void checkInvStatus_5();
 
 private:
     Ui::MainWindow *ui;
@@ -197,5 +199,10 @@ private:
     // осциллограммы
     QVector<double> xPlot, yPlot;
     int startTimeStamp;  // первое пришедшее значение метки времени
+    qint16 IregInvStatus;
+    qint16 IregInvStatus_2;
+    qint16 IregInvStatus_3;
+    qint16 IregInvStatus_flt;
+    qint16 IregInvStatus_5;
 };
 #endif // MAINWINDOW_H

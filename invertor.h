@@ -150,4 +150,102 @@
 /* Мощность из действ. значения */
 #define INV_STS3_RMS_POWER			(1 << 15)
 
+
+/* ==========================================================================
+ * Регистр ошибок инвертора IREG_INV_FAULT
+ * ========================================================================== */
+/* Предел тока инвертора */
+#define INV_FLT_IMAX		(1 << 0)
+/* Ток утечки фаз инвертора */
+#define INV_FLT_IZ			(1 << 1)
+/* Монитор параллельных ветвей инвертора, ресольвера */
+#define INV_FLT_PAR_RSLV_MON	(1 << 2)
+/* Монитор питания цифровой цепи контроллера */
+#define INV_FLT_CTR_MON		(1 << 3)
+/* Перегрев реактора, новый */
+#define INV_FLT_CLK_MON		(1 << 4)
+/* Монитор входного питания источника */
+#define INV_FLT_MB_MON		(1 << 5)
+/* Аппаратные защиты драйверов 0, 1, 2 */
+#define INV_FLT_DR0		(1 << 6)
+#define INV_FLT_DR1		(1 << 7)
+#define INV_FLT_DR2		(1 << 8)
+/* Тестовый режим инвертора */
+#define INV_FLT_TEST		(1 << 9)
+/* Ошибка связи с термодатчиками */
+#define INV_FLT_TEMP_LINK	(1 << 10)
+/* Тепловая защита инвертора */
+#define INV_FLT_TEMP		(1 << 11)
+/* Тепловая защита по воздуху */
+#define INV_FLT_AIR_TEMP	(1 << 12)
+/* Аварийная кнопка */
+#define INV_FLT_ALARM_SW	(1 << 13)
+/* Тепловая защита выпрямителя */
+#define INV_FLT_TTEMP		(1 << 14)
+/* Перегрев реактора, старый */
+#define INV_FLT_REACT_ERR	(1 << 15)
+
+/* ==========================================================================
+ * Регистр расширенного статуса инвертора IREG_INV_STATUS5, сохраняемый!
+ * ========================================================================== */
+
+/* Младший бит конфигурации платы расширения */
+#define STS5_EXP_CONF_LST_BIT	0
+/* Биты конфигурации платы расширения */
+#define STS5_EXP_CONF0			(1 << (STS5_EXP_CONF_LST_BIT + 0))
+#define STS5_EXP_CONF1			(1 << (STS5_EXP_CONF_LST_BIT + 1))
+/* Конфигурация платы расширения */
+#define STS5_EXP_CONF_2b (	\
+    STS5_EXP_CONF0 |	\
+    STS5_EXP_CONF1		\
+)
+/* Варианты конфигурации платы расширения */			/* EXP_CONF1:EXP_CONF0 */
+#define STS5_EXP_LEGACY		(0 * STS5_EXP_CONF0)			/* 0:0 */
+#define STS5_EXP_485		(1 * STS5_EXP_CONF0)			/* 0:1 */
+#define STS5_EXP_SPI		(2 * STS5_EXP_CONF0)			/* 1:0 */
+#define STS5_EXP_OTHERS		(3 * STS5_EXP_CONF0)			/* 1:1 */
+
+/* Младший бит конфигурации ПЧ */
+#define STS5_FC_CONF_LST_BIT	2
+/* Биты конфигурации ПЧ */
+#define STS5_FC_CONF0	(1 << (STS5_FC_CONF_LST_BIT + 0))
+#define STS5_FC_CONF1	(1 << (STS5_FC_CONF_LST_BIT + 1))
+#define STS5_FC_CONF2	(1 << (STS5_FC_CONF_LST_BIT + 2))
+#define STS5_FC_CONF3	(1 << (STS5_FC_CONF_LST_BIT + 3))
+#define STS5_FC_CONF4	(1 << (STS5_FC_CONF_LST_BIT + 4))
+#define STS5_FC_CONF5	(1 << (STS5_FC_CONF_LST_BIT + 5))
+/* Конфигурация ПЧ */
+#define STS5_FC_CONF_6b (\
+    STS5_FC_CONF0 | \
+    STS5_FC_CONF1 | \
+    STS5_FC_CONF2 | \
+    STS5_FC_CONF3 | \
+    STS5_FC_CONF4 | \
+    STS5_FC_CONF5 \
+)
+
+/* Младший бит типа ПЧ */
+#define STS5_FC_TYPE_LST_BIT		8
+/* Биты типа ПЧ */
+#define STS5_FC_TYPE0	(1 << (STS5_FC_TYPE_LST_BIT + 0))
+#define STS5_FC_TYPE1	(1 << (STS5_FC_TYPE_LST_BIT + 1))
+/* Тип ПЧ */
+#define STS5_FC_TYPE_2b (	\
+    STS5_FC_TYPE0 |	\
+    STS5_FC_TYPE1		\
+)
+/* Варианты типов ПЧ */
+#define STS5_FC_SUBPUMP		(0 * STS5_FC_TYPE0)
+#define STS5_FC_TRAC		(1 * STS5_FC_TYPE0)
+
+/* Частота CAN шины */
+#define STS5_CAN_BDRT_250		(1 << 10)
+
+/* Маска регистра STS5 */
+#define INV_STS5_MASK (	\
+    STS5_EXP_CONF_2b |	\
+    STS5_FC_CONF_6b	 |	\
+    STS5_FC_TYPE_2b		\
+)
+
 #endif // INVERTOR_H

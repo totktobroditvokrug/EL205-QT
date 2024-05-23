@@ -55,8 +55,15 @@ MainWindow::MainWindow(QWidget *parent)
     startTimeStamp = 0; // пока ноль, пытаемся присвоить пришедшее значение из адаптера
     addGraph();  // 2 графика с двумя осями
 
+    // работа со статусом инвертора
+    IregInvStatus = NULL;
+    IregInvStatus_2 = NULL;
+    IregInvStatus_3 = NULL;
+    IregInvStatus_flt = NULL;
+    IregInvStatus_5 = NULL;
+
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 22-05-2024");
+    ui->statusbar->showMessage("ver. 23-05-2024");
 
 }
 

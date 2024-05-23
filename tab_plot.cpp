@@ -142,11 +142,16 @@ void MainWindow::on_pushButton_holdPlot_clicked()
 void MainWindow::on_comboBox_plot1_currentIndexChanged(int index)
 {
     int maxScale = 99;
-    if(regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT){
-        maxScale = regDataArray[index].maxValue.Reg16;
+    if((regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[index].flagReg & IREGF_SCALE_PRESENT)){
+        qint16 scaleReg16 = regDataArray[index].scale.Reg16;
+        qint16 maxValueReg16 = regDataArray[index].maxValue.Reg16;
+        qint16 maxReg16 = regDataArray[index].max.Reg16;
+        if ((scaleReg16 == 0) || (maxReg16 == 0) || (maxValueReg16 == 0)) maxScale = 0;
+        else maxScale = maxReg16 / maxValueReg16 * scaleReg16;
     }
     else maxScale = regDataArray[index].max.Reg16;
-    if(maxScale <= 0) maxScale = 999;
+
+    if(maxScale <= 0) maxScale = 9999;
     ui->lineEdit_yAxis_1->setText(QString::number(maxScale, 10));
 
     ui->horizontalSlider_max_axis_1->setMinimum(0);
@@ -157,11 +162,15 @@ void MainWindow::on_comboBox_plot1_currentIndexChanged(int index)
 void MainWindow::on_comboBox_plot2_currentIndexChanged(int index)
 {
     int maxScale = 99;
-    if(regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT){
-        maxScale = regDataArray[index].maxValue.Reg16;
+    if((regDataArray[index].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[index].flagReg & IREGF_SCALE_PRESENT)){
+        qint16 scaleReg16 = regDataArray[index].scale.Reg16;
+        qint16 maxValueReg16 = regDataArray[index].maxValue.Reg16;
+        qint16 maxReg16 = regDataArray[index].max.Reg16;
+        if ((scaleReg16 == 0) || (maxReg16 == 0) || (maxValueReg16 == 0)) maxScale = 0;
+        else maxScale = maxReg16 / maxValueReg16 * scaleReg16;
     }
     else maxScale = regDataArray[index].max.Reg16;
-    if(maxScale <= 0) maxScale = 999;
+    if(maxScale <= 0) maxScale = 9999;
     ui->lineEdit_yAxis_2->setText(QString::number(maxScale, 10));
 
     ui->horizontalSlider_max_axis_2->setMinimum(0);
@@ -171,8 +180,8 @@ void MainWindow::on_comboBox_plot2_currentIndexChanged(int index)
 
 void MainWindow::on_comboBox_plot3_currentIndexChanged(int index)
 {
-    int maxScale = sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16;
-    if(maxScale <= 0 ) maxScale = 999;
+    int maxScale = sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].scale.Reg16;
+    if(maxScale <= 0 ) maxScale = 9999;
     ui->lineEdit_yAxis_3->setText( QString::number(maxScale, 10));
 
     ui->horizontalSlider_max_axis_3->setMinimum(0);
@@ -182,8 +191,8 @@ void MainWindow::on_comboBox_plot3_currentIndexChanged(int index)
 
 void MainWindow::on_comboBox_plot4_currentIndexChanged(int index)
 {
-    int maxScale = sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].maxValue.Reg16;
-    if(maxScale <= 0 ) maxScale = 999;
+    int maxScale = sampleDataArray[index + SampleCanIdClass::CAN_START_SAMPLE_ID].scale.Reg16;
+    if(maxScale <= 0 ) maxScale = 9999;
     ui->lineEdit_yAxis_4->setText( QString::number(maxScale, 10));
 
     ui->horizontalSlider_max_axis_4->setMinimum(0);
