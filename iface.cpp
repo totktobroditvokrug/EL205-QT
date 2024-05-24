@@ -96,7 +96,7 @@ QVector<QString> SampleCanIdClass::fccanidArray(){
 void handleAllStandartDataCan(
         quint32 time_stamp_32,   // метка времени EL205
         QByteArray arrayDataFromCAN,
-        registerFields *regDataArray,      
+        registerFields *regDataArray,
         QVector<QString> regNumList,     // таблица названия регистров 256 значений
         samplesFields *sampleDataArray,
         QVector<QString> sampleNumList
@@ -133,21 +133,28 @@ void handleAllStandartDataCan(
         if ((scaleSample16 == 0) || (maxSample16 == 0)) sampleDataArray[idWhole].sampleValueScaled = NULL; //double(valueSample16);
         else sampleDataArray[idWhole].sampleValueScaled = double(valueSample16) * double(scaleSample16) / double(maxSample16);
 
-        if(sampleDataArray[idWhole].counterSamplePlot < PLOT_MAX_SIZE_ARR){
+        int counterSample = sampleDataArray[idWhole].counterSamplePlot;
+        if(counterSample < PLOT_MAX_SIZE_ARR){
+            if(!sampleDataArray[idWhole].flagFullBuffer){
+                sampleDataArray[idWhole].sampleTimeArr.resize(counterSample + 1);
+                sampleDataArray[idWhole].sampleValueScaledArr.resize(counterSample + 1);
+            }
             sampleDataArray[idWhole].sampleTimeArr[sampleDataArray[idWhole].counterSamplePlot] = double(time_stamp_32);
-          //  sampleDataArray[idWhole].sampleValueArr[sampleDataArray[idWhole].counterSamplePlot] = valueSample16;
+            //  sampleDataArray[idWhole].sampleValueArr[sampleDataArray[idWhole].counterSamplePlot] = valueSample16;
             sampleDataArray[idWhole].sampleValueScaledArr[sampleDataArray[idWhole].counterSamplePlot] =
                     sampleDataArray[idWhole].sampleValueScaled;
-        //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
+            //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
             sampleDataArray[idWhole].counterSamplePlot++;
             if(sampleDataArray[idWhole].counterSamplePlot >= PLOT_MAX_SIZE_ARR){
                 sampleDataArray[idWhole].flagFullBuffer = true; // буфер заполнен полностью
                 sampleDataArray[idWhole].counterSamplePlot = 0;    // включаем перезапись буфера
+                sampleDataArray[idWhole].sampleTimeArr.resize(PLOT_MAX_SIZE_ARR);
+                sampleDataArray[idWhole].sampleValueScaledArr.resize(PLOT_MAX_SIZE_ARR);
             }
         }
 
         sampleDataArray[idWhole].flagNewData = true;
-      //  qDebug() << sampleDataArray[idWhole].displayString;
+        //  qDebug() << sampleDataArray[idWhole].displayString;
     }
     else{
         //----------- Заполняем структуру регистров ---------
@@ -176,15 +183,22 @@ void handleAllStandartDataCan(
 
 
             //------------------- формируем данные для плоттера ---------------
-            if(regDataArray[regNum].counterRegPlot < PLOT_MAX_SIZE_ARR){
-                regDataArray[regNum].regTimeArr[regDataArray[regNum].counterRegPlot] = double(time_stamp_32);
-             //   regDataArray[regNum].regValueArr[regDataArray[regNum].counterRegPlot] = valueReg16;
-                regDataArray[regNum].regValueScaledArr[regDataArray[regNum].counterRegPlot] = regDataArray[regNum].regValueScaled;
-            //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
+            int counterReg = regDataArray[regNum].counterRegPlot;
+            if(counterReg < PLOT_MAX_SIZE_ARR){
+                if(!regDataArray[regNum].flagFullBuffer){
+                    regDataArray[regNum].regTimeArr.resize(counterReg + 1);
+                    regDataArray[regNum].regValueScaledArr.resize(counterReg + 1);
+                }
+                regDataArray[regNum].regTimeArr[counterReg] = double(time_stamp_32);
+                //   regDataArray[regNum].regValueArr[regDataArray[regNum].counterRegPlot] = valueReg16;
+                regDataArray[regNum].regValueScaledArr[counterReg] = regDataArray[regNum].regValueScaled;
+                //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
                 regDataArray[regNum].counterRegPlot++;
                 if(regDataArray[regNum].counterRegPlot >= PLOT_MAX_SIZE_ARR){
                     regDataArray[regNum].flagFullBuffer = true; // буфер заполнен полностью
                     regDataArray[regNum].counterRegPlot = 0;    // включаем перезапись буфера
+                    regDataArray[regNum].regTimeArr.resize(PLOT_MAX_SIZE_ARR);
+                    regDataArray[regNum].regValueScaledArr.resize(PLOT_MAX_SIZE_ARR);
                 }
             }
 

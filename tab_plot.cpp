@@ -58,15 +58,30 @@ void MainWindow::addGraph(){
 }
 
 void MainWindow::addPointToGraph(){
+    if(ui->tabWidget_registerWidget->currentIndex() != 7){
+       // qDebug() << "графики не рисуем";
+       return; // если виджет неактивен, графики не рисуем
+    }
+
     quint32 time_stamp_32 = regDataArray[RegnumClass::IREG_FREQ].time_stamp_32;
-    if(startTimeStamp == 0) {
-        startTimeStamp = int(time_stamp_32); // стартовый отрезок времени с каждым запуском программы
-        qDebug() << "стартуем с отметки " << startTimeStamp;
+    if(quint32(startTimeStamp) == 0) {
+        startTimeStamp = double(time_stamp_32); // стартовый отрезок времени с каждым запуском программы
+        // qDebug() << "стартуем с отметки " << quint32(startTimeStamp);
         QTimer::singleShot(5000, this, SLOT(init_scale()));
         return;
     }
-    // по выбранным в комбобоксе регистрам смотрим их значения
 
+    if(plot_1_isBusy || plot_2_isBusy){ // проверка, что программа не запустится, если предыдущая не закончила
+        ui->lineEdit_freqPlot->setStyleSheet("color: red");
+        return;
+    }
+    else ui->lineEdit_freqPlot->setStyleSheet("color: green");
+
+    plot_1_isBusy = true;
+    plot_2_isBusy = true;
+
+
+    // по выбранным в комбобоксе регистрам смотрим их значения
     int regNum_1 = ui->comboBox_plot1->currentIndex();
     int regNum_2 = ui->comboBox_plot2->currentIndex();
     int regNum_plot1[2] = {regNum_1, regNum_2};
@@ -95,10 +110,18 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_1->yAxis2->setRange(yAxis_2_min, yAxis_2);
     ui->widget_plot_1->yAxis2->setLabel(regNumList[regNum_plot1[1]]);
 
+    testListRegister.clear();
+    for (int i = 0; i < regDataArray[regNum_plot1[0]].regTimeArr.size(); i++) {
+        QString time = QString::number(quint32(regDataArray[regNum_plot1[0]].regTimeArr[i]), 10);
+        QString value = QString::number(int(regDataArray[regNum_plot1[0]].regValueScaledArr[i]), 10);
+        testListRegister.append(QString::number(i, 10) + ": " + time + ": " + value);
+    }
+    ui->textEdit_testRegister->setText(testListRegister.join('\n'));
+
     for(int i = 0; i < 2; i++){
         int regCounter = regDataArray[regNum_plot1[i]].counterRegPlot; // положение счетчика буфера парсинга данных
         if (regCounter > 0) regCounter--;
-        int deltaTime = int(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]) - startTimeStamp;
+        double deltaTime = double(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]) - startTimeStamp;
         // qDebug() << "шкала времени. regCounter=" << regCounter << " deltaTime=" << deltaTime;
         if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
 
@@ -107,6 +130,8 @@ void MainWindow::addPointToGraph(){
         ui->widget_plot_1->graph(i)->setData(regDataArray[regNum_plot1[i]].regTimeArr, regDataArray[regNum_plot1[i]].regValueScaledArr, false);
     }
     ui->widget_plot_1->replot();
+    // ui->widget_plot_1->update();
+    plot_1_isBusy = false;
 
     //------------ второй график с двумя осями
     ui->widget_plot_2->yAxis->setRange(yAxis_3_min, yAxis_3);
@@ -124,7 +149,10 @@ void MainWindow::addPointToGraph(){
         ui->widget_plot_2->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);
         ui->widget_plot_2->graph(i)->setData(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr, sampleDataArray[sampleNum_plot2[i]].sampleValueScaledArr, false);
     }
+
     ui->widget_plot_2->replot();
+    // ui->widget_plot_2->update();
+    plot_2_isBusy = false;
 }
 
 void MainWindow::on_pushButton_holdPlot_clicked()
@@ -252,7 +280,6 @@ void MainWindow::on_lineEdit_scalePlot_editingFinished()
 }
 
 
-
 void MainWindow::init_scale(){
     ui->lineEdit_yAxis_1->setStyleSheet("color: blue");
     ui->lineEdit_yAxis_2->setStyleSheet("color: green");
@@ -263,4 +290,9 @@ void MainWindow::init_scale(){
     on_comboBox_plot2_currentIndexChanged(ui->comboBox_plot2->currentIndex());
     on_comboBox_plot3_currentIndexChanged(ui->comboBox_plot3->currentIndex());
     on_comboBox_plot4_currentIndexChanged(ui->comboBox_plot4->currentIndex());
+}
+
+void MainWindow::on_lineEdit_freqPlot_editingFinished() // изментиь находу частоту обновления осциллограмм
+{
+    timerPlotter->setInterval((ui->lineEdit_freqPlot->text().toInt()));
 }

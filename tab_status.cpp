@@ -17,6 +17,8 @@ void MainWindow::checkStatus()
 
 void MainWindow::checkInvStatus()
 {
+    if(ui->tabWidget_registerWidget->currentIndex() != 6) return; // если виджет неактивен, статусы не анализируем
+
     QString currentStatus = "--> ";
     QString valueStatus = "-";
 

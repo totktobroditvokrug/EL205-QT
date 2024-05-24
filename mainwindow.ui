@@ -36,9 +36,9 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>5</number>
       </property>
-      <widget class="QWidget" name="tab_7">
+      <widget class="QWidget" name="tab_adapter">
        <attribute name="title">
         <string>CAN adapter</string>
        </attribute>
@@ -617,7 +617,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_3">
+      <widget class="QWidget" name="tab_selectAlias">
        <attribute name="title">
         <string>Select alias</string>
        </attribute>
@@ -774,7 +774,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_6">
+      <widget class="QWidget" name="tab_registers">
        <attribute name="title">
         <string>Registers</string>
        </attribute>
@@ -1078,7 +1078,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="tab_samples">
        <attribute name="title">
         <string>Samples</string>
        </attribute>
@@ -1107,7 +1107,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_5">
+      <widget class="QWidget" name="tab_checkRegisters">
        <attribute name="title">
         <string>Check registers</string>
        </attribute>
@@ -1233,58 +1233,37 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tab_control">
        <attribute name="title">
         <string>Control</string>
        </attribute>
-       <widget class="QLineEdit" name="lineEdit_testCommand">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>40</y>
-          <width>231</width>
-          <height>22</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_2">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>70</y>
-          <width>141</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>введите команду</string>
-        </property>
-       </widget>
-       <widget class="QTextEdit" name="textEdit_commandCRC">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>110</y>
-          <width>231</width>
-          <height>381</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_sendCommand">
-        <property name="geometry">
-         <rect>
-          <x>152</x>
-          <y>70</y>
-          <width>111</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Send command</string>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_18">
+        <item row="0" column="0" colspan="2">
+         <widget class="QLineEdit" name="lineEdit_testCommand"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>введите команду</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" rowspan="2">
+         <widget class="QPushButton" name="pushButton_sendCommand">
+          <property name="text">
+           <string>Send command</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2" rowspan="2">
+         <widget class="QTextEdit" name="textEdit_testRegister"/>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QTextEdit" name="textEdit_commandCRC"/>
+        </item>
+       </layout>
       </widget>
-      <widget class="QWidget" name="tab_8">
+      <widget class="QWidget" name="tab_status">
        <attribute name="title">
         <string>Status</string>
        </attribute>
@@ -1480,7 +1459,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_4">
+      <widget class="QWidget" name="tab_plot">
        <attribute name="title">
         <string>Plot</string>
        </attribute>

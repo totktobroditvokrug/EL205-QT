@@ -174,6 +174,8 @@ private slots:
     void checkInvStatus_flt();
     void checkInvStatus_5();
 
+    void on_lineEdit_freqPlot_editingFinished();
+
 private:
     Ui::MainWindow *ui;
 
@@ -198,7 +200,13 @@ private:
 
     // осциллограммы
     QVector<double> xPlot, yPlot;
-    int startTimeStamp;  // первое пришедшее значение метки времени
+    double startTimeStamp;  // первое пришедшее значение метки времени
+    bool plot_1_isBusy;
+    bool plot_2_isBusy;
+
+    QStringList testListRegister;
+
+    // статусы инвертора
     qint16 IregInvStatus;
     qint16 IregInvStatus_2;
     qint16 IregInvStatus_3;
