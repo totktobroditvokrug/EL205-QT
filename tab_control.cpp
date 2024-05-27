@@ -23,7 +23,6 @@ QString MainWindow::glueString(quint16 data, quint8 registerInv){ // !!!! без
 }
 
 
-
 // формируем заголовок стандартной CAN посылки в адаптер
 static quint8 numberMessage = 0;
 QString MainWindow::glueAdapterHeader(){

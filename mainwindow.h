@@ -114,6 +114,10 @@ private slots:
 
     void on_pushButton_sendCommand_clicked();
 
+    void on_pushButton_startInv_panel_clicked();
+    void on_pushButton_stopInv_panel_clicked();
+    void on_pushButton_alarmInv_panel_clicked();
+
     void on_pushButton_startInv_clicked();
     void on_pushButton_stopInv_clicked();
     void on_pushButton_alarmInv_clicked();
@@ -175,6 +179,7 @@ private slots:
     void checkInvStatus_5();
 
     void on_lineEdit_freqPlot_editingFinished();
+
 
 private:
     Ui::MainWindow *ui;

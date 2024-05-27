@@ -85,6 +85,9 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     ui->pushButton_startInv->setEnabled(true);
     ui->pushButton_stopInv->setEnabled(true);
     ui->pushButton_alarmInv->setEnabled(true);
+    ui->pushButton_startInv_panel->setEnabled(true);
+    ui->pushButton_stopInv_panel->setEnabled(true);
+    ui->pushButton_alarmInv_panel->setEnabled(true);
 
     ui->textEdit_invertorStatus->setEnabled(true);
 

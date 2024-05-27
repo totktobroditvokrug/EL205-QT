@@ -36,7 +36,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="tab_adapter">
        <attribute name="title">
@@ -936,7 +936,7 @@
                   <number>44</number>
                  </property>
                  <item>
-                  <widget class="QPushButton" name="pushButton_startInv">
+                  <widget class="QPushButton" name="pushButton_startInv_panel">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -962,7 +962,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_stopInv">
+                  <widget class="QPushButton" name="pushButton_stopInv_panel">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -988,7 +988,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_alarmInv">
+                  <widget class="QPushButton" name="pushButton_alarmInv_panel">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -1290,32 +1290,6 @@
           <property name="bottomMargin">
            <number>10</number>
           </property>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_ctrl_int">
-            <property name="text">
-             <string>IREG_INV_INT_CTRL</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QTextEdit" name="textEdit_ctrl_2"/>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_ctrl_3">
-            <property name="text">
-             <string>IREG_CTRL3</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLineEdit" name="lineEdit_ctrl"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="lineEdit_ctrl_3"/>
-          </item>
-          <item row="2" column="2">
-           <widget class="QTextEdit" name="textEdit_ctrl_3"/>
-          </item>
           <item row="0" column="1">
            <widget class="QLabel" name="label_ctrl_2">
             <property name="sizePolicy">
@@ -1329,18 +1303,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QTextEdit" name="textEdit_ctrl"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_ctrl_2"/>
-          </item>
-          <item row="2" column="3">
-           <widget class="QTextEdit" name="textEdit_ctrl_int"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit_ctrl_int"/>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_ctrl">
             <property name="sizePolicy">
@@ -1351,6 +1313,77 @@
             </property>
             <property name="text">
              <string>IREG_INV_CONTROL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButton_startInv">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>START</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_ctrl_int">
+            <property name="text">
+             <string>IREG_INV_INT_CTRL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_ctrl_3">
+            <property name="text">
+             <string>IREG_CTRL3</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="pushButton_alarmInv">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>ALARM</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="pushButton_stopInv">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>STOP</string>
             </property>
            </widget>
           </item>

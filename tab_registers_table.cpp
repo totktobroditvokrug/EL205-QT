@@ -5,27 +5,6 @@
 #include "stylehelper.h"
 
 
-// функция смены младший-старший байт
-
-qint16 changeHiLowBytes(qint16 dataIn){
-    struct twoBytes{
-        union{          // значение регистра
-           qint16 Reg16;
-           struct {
-               qint8 LowerByte;
-               qint8 UpperByte;
-           };
-        } value;
-    };
-    twoBytes direct;
-    twoBytes reverse;
-    direct.value.Reg16 = dataIn;
-    reverse.value.LowerByte = direct.value.UpperByte;
-    reverse.value.UpperByte = direct.value.LowerByte;
-    qint16 dataOut = reverse.value.Reg16;
-    return dataOut;
-}
-
 void MainWindow::createRegistersTable()
 {
   //  qDebug() << "создать таблицу регистров";
@@ -169,9 +148,11 @@ void MainWindow::deleteRowRegistersTable(int index)
 //------------------Вывод значений регистров в таблицу-----------------
 void MainWindow::regDisplayTable()
 {
+    checkInvertorStatus();
+
     if(ui->tabWidget_registerWidget->currentIndex() != 2) return; // если виджет неактивен, таблицей не занимаемся
 
-    checkInvertorStatus();
+
     getFreqInv();
     setRegistersCombobox();
 
@@ -726,8 +707,6 @@ void MainWindow::setSelectedRegisterSlider(int regNum){
 
 //-------------------- панель управления ----------------------
 
-//---------- кнопки управления
-
 void MainWindow::on_pushButton_showPanel_clicked()
 {
     ui->groupBox_controlPanel->setVisible(true);
@@ -740,122 +719,3 @@ void MainWindow::on_pushButton_hidePanel_clicked()
     ui->pushButton_showPanel->setVisible(true);
 }
 
-void MainWindow::on_pushButton_startInv_clicked()
-{
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_START, IREG_INV_CONTROL)), 2).toHex();
-    ui->textEdit_commandCRC->append(commandString);
-    writeSerialPort(commandString);
-}
-
-void MainWindow::on_pushButton_stopInv_clicked()
-{
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_STOP, IREG_INV_CONTROL)), 2).toHex();
-    ui->textEdit_commandCRC->append(commandString);
-    writeSerialPort(commandString);
-}
-
-void MainWindow::on_pushButton_alarmInv_clicked()
-{
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(INV_CTRL_ALARM, IREG_INV_CONTROL)), 2).toHex();
-    ui->textEdit_commandCRC->append(commandString);
-    writeSerialPort(commandString);
-}
-
-//---------- проверка статуса работы инвертора
-void MainWindow::checkInvertorStatus()
-{
-    QString currentStatus = "";
-    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS].value.Reg16;
-    if (invStatus & INV_STS_STARTED){
-
-      if (invStatus & INV_STS_TO_STOP_MODE) {
-          ui->pushButton_startInv->setStyleSheet(StyleHelper::getWaitButtonStyle());
-          ui->pushButton_showPanel->setIcon(QIcon(":/images/wait_small.png"));
-      }
-      else{
-         ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartedButtonStyle());
-         ui->pushButton_showPanel->setIcon(QIcon(":/images/start_small.png"));
-      }
-      currentStatus += ("Система запущена \n");
-    }
-    else{
-      ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartButtonStyle());
-      ui->pushButton_showPanel->setIcon(QIcon(":/images/stop_small.png"));
-      currentStatus += ("Система остановлена \n");
-    }
-    if (invStatus & INV_STS_WAIT_RECT_START) currentStatus += ("Ожидает запуска выпрямителя \n");
-    if (invStatus & INV_STS_STOPPED_REGISTERS) currentStatus += ("Остановлен по изменению важного регистра \n");
-    if (invStatus & INV_STS_STOPPED_EXTERNAL){
-        ui->pushButton_stopInv->setStyleSheet(StyleHelper::getStopedButtonStyle());
-        currentStatus += ("Остановлен по команде извне (CAN, Modbus) \n");
-    }
-    else{
-        ui->pushButton_stopInv->setStyleSheet(StyleHelper::getStopButtonStyle());
-    }
-    if (invStatus & INV_STS_WAIT_RECT_STOP) currentStatus += ("Ожидает останова выпрямителя \n");
-    if (invStatus & INV_STS_FAULT_STOPPED) currentStatus += ("Остановлен по причине FAULT \n");
-    if (invStatus & INV_STS_I_LIMIT) currentStatus += ("Токоограничение \n");
-    if (invStatus & INV_STS_ULOW) currentStatus += ("Недостаточно напряжения \n");
-    if (invStatus & INV_STS_STOPPED_ALARM){
-        ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getStopedButtonStyle());
-        currentStatus += ("Аварийный останов \n");
-    }
-    else{
-      ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getStopButtonStyle());
-    }
-    if (invStatus & INV_STS_UD_LOW_FAULT) currentStatus += ("Остановлен по снижению напряжения на шине \n");
-    if (invStatus & INV_STS_TO_STOP_MODE) currentStatus += ("Режим плавной остановки инвертора \n");
-    if (invStatus & INV_STS_URECT_SHORTCIRCUIT) currentStatus += ("Остановлен по КЗ от выпрямителя \n");
-
-    ui->textEdit_invertorStatus->setText(currentStatus);
-}
-
-//----------- для дальнейшего отображения статуса инвертора!!!!
-/* система запущена */
-//#define INV_STS_STARTED			(1 << 0)
-
-/* ожидает запуска выпрямителя */
-//#define INV_STS_WAIT_RECT_START		(1 << 1)
-
-/* Инвертор остановлен по изменению какого-либо важного регистра */
-//#define INV_STS_STOPPED_REGISTERS	(1 << 2)
-
-/* Инвертор остановлен по команде извне (CAN, Modbus) */
-//#define INV_STS_STOPPED_EXTERNAL	(1 << 3)
-
-/* ожидает останова выпрямителя */
-//#define INV_STS_WAIT_RECT_STOP		(1 << 4)
-
-/* Остановлен по причине FAULT */
-//#define INV_STS_FAULT_STOPPED		(1 << 5)
-
-/* Фактическое направление вращения */
-//#define INV_STS_RIGHT_DIR			(1 << 6)
-
-/* Токоограничение */
-//#define INV_STS_I_LIMIT				(1 << 7)
-
-/* Недостаточно напряжения */
-//#define INV_STS_ULOW				(1 << 8)
-
-/* остановлен аварийной кнопкой */
-//#define INV_STS_STOPPED_ALARM		(1 << 9)
-
-/* остановлен по снижению напряжения на шине */
-//#define INV_STS_UD_LOW_FAULT		(1 << 10)
-
-/* остановлен по снижению напряжения на шине */
-//#define INV_STS_UD_HIGH_FAULT		(1 << 11)
-
-/* напряжение не в норме так или эдак */
-//#define INV_STS_UD_FAULT \
-//	(INV_STS_UD_LOW_FAULT | INV_STS_UD_HIGH_FAULT)
-
-/* режим плавной остановки инвертора */
-//#define INV_STS_TO_STOP_MODE		(1 << 12)
-
-/* Активный режим (R, D - "1"; P, N - "0") */
-//#define INV_STS_RUN					(1 << 13)
-
-/* остановлен по КЗ зареганному от выпрямителя */
-//#define INV_STS_URECT_SHORTCIRCUIT	(1 << 14)

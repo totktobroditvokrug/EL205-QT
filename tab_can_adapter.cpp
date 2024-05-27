@@ -104,6 +104,9 @@ void MainWindow::initTabCan(){
     ui->pushButton_startInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
     ui->pushButton_stopInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
     ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_startInv_panel->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_stopInv_panel->setStyleSheet(StyleHelper::getDisableButtonStyle());
+    ui->pushButton_alarmInv_panel->setStyleSheet(StyleHelper::getDisableButtonStyle());
 
     ui->textEdit_invertorStatus->setEnabled(false);
 
@@ -111,6 +114,10 @@ void MainWindow::initTabCan(){
     ui->pushButton_startInv->setEnabled(false);
     ui->pushButton_stopInv->setEnabled(false);
     ui->pushButton_alarmInv->setEnabled(false);
+    ui->pushButton_startInv_panel->setEnabled(false);
+    ui->pushButton_stopInv_panel->setEnabled(false);
+    ui->pushButton_alarmInv_panel->setEnabled(false);
+
     // отключит активность полей вывода регистров. По ним вторично активизируется слайдер
     ui->lineEdit_currentFreq->setEnabled(false);
     ui->lineEdit_registerValue_1->setEnabled(false);

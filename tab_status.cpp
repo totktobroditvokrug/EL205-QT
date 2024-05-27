@@ -199,3 +199,103 @@ void MainWindow::checkInvStatus_5()
 
     ui->textEdit_status_5->setText(currentStatus);
 }
+
+
+void MainWindow::on_pushButton_startInv_panel_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(changeHiLowBytes(INV_CTRL_START)), IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_stopInv_panel_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(changeHiLowBytes(INV_CTRL_STOP)), IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_alarmInv_panel_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(changeHiLowBytes(INV_CTRL_ALARM)), IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_startInv_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(changeHiLowBytes(INV_CTRL_START)), IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_stopInv_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(changeHiLowBytes(INV_CTRL_STOP)), IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_alarmInv_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(quint16(changeHiLowBytes(INV_CTRL_ALARM)), IREG_INV_CONTROL)), 2).toHex();
+    ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+
+//---------- проверка статуса работы инвертора
+void MainWindow::checkInvertorStatus()
+{
+    QString currentStatus = "";
+    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS].value.Reg16;
+    if (invStatus & INV_STS_STARTED){
+
+      if (invStatus & INV_STS_TO_STOP_MODE) {
+          ui->pushButton_startInv->setStyleSheet(StyleHelper::getWaitButtonStyle());
+          ui->pushButton_startInv_panel->setStyleSheet(StyleHelper::getWaitButtonStyle());
+          ui->pushButton_showPanel->setIcon(QIcon(":/images/wait_small.png"));
+      }
+      else{
+         ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartedButtonStyle());
+         ui->pushButton_startInv_panel->setStyleSheet(StyleHelper::getStartedButtonStyle());
+         ui->pushButton_showPanel->setIcon(QIcon(":/images/start_small.png"));
+      }
+      currentStatus += ("Система запущена \n");
+    }
+    else{
+      ui->pushButton_startInv->setStyleSheet(StyleHelper::getStartButtonStyle());
+      ui->pushButton_startInv_panel->setStyleSheet(StyleHelper::getStartButtonStyle());
+      ui->pushButton_showPanel->setIcon(QIcon(":/images/stop_small.png"));
+      currentStatus += ("Система остановлена \n");
+    }
+    if (invStatus & INV_STS_WAIT_RECT_START) currentStatus += ("Ожидает запуска выпрямителя \n");
+    if (invStatus & INV_STS_STOPPED_REGISTERS) currentStatus += ("Остановлен по изменению важного регистра \n");
+    if (invStatus & INV_STS_STOPPED_EXTERNAL){
+        ui->pushButton_stopInv->setStyleSheet(StyleHelper::getStopedButtonStyle());
+        ui->pushButton_stopInv_panel->setStyleSheet(StyleHelper::getStopedButtonStyle());
+        currentStatus += ("Остановлен по команде извне (CAN, Modbus) \n");
+    }
+    else{
+        ui->pushButton_stopInv->setStyleSheet(StyleHelper::getStopButtonStyle());
+        ui->pushButton_stopInv_panel->setStyleSheet(StyleHelper::getStopButtonStyle());
+    }
+    if (invStatus & INV_STS_WAIT_RECT_STOP) currentStatus += ("Ожидает останова выпрямителя \n");
+    if (invStatus & INV_STS_FAULT_STOPPED) currentStatus += ("Остановлен по причине FAULT \n");
+    if (invStatus & INV_STS_I_LIMIT) currentStatus += ("Токоограничение \n");
+    if (invStatus & INV_STS_ULOW) currentStatus += ("Недостаточно напряжения \n");
+    if (invStatus & INV_STS_STOPPED_ALARM){
+        ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getStopedButtonStyle());
+        ui->pushButton_alarmInv_panel->setStyleSheet(StyleHelper::getStopedButtonStyle());
+        currentStatus += ("Аварийный останов \n");
+    }
+    else{
+      ui->pushButton_alarmInv->setStyleSheet(StyleHelper::getStopButtonStyle());
+      ui->pushButton_alarmInv_panel->setStyleSheet(StyleHelper::getStopButtonStyle());
+    }
+    if (invStatus & INV_STS_UD_LOW_FAULT) currentStatus += ("Остановлен по снижению напряжения на шине \n");
+    if (invStatus & INV_STS_TO_STOP_MODE) currentStatus += ("Режим плавной остановки инвертора \n");
+    if (invStatus & INV_STS_URECT_SHORTCIRCUIT) currentStatus += ("Остановлен по КЗ от выпрямителя \n");
+
+    ui->textEdit_invertorStatus->setText(currentStatus);
+}

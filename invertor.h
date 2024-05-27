@@ -18,12 +18,63 @@
 #define IREG_INV_CONTROL  0x5A
 
 
+/* ==========================================================================
+ * Управляющий регистр IREG_INV_CONTROL
+ * ========================================================================== */
+
 /* команда "запустить" */
-#define INV_CTRL_START		0x0100
+#define INV_CTRL_START		(1 << 0)
+
 /* команда "остановить" */
-#define INV_CTRL_STOP		0x0200
+#define INV_CTRL_STOP		(1 << 1)
+
+/* Направление (Реверс) */
+#define INV_CTRL_LEFT_DIRECTION	(1 << 2)
+#define INV_CTRL_RIGHT_DIRECTION	(1 << 3)
+
 /* аварийный стоп */
-#define INV_CTRL_ALARM		0x1000
+#define INV_CTRL_ALARM		(1 << 4)
+
+/* Биты управления оптимизацией */
+#define INV_CTRL_CURRENT_OPT		(1 << 5)
+#define INV_CTRL_POWER_OPT		(1 << 6)
+#define INV_CTRL_CLEAR_OPT		(1 << 7)
+
+/* Установка типа мотора */
+#define INV_CTRL_ASYN_MOTOR		(1 << 8)
+#define INV_CTRL_VENT_MOTOR		(1 << 9)
+
+/* Установка типа ШИМ */
+#define INV_CTRL_OVERPWM1_ON		(1 << 10)
+#define INV_CTRL_OVERPWM2_ON		(1 << 11)
+#define INV_CTRL_OVERPWM_OFF		(1 << 12)
+
+/* Установка режима предразряда шины */
+#define INV_CTRL_HARM_CALC_ON	(1 << 13)
+#define INV_CTRL_HARM_CALC_OFF	(1 << 14)
+/* Сброс аппаратных ошибок */
+#define INV_CTRL_FLT_CLR		(1 << 15)
+
+/* маска всех бит управляющего регистра */
+#define INV_CTRL_MASK		(	\
+        INV_CTRL_START		\
+    |	INV_CTRL_STOP		\
+    |	INV_CTRL_LEFT_DIRECTION	\
+    |	INV_CTRL_RIGHT_DIRECTION	\
+    |	INV_CTRL_ALARM		\
+    |	INV_CTRL_CURRENT_OPT		\
+    |	INV_CTRL_POWER_OPT		\
+    |	INV_CTRL_CLEAR_OPT		\
+    |	INV_CTRL_ASYN_MOTOR		\
+    |	INV_CTRL_VENT_MOTOR		\
+    |	INV_CTRL_OVERPWM1_ON		\
+    |	INV_CTRL_OVERPWM2_ON		\
+    |	INV_CTRL_OVERPWM_OFF		\
+    |	INV_CTRL_HARM_CALC_ON	\
+    |	INV_CTRL_HARM_CALC_OFF	\
+    |	INV_CTRL_FLT_CLR		\
+)
+
 
 /* ==========================================================================
  * Регистр статуса инвертора IREG_INV_STATUS

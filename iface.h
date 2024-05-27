@@ -846,4 +846,8 @@ void handleAllStandartDataCan(
         QVector<QString> sampleNumList
 );
 
+
+// функция смены старший-младший байт
+qint16 changeHiLowBytes(qint16 dataIn);
+
 #endif // IFACE_H

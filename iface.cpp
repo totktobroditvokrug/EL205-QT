@@ -251,7 +251,27 @@ void handleAllStandartDataCan(
         }
         }
     }
-
 };
 
+
+// функция смены младший-старший байт
+
+qint16 changeHiLowBytes(qint16 dataIn){
+    struct twoBytes{
+        union{          // значение регистра
+           qint16 Reg16;
+           struct {
+               qint8 LowerByte;
+               qint8 UpperByte;
+           };
+        } value;
+    };
+    twoBytes direct;
+    twoBytes reverse;
+    direct.value.Reg16 = dataIn;
+    reverse.value.LowerByte = direct.value.UpperByte;
+    reverse.value.UpperByte = direct.value.LowerByte;
+    qint16 dataOut = reverse.value.Reg16;
+    return dataOut;
+}
 
