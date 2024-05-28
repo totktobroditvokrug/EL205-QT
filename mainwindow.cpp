@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_volumeTextRead->setText("50");
     ui->textEdit_dataRead->document()->setMaximumBlockCount(50); //
 
+  //  ui->lineEdit_availableByte->setEnabled(false);
+
     serial = new QSerialPort;  // объявляем serial
 
     workDirPath = "C:/"; // инициализация рабочей директории
@@ -67,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     IregInvStatus_5 = NULL;
 
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 24-05-2024");
+    ui->statusbar->showMessage("ver. 28-05-2024");
 
 }
 

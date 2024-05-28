@@ -849,5 +849,7 @@ void handleAllStandartDataCan(
 
 // функция смены старший-младший байт
 qint16 changeHiLowBytes(qint16 dataIn);
+quint16 changeHiLowBytes_uint(quint16 dataIn);
+
 
 #endif // IFACE_H

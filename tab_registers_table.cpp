@@ -148,7 +148,7 @@ void MainWindow::deleteRowRegistersTable(int index)
 //------------------Вывод значений регистров в таблицу-----------------
 void MainWindow::regDisplayTable()
 {
-    checkInvertorStatus();
+    // checkInvertorStatus();
 
     if(ui->tabWidget_registerWidget->currentIndex() != 2) return; // если виджет неактивен, таблицей не занимаемся
 

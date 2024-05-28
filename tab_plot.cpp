@@ -58,10 +58,6 @@ void MainWindow::addGraph(){
 }
 
 void MainWindow::addPointToGraph(){
-    if(ui->tabWidget_registerWidget->currentIndex() != 7){
-       // qDebug() << "графики не рисуем";
-       return; // если виджет неактивен, графики не рисуем
-    }
 
     quint32 time_stamp_32 = regDataArray[RegnumClass::IREG_FREQ].time_stamp_32;
     if(quint32(startTimeStamp) == 0) {
@@ -69,6 +65,11 @@ void MainWindow::addPointToGraph(){
         // qDebug() << "стартуем с отметки " << quint32(startTimeStamp);
         QTimer::singleShot(5000, this, SLOT(init_scale()));
         return;
+    }
+
+    if(ui->tabWidget_registerWidget->currentIndex() != 7){
+       // qDebug() << "графики не рисуем";
+       return; // если виджет неактивен, графики не рисуем
     }
 
     if(plot_1_isBusy || plot_2_isBusy){ // проверка, что программа не запустится, если предыдущая не закончила
@@ -111,12 +112,12 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_1->yAxis2->setLabel(regNumList[regNum_plot1[1]]);
 
     testListRegister.clear();
-    for (int i = 0; i < regDataArray[regNum_plot1[0]].regTimeArr.size(); i++) {
-        QString time = QString::number(quint32(regDataArray[regNum_plot1[0]].regTimeArr[i]), 10);
-        QString value = QString::number(int(regDataArray[regNum_plot1[0]].regValueScaledArr[i]), 10);
-        testListRegister.append(QString::number(i, 10) + ": " + time + ": " + value);
-    }
-    ui->textEdit_testRegister->setText(testListRegister.join('\n'));
+//    for (int i = 0; i < regDataArray[regNum_plot1[0]].regTimeArr.size(); i++) {
+//        QString time = QString::number(quint32(regDataArray[regNum_plot1[0]].regTimeArr[i]), 10);
+//        QString value = QString::number(int(regDataArray[regNum_plot1[0]].regValueScaledArr[i]), 10);
+//        testListRegister.append(QString::number(i, 10) + ": " + time + ": " + value);
+//    }
+//    ui->textEdit_testRegister->setText(testListRegister.join('\n'));
 
     for(int i = 0; i < 2; i++){
         int regCounter = regDataArray[regNum_plot1[i]].counterRegPlot; // положение счетчика буфера парсинга данных
@@ -143,7 +144,7 @@ void MainWindow::addPointToGraph(){
     for(int i = 0; i < 2; i++){
         int sampleCounter = sampleDataArray[regNum_plot1[i]].counterSamplePlot; // положение счетчика буфера парсинга измерений
         if (sampleCounter > 0) sampleCounter--;
-        int deltaTime = int(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]) - startTimeStamp;
+        int deltaTime = int(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]) - int(startTimeStamp); // goto поправил шкалу
         if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
 
         ui->widget_plot_2->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);

@@ -20,7 +20,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QGridLayout" name="gridLayout_15">
+   <layout class="QGridLayout" name="gridLayout_16">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget_registerWidget">
       <property name="sizePolicy">
@@ -36,7 +36,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="tab_adapter">
        <attribute name="title">
@@ -508,7 +508,11 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QLineEdit" name="lineEdit_availableByte"/>
+                      <widget class="QLineEdit" name="lineEdit_availableByte">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                      </widget>
                      </item>
                      <item row="2" column="0">
                       <widget class="QLabel" name="label_6">
@@ -1111,8 +1115,8 @@
        <attribute name="title">
         <string>Check registers</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_15">
+        <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -1209,7 +1213,7 @@
           </item>
          </layout>
         </item>
-        <item>
+        <item row="1" column="0">
          <widget class="QTableWidget" name="tableFromFile">
           <property name="enabled">
            <bool>true</bool>
@@ -1267,228 +1271,348 @@
        <attribute name="title">
         <string>Status</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_13">
-        <item>
-         <widget class="QLabel" name="label_11">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>CONTROL</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QGridLayout" name="gridLayout_16">
-          <property name="bottomMargin">
-           <number>10</number>
-          </property>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_ctrl_2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>IREG_INV_CTRL2</string>
-            </property>
-           </widget>
+       <layout class="QGridLayout" name="gridLayout_17">
+        <item row="0" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_19">
+              <item>
+               <widget class="QPushButton" name="pushButton_startInv">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>START</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_stopInv">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>STOP</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_alarmInv">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>ALARM</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_rstFlt">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Reset fault</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_harmonicAnalysis">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Harmonic analysis</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_ctrl">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>IREG_INV_CONTROL</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButton_startInv">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>START</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_ctrl_int">
-            <property name="text">
-             <string>IREG_INV_INT_CTRL</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_ctrl_3">
-            <property name="text">
-             <string>IREG_CTRL3</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QPushButton" name="pushButton_alarmInv">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>ALARM</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="pushButton_stopInv">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>STOP</string>
-            </property>
-           </widget>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_13">
+            <item>
+             <widget class="QGroupBox" name="groupBox_direction">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>220</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Direction</string>
+              </property>
+              <widget class="QRadioButton" name="radioButton_directRotation">
+               <property name="geometry">
+                <rect>
+                 <x>12</x>
+                 <y>37</y>
+                 <width>60</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Direct</string>
+               </property>
+              </widget>
+              <widget class="QRadioButton" name="radioButton_reversRotation">
+               <property name="geometry">
+                <rect>
+                 <x>79</x>
+                 <y>37</y>
+                 <width>66</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Revers</string>
+               </property>
+              </widget>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_motorType">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>220</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Motor type</string>
+              </property>
+              <widget class="QRadioButton" name="radioButton_async">
+               <property name="geometry">
+                <rect>
+                 <x>13</x>
+                 <y>38</y>
+                 <width>60</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Async</string>
+               </property>
+              </widget>
+              <widget class="QRadioButton" name="radioButton_vent">
+               <property name="geometry">
+                <rect>
+                 <x>80</x>
+                 <y>38</y>
+                 <width>53</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Vent</string>
+               </property>
+              </widget>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_PWM_Type">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>220</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>PWM type</string>
+              </property>
+              <widget class="QRadioButton" name="radioButton_PWM_OVER1">
+               <property name="geometry">
+                <rect>
+                 <x>67</x>
+                 <y>29</y>
+                 <width>66</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>OVER1</string>
+               </property>
+              </widget>
+              <widget class="QRadioButton" name="radioButton_PWM_SIN">
+               <property name="geometry">
+                <rect>
+                 <x>13</x>
+                 <y>29</y>
+                 <width>47</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>SIN</string>
+               </property>
+              </widget>
+              <widget class="QRadioButton" name="radioButton_PWM_OVER2">
+               <property name="geometry">
+                <rect>
+                 <x>140</x>
+                 <y>29</y>
+                 <width>66</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>OVER2</string>
+               </property>
+              </widget>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
-        <item>
-         <widget class="QLabel" name="label_10">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_status">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
           <property name="text">
-           <string>STATUS</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="margin">
-           <number>-1</number>
+           <string>IREG_INV_STATUS</string>
           </property>
          </widget>
         </item>
-        <item>
-         <layout class="QGridLayout" name="gridLayout_17">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_status">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>IREG_INV_STATUS</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_status_2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>IREG_INV_STATUS2</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_status_3">
-            <property name="text">
-             <string>IREG_INV_STATUS3</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_status_flt">
-            <property name="text">
-             <string>IREG_INV_FAULT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QLabel" name="label_status_5">
-            <property name="text">
-             <string>IREG_INV_STATUS5</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLineEdit" name="lineEdit_status"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_status_2"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="lineEdit_status_3"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit_status_flt"/>
-          </item>
-          <item row="1" column="4">
-           <widget class="QLineEdit" name="lineEdit_status_5"/>
-          </item>
-          <item row="2" column="0">
-           <widget class="QTextEdit" name="textEdit_status"/>
-          </item>
-          <item row="2" column="1">
-           <widget class="QTextEdit" name="textEdit_status_2"/>
-          </item>
-          <item row="2" column="2">
-           <widget class="QTextEdit" name="textEdit_status_3"/>
-          </item>
-          <item row="2" column="3">
-           <widget class="QTextEdit" name="textEdit_status_flt"/>
-          </item>
-          <item row="2" column="4">
-           <widget class="QTextEdit" name="textEdit_status_5"/>
-          </item>
-         </layout>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_status_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>IREG_INV_STATUS2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_status_3">
+          <property name="text">
+           <string>IREG_INV_STATUS3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="label_status_flt">
+          <property name="text">
+           <string>IREG_INV_FAULT</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLabel" name="label_status_5">
+          <property name="text">
+           <string>IREG_INV_STATUS5</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLineEdit" name="lineEdit_status"/>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="lineEdit_status_2"/>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLineEdit" name="lineEdit_status_3"/>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLineEdit" name="lineEdit_status_flt"/>
+        </item>
+        <item row="3" column="4">
+         <widget class="QLineEdit" name="lineEdit_status_5"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QTextEdit" name="textEdit_status"/>
+        </item>
+        <item row="4" column="1">
+         <widget class="QTextEdit" name="textEdit_status_2"/>
+        </item>
+        <item row="4" column="2">
+         <widget class="QTextEdit" name="textEdit_status_3"/>
+        </item>
+        <item row="4" column="3">
+         <widget class="QTextEdit" name="textEdit_status_flt"/>
+        </item>
+        <item row="4" column="4">
+         <widget class="QTextEdit" name="textEdit_status_5"/>
         </item>
        </layout>
       </widget>

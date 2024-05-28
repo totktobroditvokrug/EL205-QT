@@ -129,6 +129,49 @@
 /* остановлен по КЗ зареганному от выпрямителя */
 #define INV_STS_URECT_SHORTCIRCUIT	(1 << 14)
 
+/* Один бит зарезервирован под критичный флаг */
+#define INV_STS_RECT_NO_CHARGE		(1 << 15)
+
+/* Стоп биты связанные с остановкой извне */
+#define INV_STS_EXT_STP_BITS (\
+        INV_STS_STOPPED_REGISTERS	\
+    |	INV_STS_STOPPED_EXTERNAL	\
+    |	INV_STS_STOPPED_ALARM		\
+)
+
+/* Внутр. ошибки, по которым останавливается запись архива */
+#define INV_STS_ERR_BITS (\
+        INV_STS_FAULT_STOPPED		\
+    |	INV_STS_UD_LOW_FAULT		\
+    |	INV_STS_UD_HIGH_FAULT		\
+    |	INV_STS_URECT_SHORTCIRCUIT	\
+    |	INV_STS_RECT_NO_CHARGE		\
+)
+
+/* Стоп биты связанные с режимом остановки */
+#define INV_STS_STP_BITS (\
+    INV_STS_EXT_STP_BITS | INV_STS_ERR_BITS	\
+)
+
+#define INV_STS_MASK (\
+        INV_STS_STARTED				\
+    |	INV_STS_WAIT_RECT_START		\
+    |	INV_STS_STOPPED_REGISTERS	\
+    |	INV_STS_STOPPED_EXTERNAL	\
+    |	INV_STS_WAIT_RECT_STOP		\
+    |	INV_STS_FAULT_STOPPED		\
+    |	INV_STS_RIGHT_DIR			\
+    |	INV_STS_I_LIMIT				\
+    |	INV_STS_ULOW				\
+    |	INV_STS_STOPPED_ALARM		\
+    |	INV_STS_UD_LOW_FAULT		\
+    |	INV_STS_UD_HIGH_FAULT		\
+    |	INV_STS_TO_STOP_MODE		\
+    |	INV_STS_RUN					\
+    |	INV_STS_URECT_SHORTCIRCUIT	\
+    |	INV_STS_RECT_NO_CHARGE		\
+)
+
 /* ==========================================================================
  * Регистр расширенного статуса инвертора IREG_INV_STATUS2
  * ========================================================================== */
@@ -166,6 +209,55 @@
 /* Ошибка диапазона уставок флеш */
 #define INV_STS2_FLSH_VAL_ERR		(1 << 15)
 
+/* Стоп биты расширенного регистра статуса */
+#define INV_STS2_STP_BITS		(	\
+        INV_STS2_FC_IT_ERR		\
+    |	INV_STS2_M_I2T_ERR		\
+    |	INV_STS2_M_IFAST_ERR		\
+    |	INV_STS2_I_LIM_ERR		\
+    |	INV_STS2_AST_ERR		\
+    |	INV_STS2_VC_ERR			\
+)
+/* Ошибки, по которым останавливается запись архива */
+#define INV_STS2_ERR_BITS		(	\
+        INV_STS2_FC_IT_ERR		\
+    |	INV_STS2_AST_ERR		\
+    |	INV_STS2_M_I2T_ERR		\
+    |	INV_STS2_M_IFAST_ERR		\
+    |	INV_STS2_I_LIM_ERR		\
+    |	INV_STS2_VC_ERR			\
+)
+/* Биты управления оптимизацией */
+#define INV_STS2_OPT_BITS		(	\
+        INV_STS2_CURRENT_OPT		\
+    |	INV_STS2_POWER_OPT		\
+)
+
+#define INV_STS2_MASK		(		\
+        INV_STS2_FC_IT_ERR		\
+    |	INV_STS2_AST_ERR		\
+    |	INV_STS2_I_LIMIT_FAST		\
+    |	INV_STS2_CURRENT_OPT		\
+    |	INV_STS2_POWER_OPT		\
+    |	INV_STS2_OPT_DONE		\
+    |	INV_STS2_FLSH_RD_ERR		\
+    |	INV_STS2_FLSH_WR_ERR		\
+    |	INV_STS2_DISCHARGE_ON		\
+    |	INV_STS2_DISCHARGE		\
+    |	INV_STS2_DISCHARGE_ERR		\
+    |	INV_STS2_VC_ERR			\
+    |	INV_STS2_M_IFAST_ERR		\
+    |	INV_STS2_M_I2T_ERR		\
+    |	INV_STS2_I_LIM_ERR		\
+    |	INV_STS2_FLSH_VAL_ERR		\
+)
+/* Биты ошибок  флеш */
+#define INV_STS2_FLSH_ERR_BITS		(	\
+        INV_STS2_FLSH_RD_ERR	|	\
+        INV_STS2_FLSH_WR_ERR	|	\
+        INV_STS2_FLSH_VAL_ERR		\
+)
+
 /* ==========================================================================
  * Регистр расширенного статуса инвертора IREG_INV_STATUS3, сохраняемый!
  * ========================================================================== */
@@ -201,6 +293,53 @@
 /* Мощность из действ. значения */
 #define INV_STS3_RMS_POWER			(1 << 15)
 
+/* Тип ШИМ */
+/* установить тип ШИМ  в регистре статуса:
+ * 0 - синус,
+ * INV_STS3_OVERPWM1 - ОверШИМ1 (трапеция),
+ * INV_STS3_OVERPWM2 - "шестиугольник"
+ * (варьирование скоростью вектора). */
+#define INV_STS3_PWM_TYPE	(		\
+        INV_STS3_OVERPWM1			\
+    |	INV_STS3_OVERPWM2			\
+)
+
+/* Варианты конфигурации типов ШИМ */
+#define STS3_SINPWM         (0 * INV_STS3_OVERPWM1)
+#define STS3_OVERPWM1       (1 * INV_STS3_OVERPWM1)
+#define STS3_OVERPWM2       (2 * INV_STS3_OVERPWM1)
+#define STS3_OVERPWM_RES    (3 * INV_STS3_OVERPWM1)
+
+/* Тип подавления резонанса */
+#define INV_STS3_RES_TYPE	(		\
+        INV_STS3_RES_TYPE0			\
+    |	INV_STS3_RES_TYPE1			\
+)
+
+/* Варианты конфигурации подавления резонанса */
+#define STS3_RES_ANGLE		(0 * INV_STS3_RES_TYPE0)
+#define STS3_RES_TORQUE		(1 * INV_STS3_RES_TYPE0)
+#define STS3_RES_POWER		(2 * INV_STS3_RES_TYPE0)
+#define STS3_RES_RESERVED	(3 * INV_STS3_RES_TYPE0)
+
+#define INV_STS3_MASK		(		\
+        INV_STS3_RIGHT_DIR		\
+    |	INV_STS3_OVERPWM1			\
+    |	INV_STS3_OVERPWM2			\
+    |	INV_STS3_M_TYPE				\
+    |	INV_STS3_PMM_DIS			\
+    |	INV_STS3_RES_TYPE0			\
+    |	INV_STS3_RES_TYPE1			\
+    |	INV_STS3_DT_SINGLE			\
+    |	INV_STS3_DT_CRITIC			\
+    |	INV_STS3_PW_ERR_ON			\
+    |	INV_STS3_LX_USE				\
+    |	INV_STS3_DT_SU				\
+    |	INV_STS3_ZERO_UDROP			\
+    |	INV_STS3_NORM_MV_FREF		\
+    |	INV_STS3_HARM_CALC_OFF		\
+    |	INV_STS3_RMS_POWER			\
+)
 
 /* ==========================================================================
  * Регистр ошибок инвертора IREG_INV_FAULT
@@ -235,6 +374,41 @@
 #define INV_FLT_TTEMP		(1 << 14)
 /* Перегрев реактора, старый */
 #define INV_FLT_REACT_ERR	(1 << 15)
+
+#define INV_FAULT_MASK		(\
+        INV_FLT_IMAX		\
+    |	INV_FLT_IZ			\
+    |	INV_FLT_PAR_RSLV_MON		\
+    |	INV_FLT_CTR_MON		\
+    |	INV_FLT_CLK_MON		\
+    |	INV_FLT_MB_MON		\
+    |	INV_FLT_DR0		\
+    |	INV_FLT_DR1		\
+    |	INV_FLT_DR2		\
+    |	INV_FLT_TEST		\
+    |	INV_FLT_TEMP_LINK	\
+    |	INV_FLT_TEMP		\
+    |	INV_FLT_AIR_TEMP	\
+    |	INV_FLT_ALARM_SW	\
+    |	INV_FLT_TTEMP		\
+    |	INV_FLT_REACT_ERR	\
+)
+#define FLT_NOT_STOPPED_MASK	(\
+        INV_FLT_CLK_MON		\
+    |	INV_FLT_TEST		\
+)
+    // |	INV_FLT_ALARM_SW	)
+
+#define FLT_SMOOTH_STOPPED_MASK	(\
+        INV_FLT_TEMP_LINK	\
+    |	INV_FLT_TEMP		\
+    |	INV_FLT_AIR_TEMP	\
+    |	INV_FLT_TTEMP		\
+    |	INV_FLT_REACT_ERR	\
+)
+#define FLT_INST_STOPPED_MASK	(INV_FAULT_MASK &	\
+        (~(FLT_SMOOTH_STOPPED_MASK | FLT_NOT_STOPPED_MASK)))
+
 
 /* ==========================================================================
  * Регистр расширенного статуса инвертора IREG_INV_STATUS5, сохраняемый!

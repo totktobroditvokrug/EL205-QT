@@ -102,7 +102,7 @@ private slots:
     void regDisplayTable();
     void createTableFromFile();
     void addRowTableFromFile(QString lineFromFile);
-    void checkInvertorStatus();
+
     void getFreqInv();
     QString getRegisterInv(int regNum, qint16 valueInt);
     void setRegistersCombobox();
@@ -180,6 +180,24 @@ private slots:
 
     void on_lineEdit_freqPlot_editingFinished();
 
+
+    void on_radioButton_directRotation_clicked(bool checked);
+
+    void on_radioButton_reversRotation_clicked(bool checked);
+
+    void on_radioButton_async_clicked(bool checked);
+
+    void on_radioButton_vent_clicked(bool checked);
+
+    void on_radioButton_PWM_SIN_clicked(bool checked);
+
+    void on_radioButton_PWM_OVER1_clicked(bool checked);
+
+    void on_radioButton_PWM_OVER2_clicked(bool checked);
+
+    void on_checkBox_harmonicAnalysis_clicked(bool checked);
+
+    void on_pushButton_rstFlt_clicked();
 
 private:
     Ui::MainWindow *ui;

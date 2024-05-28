@@ -275,3 +275,23 @@ qint16 changeHiLowBytes(qint16 dataIn){
     return dataOut;
 }
 
+quint16 changeHiLowBytes_uint(quint16 dataIn){
+    struct twoBytes{
+        union{          // значение регистра
+           quint16 Reg16;
+           struct {
+               quint8 LowerByte;
+               quint8 UpperByte;
+           };
+        } value;
+    };
+    twoBytes direct;
+    twoBytes reverse;
+    direct.value.Reg16 = dataIn;
+    reverse.value.LowerByte = direct.value.UpperByte;
+    reverse.value.UpperByte = direct.value.LowerByte;
+    quint16 dataOut = reverse.value.Reg16;
+    return dataOut;
+}
+
+
