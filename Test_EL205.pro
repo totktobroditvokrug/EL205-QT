@@ -22,6 +22,7 @@ SOURCES += \
     mainwindow.cpp \
     menu.cpp \
     plot/qcustomplot.cpp \
+    qpaintwidget.cpp \
     stylehelper.cpp \
     tab_all_data.cpp \
     tab_can_adapter.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     invertor.h \
     mainwindow.h \
     plot/qcustomplot.h \
+    qpaintwidget.h \
     stylehelper.h \
     tab_plot.h
 

@@ -70,7 +70,7 @@
 #endif
 
 // максимальный размер буфера осциллограммы
-const int PLOT_MAX_SIZE_ARR = 500;
+const int PLOT_MAX_SIZE_ARR = 1000;
 
 class RegnumClass : public QObject
 {

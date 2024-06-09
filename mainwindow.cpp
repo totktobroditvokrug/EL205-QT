@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     IregInvStatus_5 = NULL;
 
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 28-05-2024");
+    ui->statusbar->showMessage("ver. 06-06-2024");
 
 }
 
