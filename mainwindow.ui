@@ -36,7 +36,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>8</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="tab_adapter">
        <attribute name="title">
@@ -1632,21 +1632,21 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_20">
                <item>
-                <widget class="QRadioButton" name="radioButton">
+                <widget class="QRadioButton" name="radioButton_termosensorSingle">
                  <property name="text">
                   <string>Single</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_2">
+                <widget class="QRadioButton" name="radioButton_termosensorCritic">
                  <property name="text">
                   <string>Critic</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_3">
+                <widget class="QRadioButton" name="radioButton_termosensorAll">
                  <property name="text">
                   <string>All</string>
                  </property>
@@ -1800,7 +1800,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox">
+                <widget class="QCheckBox" name="checkBox_currSensOnFilter">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -1815,7 +1815,7 @@
                   <bool>false</bool>
                  </property>
                  <property name="text">
-                  <string>Rationing time</string>
+                  <string>Accel/decel normalize</string>
                  </property>
                 </widget>
                </item>
@@ -1830,7 +1830,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_2">
+                <widget class="QCheckBox" name="checkBox_useOutInductance">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -1840,7 +1840,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_3">
+                <widget class="QCheckBox" name="checkBox_powerIsRMS">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -1866,12 +1866,12 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_4">
+                <widget class="QCheckBox" name="checkBox_pmmOn">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
                  <property name="text">
-                  <string>PMM on</string>
+                  <string>PMM enable</string>
                  </property>
                 </widget>
                </item>

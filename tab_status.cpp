@@ -159,8 +159,7 @@ void MainWindow::checkInvStatus_3()
        currentStatus += ("Левое направление вращения; \n");
        ui->radioButton_reversRotation->setChecked(true);
     }
-//    if (invStatus & INV_STS3_OVERPWM1)  currentStatus += ("ОверШИМ тип 1; \n");
-//    if (invStatus & INV_STS3_OVERPWM2) currentStatus += ("ОверШИМ тип 2; \n");
+
     if (invStatus & INV_STS3_M_TYPE){
        currentStatus += ("Тип двигателя - вентильный; \n");
        ui->radioButton_vent->setChecked(true);
@@ -169,22 +168,61 @@ void MainWindow::checkInvStatus_3()
       currentStatus += ("Тип двигателя - асинхронный; \n");
       ui->radioButton_async->setChecked(true);
     }
-    if (invStatus & INV_STS3_PMM_DIS)  currentStatus += ("Запрет вентильного двигателя; \n");
-//    if (invStatus & INV_STS3_RES_TYPE0) currentStatus += ("ОС для подавления резонанса TYPE0; \n");
-//    if (invStatus & INV_STS3_RES_TYPE1) currentStatus += ("ОС для подавления резонанса TYPE1; \n");
-    if (invStatus & INV_STS3_DT_SINGLE) currentStatus += ("Режим контроля связи с термодатчиками - хоть один; \n");
-    else currentStatus += ("Режим контроля связи с термодатчиками - все; \n");
-    if (invStatus & INV_STS3_DT_CRITIC) currentStatus += ("Критический температурный режим; \n");
-    if (invStatus & INV_STS3_PW_ERR_ON) currentStatus += ("Включение мониторов питания; \n");
-    else currentStatus += ("Выключение мониторов питания; \n");
-    if (invStatus & INV_STS3_LX_USE) currentStatus += ("Использовать выходную индуктивность Lx; \n");
-    else currentStatus += ("Не использовать выходную индуктивность Lx; \n");
-    if (invStatus & INV_STS3_DT_SU) currentStatus += ("Датчик тока на выходе СУ (после фильтра); \n");
-    else currentStatus += ("Датчик тока на выходе инвертора (до фильтра); \n");
-    if (invStatus & INV_STS3_ZERO_UDROP) currentStatus += ("Включить разрешение сброса напряженя до нуля; \n");
-    else currentStatus += ("Выключить разрешение сброса напряженя до нуля; \n");
-    if (invStatus & INV_STS3_NORM_MV_FREF) currentStatus += ("Включен нормированный разгон - торможение; \n");
-    else currentStatus += ("Выключен нормированный разгон - торможение; \n");
+
+    if (invStatus & INV_STS3_PMM_DIS){
+        currentStatus += ("Запрет вентильного двигателя; \n");
+        ui->checkBox_pmmOn->setChecked(false);
+    }
+    else{
+       currentStatus += ("Разрешить вентильный двигатель; \n");
+       ui->checkBox_pmmOn->setChecked(true);
+    }
+
+    if (invStatus & INV_STS3_PW_ERR_ON){
+        currentStatus += ("Включение мониторов питания; \n");
+        ui->checkBox_powerMonitor->setChecked(true);
+    }
+    else{
+        currentStatus += ("Выключение мониторов питания; \n");
+        ui->checkBox_powerMonitor->setChecked(false);
+    }
+
+    if (invStatus & INV_STS3_LX_USE){
+        currentStatus += ("Использовать выходную индуктивность Lx; \n");
+        ui->checkBox_useOutInductance->setChecked(true);
+    }
+    else{
+       currentStatus += ("Не использовать выходную индуктивность Lx; \n");
+       ui->checkBox_useOutInductance->setChecked(false);
+    }
+
+    if (invStatus & INV_STS3_DT_SU){
+       currentStatus += ("Датчик тока на выходе СУ (после фильтра); \n");
+       ui->checkBox_currSensOnFilter->setChecked(true);
+    }
+    else{
+       currentStatus += ("Датчик тока на выходе инвертора (до фильтра); \n");
+       ui->checkBox_currSensOnFilter->setChecked(false);
+    }
+
+    if (invStatus & INV_STS3_ZERO_UDROP){
+        currentStatus += ("Включить разрешение сброса напряженя до нуля; \n");
+        ui->checkBox_enableZeroUdc->setChecked(true);
+    }
+    else{
+        currentStatus += ("Выключить разрешение сброса напряженя до нуля; \n");
+        ui->checkBox_enableZeroUdc->setChecked(false);
+    }
+
+    if (invStatus & INV_STS3_NORM_MV_FREF){
+        currentStatus += ("Включен нормированный разгон - торможение; \n");
+        ui->checkBox_rationingTime->setChecked(true);
+    }
+    else{
+        currentStatus += ("Выключен нормированный разгон - торможение; \n");
+        ui->checkBox_rationingTime->setChecked(false);
+    }
+
     if (invStatus & INV_STS3_HARM_CALC_OFF){
         currentStatus += ("Выключен гармонический анализ; \n");
         ui->checkBox_harmonicAnalysis->setChecked(false);
@@ -193,8 +231,15 @@ void MainWindow::checkInvStatus_3()
       currentStatus += ("Включен гармонический анализ; \n");
       ui->checkBox_harmonicAnalysis->setChecked(true);
     }
-    if (invStatus & INV_STS3_RMS_POWER) currentStatus += ("Мощность из действ. значения; \n");
-    else currentStatus += ("Мощность из анализатора; \n");
+
+    if (invStatus & INV_STS3_RMS_POWER){
+        currentStatus += ("Мощность из действ. значения; \n");
+        ui->checkBox_powerIsRMS->setChecked(true);
+    }
+    else{
+       currentStatus += ("Мощность из анализатора; \n");
+       ui->checkBox_powerIsRMS->setChecked(false);
+    }
 
     currentStatus += "------ \n"; // агрегированные состояния
 
@@ -218,18 +263,51 @@ void MainWindow::checkInvStatus_3()
     if(pwmType == STS3_OVERPWM_RES) currentStatus += ("ШИМ - тип зарезервирован ; \n");
 
     quint16 resType = invStatus & INV_STS3_RES_TYPE;
-    if(resType == STS3_RES_ANGLE) currentStatus += ("Подавление резонанса - по углу ; \n");
-    if(resType == STS3_RES_TORQUE) currentStatus += ("Подавление резонанса - по моменту ; \n");
-    if(resType == STS3_RES_POWER) currentStatus += ("Подавление резонанса - по мощности ; \n");
+    if(resType == STS3_RES_ANGLE){
+        currentStatus += ("Подавление резонанса - по углу ; \n");
+        ui->radioButton_resDempAngle->setChecked(true);
+    }
+
+    if(resType == STS3_RES_TORQUE){
+        currentStatus += ("Подавление резонанса - по моменту ; \n");
+        ui->radioButton_resDempTorque->setChecked(true);
+    }
+    if(resType == STS3_RES_POWER){
+       currentStatus += ("Подавление резонанса - по мощности ; \n");
+       ui->radioButton_resDempPower->setChecked(true);
+    }
     if(resType == STS3_RES_RESERVED) currentStatus += ("Подавление резонанса - зарезервированное ; \n");
+
+    // обработка термодатчиков
+    if (invStatus & INV_STS3_DT_SINGLE){
+        currentStatus += ("Режим контроля связи с термодатчиками - хоть один; \n");
+        ui->radioButton_termosensorSingle->setChecked(true);
+    }
+    else{
+      currentStatus += ("Режим контроля связи с термодатчиками - все; \n");
+      ui->radioButton_termosensorAll->setChecked(true);
+    }
+    if (invStatus & INV_STS3_DT_CRITIC){
+      currentStatus += ("Критический температурный режим; \n");
+      ui->radioButton_termosensorCritic->setChecked(true);
+    }
 
     ui->textEdit_status_3->setText(currentStatus);
 
     ui->groupBox_direction->setEnabled(true);
     ui->groupBox_motorType->setEnabled(true);
-    ui->groupBox_PWM_Type->setEnabled(true);
-    ui->checkBox_harmonicAnalysis->setEnabled(true);
+    ui->groupBox_PWM_Type->setEnabled(true);   
+    ui->groupBox_resonansDemping->setEnabled(true);
+    ui->groupBox_termosensMode->setEnabled(true);
 
+    ui->checkBox_powerMonitor->setEnabled(true);
+    ui->checkBox_currSensOnFilter->setEnabled(true);
+    ui->checkBox_harmonicAnalysis->setEnabled(true);
+    ui->checkBox_enableZeroUdc->setEnabled(true);
+    ui->checkBox_rationingTime->setEnabled(true);
+    ui->checkBox_useOutInductance->setEnabled(true);
+    ui->checkBox_pmmOn->setEnabled(true);
+    ui->checkBox_powerIsRMS->setEnabled(true);
 }
 
 void MainWindow::checkInvStatus_flt()
@@ -432,6 +510,81 @@ void MainWindow::on_radioButton_PWM_OVER2_clicked(bool checked)
     }
 }
 
+
+void MainWindow::on_pushButton_rstFlt_clicked()
+{
+//    ui->pushButton_rstFlt->setEnabled(false);
+
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_FLT_CLR), IREG_INV_CONTROL)), 2).toHex();
+  //  ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_radioButton_resDempAngle_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_resonansDemping->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_RES_ANGLE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_resDempTorque_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_resonansDemping->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_RES_TORQUE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_resDempPower_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_resonansDemping->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_RES_POWER), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+
+
+void MainWindow::on_radioButton_termosensorSingle_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_termosensMode->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SINGLE_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_termosensorCritic_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_termosensMode->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_CRITIC_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_termosensorAll_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_termosensMode->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_ALL_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+
+// проверка чек-боксов
+
 void MainWindow::on_checkBox_harmonicAnalysis_clicked(bool checked)
 {
     QString commandString;
@@ -447,12 +600,107 @@ void MainWindow::on_checkBox_harmonicAnalysis_clicked(bool checked)
     writeSerialPort(commandString);
 }
 
-
-void MainWindow::on_pushButton_rstFlt_clicked()
+void MainWindow::on_checkBox_powerMonitor_clicked(bool checked)
 {
-//    ui->pushButton_rstFlt->setEnabled(false);
+    QString commandString;
+    ui->checkBox_powerMonitor->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_PW_ERR_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_PW_ERR_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
 
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_FLT_CLR), IREG_INV_CONTROL)), 2).toHex();
-  //  ui->textEdit_commandCRC->append(commandString);
+void MainWindow::on_checkBox_currSensOnFilter_clicked(bool checked)
+{
+    QString commandString;
+    ui->checkBox_currSensOnFilter->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SU_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SU_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_rationingTime_clicked(bool checked)
+{
+    QString commandString;
+    ui->checkBox_rationingTime->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_NORM_MV_FREF_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_NORM_MV_FREF_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_enableZeroUdc_clicked(bool checked)
+{
+    QString commandString;
+    ui->checkBox_enableZeroUdc->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_ZERO_UDROP_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_ZERO_UDROP_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_useOutInductance_clicked(bool checked)
+{
+    QString commandString;
+    ui->checkBox_useOutInductance->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_LX_USE_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_LX_USE_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_powerIsRMS_clicked(bool checked)
+{
+    QString commandString;
+    ui->checkBox_powerIsRMS->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_RMS_POWER_ON), RegnumClass::IREG_CTRL3)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_RMS_POWER_OFF), RegnumClass::IREG_CTRL3)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_pmmOn_clicked(bool checked)
+{
+    QString commandString;
+    ui->checkBox_pmmOn->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_PMM_ON), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_PMM_OFF), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
     writeSerialPort(commandString);
 }

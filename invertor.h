@@ -77,6 +77,192 @@
 
 
 /* ==========================================================================
+ * Управляющий регистр IREG_INV_CTRL2
+ * ========================================================================== */
+/* Источник подавления резонанса - угол */
+#define INV_CTRL2_RES_ANGLE		(1 << 0)
+/* Источник подавления резонанса - момент */
+#define INV_CTRL2_RES_TORQUE		(1 << 1)
+/* Источник подавления резонанса - мощность */
+#define INV_CTRL2_RES_POWER		(1 << 2)
+
+/* Включить режим контроля температур - "1" (до последнего)
+ * Для трех групп - тиристоров, IGBT и воздуха */
+#define INV_CTRL2_DT_SINGLE_MODE	(1 << 3)
+/* Режим контроля температур  - класть хер на все (что можно)
+ * А можно пока только на ошибку термодатчика тиристоров(( */
+#define INV_CTRL2_DT_CRITIC_MODE	(1 << 4)
+/* Режим контроля температур - "0"(по всем) включить */
+#define INV_CTRL2_DT_ALL_MODE		(1 << 5)
+
+/* Включить/отключить контроль мониторов питания */
+#define INV_CTRL2_PW_ERR_ON		(1 << 6)
+#define INV_CTRL2_PW_ERR_OFF		(1 << 7)
+
+/* Датчик тока на выходе фильтра */
+#define INV_CTRL2_DT_SU_ON		(1 << 8)
+/* Датчик тока на выходе ПЧ */
+#define INV_CTRL2_DT_SU_OFF		(1 << 9)
+
+/* Включить/отключить разрешение сброса до нуля */
+#define INV_CTRL2_ZERO_UDROP_ON		(1 << 10)
+#define INV_CTRL2_ZERO_UDROP_OFF	(1 << 11)
+
+/* Включить/Отключить нормированный разгон - торможение */
+#define INV_CTRL2_NORM_MV_FREF_ON	(1 << 12)
+#define INV_CTRL2_NORM_MV_FREF_OFF	(1 << 13)
+
+/* Использовать выходную индуктивность */
+#define INV_CTRL2_LX_USE_ON		(1 << 14)
+/* Использовать  индуктивность  */
+#define INV_CTRL2_LX_USE_OFF		(1 << 15)
+
+/* маска всех бит управляющего регистра CTRL2 */
+#define INV_CTRL2_MASK		( \
+        INV_CTRL2_RES_ANGLE		\
+    |	INV_CTRL2_RES_TORQUE		\
+    |	INV_CTRL2_RES_POWER		\
+    |	INV_CTRL2_DT_SINGLE_MODE	\
+    |	INV_CTRL2_DT_CRITIC_MODE	\
+    |	INV_CTRL2_DT_ALL_MODE		\
+    |	INV_CTRL2_PW_ERR_ON		\
+    |	INV_CTRL2_PW_ERR_OFF		\
+    |	INV_CTRL2_DT_SU_ON		\
+    |	INV_CTRL2_DT_SU_OFF		\
+    |	INV_CTRL2_ZERO_UDROP_ON		\
+    |	INV_CTRL2_ZERO_UDROP_OFF	\
+    |	INV_CTRL2_NORM_MV_FREF_ON	\
+    |	INV_CTRL2_NORM_MV_FREF_OFF	\
+    |	INV_CTRL2_LX_USE_ON	\
+    |	INV_CTRL2_LX_USE_OFF	\
+)
+
+/* ==========================================================================
+ * Управляющий регистр IREG_CTRL3
+ * ========================================================================== */
+
+/* Включить/выключить измерение мощности по действующим значениям. */
+#define CTRL3_RMS_POWER_ON		(1 << 0)
+#define CTRL3_RMS_POWER_OFF		(1 << 1)
+
+/* Задать конфигурацию платы расширения */
+#define CTRL3_EXP_CONF_SET		(1 << 2)
+
+/* Младший бит установки конфигурации платы расширения */
+#define CTRL3_EXP_CONF_LST_BIT	3			/* =3 */
+
+#define CTRL3_EXP_CONF0		(1 << (CTRL3_EXP_CONF_LST_BIT + 0))
+#define CTRL3_EXP_CONF1		(1 << (CTRL3_EXP_CONF_LST_BIT + 1))
+
+/* Биты конфигурации платы расширения */
+#define CTRL3_EXP_CONF_2b	(\
+    CTRL3_EXP_CONF0 |	\
+    CTRL3_EXP_CONF1		\
+)
+
+/* Варианты конфигурации платы расширения */
+#define CTRL3_EXP_LEGACY		(0 * CTRL3_EXP_CONF0)
+#define CTRL3_EXP_485			(1 * CTRL3_EXP_CONF0)
+#define CTRL3_EXP_SPI			(2 * CTRL3_EXP_CONF0)
+#define CTRL3_EXP_OTHERS		(3 * CTRL3_EXP_CONF0)
+/* Задание конфигурации платы расширения */
+#define CTRL3_EXP_LEGACY_SET	(CTRL3_EXP_CONF_SET | CTRL3_EXP_LEGACY)
+#define CTRL3_EXP_485_SET		(CTRL3_EXP_CONF_SET | CTRL3_EXP_485)
+#define CTRL3_EXP_SPI_SET		(CTRL3_EXP_CONF_SET | CTRL3_EXP_SPI)
+#define CTRL3_EXP_OTHERS_SET	(CTRL3_EXP_CONF_SET | CTRL3_EXP_OTHERS)
+
+/*
+Устаревшие биты управления
+#define INV_CTRL3_EXP_LEGACY		(1 << 2)
+#define INV_CTRL3_EXP_485			(1 << 3)
+#define INV_CTRL3_EXP_SPI			(1 << 4)
+#define INV_CTRL3_EXP_OTHERS		(1 << 5)
+ */
+
+/* Задать конфигурацию ПЧ */
+#define CTRL3_FC_CONF_SET		(1 << 5)		/* (1 << 5) */
+
+/* Младший бит установки конфигурации ПЧ */
+#define CTRL3_FC_CONF_LST_BIT	6
+/* Установка конфигурации ПЧ */
+#define CTRL3_FC_CONF_6b			(	\
+    (1 << (CTRL3_FC_CONF_LST_BIT + 0)) | \
+    (1 << (CTRL3_FC_CONF_LST_BIT + 1)) | \
+    (1 << (CTRL3_FC_CONF_LST_BIT + 2)) | \
+    (1 << (CTRL3_FC_CONF_LST_BIT + 3)) | \
+    (1 << (CTRL3_FC_CONF_LST_BIT + 4)) | \
+    (1 << (CTRL3_FC_CONF_LST_BIT + 5)) 	 \
+)
+
+/* Задать тип ПЧ */
+#define CTRL3_FC_TYPE_SET		(1 << 12)
+
+/* Младший бит установки типа ПЧ */
+#define CTRL3_FC_TYPE_LST_BIT	13
+
+#define CTRL3_FC_TYPE0		(1 << (CTRL3_FC_TYPE_LST_BIT + 0))
+#define CTRL3_FC_TYPE1		(1 << (CTRL3_FC_TYPE_LST_BIT + 1))
+
+/* Биты типа ПЧ */
+#define CTRL3_FC_TYPE_2b	(		\
+    CTRL3_FC_TYPE0 |	\
+    CTRL3_FC_TYPE1		\
+)
+/* Варианты типа ПЧ */
+#define CTRL3_FC_SUBPUMP		(0 * CTRL3_FC_TYPE0)
+#define CTRL3_FC_TRAC			(1 * CTRL3_FC_TYPE0)
+
+#define CTRL3_FC_SUBPUMP_SET	(CTRL3_FC_TYPE_SET | CTRL3_FC_SUBPUMP)
+#define CTRL3_FC_TRAC_SET		(CTRL3_FC_TYPE_SET | CTRL3_FC_TRAC)
+
+typedef enum {
+    FC_CONF_BASE = 0,
+    FC_CONF_X1_ISING_RSING,
+    FC_CONF_X1_ISING_RDOUB,
+    FC_CONF_X1_IDOUB_RSING,
+    FC_CONF_X1_IDOUB_RDOUB,
+    FC_CONF_X1_ITRIP_RSING,
+    FC_CONF_X1_ITRIP_RDOUB,
+    FC_CONF_X1_IQUAD_RSING,
+    FC_CONF_X1_IQUAD_RDOUB,
+    FC_CONF_X2_IQUAD_RSING,
+    FC_CONF_X2_IQUAD_RDOUB,
+    FC_CONFS_COUNT
+} _fc_conf;
+
+
+#define CTRL3_FC_BASE_SET	( CTRL3_FC_CONF_SET |	\
+    (FC_CONF_BASE << CTRL3_FC_CONF_LST_BIT)	\
+)
+#define CTRL3_FC_X1_ISING_RSING_SET	( CTRL3_FC_CONF_SET |	\
+    (FC_CONF_X1_ISING_RSING << CTRL3_FC_CONF_LST_BIT)	\
+)
+#define CTRL3_FC_X1_IDOUB_RDOUB_SET	( CTRL3_FC_CONF_SET |	\
+    (FC_CONF_X1_IDOUB_RDOUB << CTRL3_FC_CONF_LST_BIT)	\
+)
+#define CTRL3_FC_X1_ITRIP_RDOUB_SET	( CTRL3_FC_CONF_SET |	\
+    (FC_CONF_X1_ITRIP_RDOUB << CTRL3_FC_CONF_LST_BIT)	\
+)
+#define CTRL3_FC_X1_IQUAD_RDOUB_SET	( CTRL3_FC_CONF_SET |	\
+    (FC_CONF_X1_IQUAD_RDOUB << CTRL3_FC_CONF_LST_BIT)	\
+)
+#define CTRL3_FC_X2_IQUAD_RDOUB_SET	( CTRL3_FC_CONF_SET |	\
+    (FC_CONF_X2_IQUAD_RDOUB << CTRL3_FC_CONF_LST_BIT)	\
+)
+
+/* маска всех бит управляющего регистра CTRL3 */
+#define CTRL3_MASK		( 		\
+        CTRL3_RMS_POWER_ON		\
+    |	CTRL3_RMS_POWER_OFF		\
+    |	CTRL3_EXP_CONF_SET		\
+    |	CTRL3_EXP_CONF_2b		\
+    |	CTRL3_FC_CONF_SET		\
+    |	CTRL3_FC_CONF_6b		\
+    |	CTRL3_FC_TYPE_SET		\
+    |	CTRL3_FC_TYPE_2b		\
+)
+
+/* ==========================================================================
  * Регистр статуса инвертора IREG_INV_STATUS
  * ========================================================================== */
 
@@ -472,5 +658,62 @@
     STS5_FC_CONF_6b	 |	\
     STS5_FC_TYPE_2b		\
 )
+
+/* ==========================================================================
+ * Внутренний управляющий регистр контоллера IREG_INV_INT_CTRL
+ * ========================================================================== */
+
+/* Включить дискретный выход EXT0 */
+#define INT_CTRL_SET_EXT_OUT0			(1 << 0)
+/* Выключить дискретный выход EXT0 */
+#define INT_CTRL_CLR_EXT_OUT0			(1 << 1)
+/* Включить дискретный выход EXT0 */
+#define INT_CTRL_SET_EXT_OUT1			(1 << 2)
+/* Выключить дискретный выход EXT0 */
+#define INT_CTRL_CLR_EXT_OUT1			(1 << 3)
+/* Включить дискретный выход EXT2 */
+#define INT_CTRL_SET_EXT_OUT2			(1 << 5)
+/* Выключить дискретный выход EXT2 */
+#define INT_CTRL_CLR_EXT_OUT2			(1 << 6)
+
+/* Установить частоту CAN 125 кБит */
+#define INT_CTRL_SET_BDRT_125			(1 << 7)
+/* Установить частоту CAN 250 кБит */
+#define INT_CTRL_SET_BDRT_250			(1 << 8)
+
+/* Произошел внешний ресет прокси */
+#define INT_CTRL_PROXY_EXT_RST			(1 << 9)
+/* Произошел ресет прокси по ошибке CAN */
+#define INT_CTRL_PROXY_CANERR_RST		(1 << 10)
+/* Произошел авторесет прокси по потере связи */
+#define INT_CTRL_PROXY_LINK_RST			(1 << 11)
+/* Сброс битов ошибок флеш */
+#define INT_CTRL_FLSH_ERR_CLR			(1 << 12)
+/* Записать всю флеш */
+#define INT_CTRL_FLSH_WR_ALL			(1 << 13)
+/* Разрешить ВД */
+#define INT_CTRL_PMM_ON					(1 << 14)
+/* Запретить ВД */
+#define INT_CTRL_PMM_OFF				(1 << 15)
+
+/* маска всех битов внутр. управляющего регистра */
+#define INT_CTRL_MASK		(	\
+        INT_CTRL_SET_EXT_OUT0				\
+    |	INT_CTRL_CLR_EXT_OUT0				\
+    |	INT_CTRL_SET_EXT_OUT1				\
+    |	INT_CTRL_CLR_EXT_OUT1				\
+    |	INT_CTRL_SET_EXT_OUT2				\
+    |	INT_CTRL_CLR_EXT_OUT2				\
+    |	INT_CTRL_SET_BDRT_125			\
+    |	INT_CTRL_PROXY_CANERR_RST	\
+    |	INT_CTRL_PROXY_EXT_RST		\
+    |	INT_CTRL_SET_BDRT_250		\
+    |	INT_CTRL_PROXY_LINK_RST		\
+    |	INT_CTRL_FLSH_ERR_CLR		\
+    |	INT_CTRL_FLSH_WR_ALL			\
+    |	INT_CTRL_PMM_ON				\
+    |	INT_CTRL_PMM_OFF				\
+)
+
 
 #endif // INVERTOR_H

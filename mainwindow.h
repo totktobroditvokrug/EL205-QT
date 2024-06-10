@@ -199,6 +199,33 @@ private slots:
 
     void on_pushButton_rstFlt_clicked();
 
+    void on_radioButton_resDempAngle_clicked(bool checked);
+
+    void on_radioButton_resDempTorque_clicked(bool checked);
+
+    void on_radioButton_resDempPower_clicked(bool checked);
+
+
+    void on_radioButton_termosensorSingle_clicked(bool checked);
+
+    void on_radioButton_termosensorCritic_clicked(bool checked);
+
+    void on_radioButton_termosensorAll_clicked(bool checked);
+
+    void on_checkBox_powerMonitor_clicked(bool checked);
+
+    void on_checkBox_currSensOnFilter_clicked(bool checked);
+
+    void on_checkBox_rationingTime_clicked(bool checked);
+
+    void on_checkBox_enableZeroUdc_clicked(bool checked);
+
+    void on_checkBox_useOutInductance_clicked(bool checked);
+
+    void on_checkBox_powerIsRMS_clicked(bool checked);
+
+    void on_checkBox_pmmOn_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
 
