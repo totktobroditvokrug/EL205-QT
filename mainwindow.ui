@@ -1267,9 +1267,9 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_status">
+      <widget class="QWidget" name="tab_settings">
        <attribute name="title">
-        <string>Status</string>
+        <string>Settings</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_20">
         <item row="0" column="0">

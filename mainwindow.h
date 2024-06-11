@@ -243,6 +243,12 @@ private slots:
 
     void on_checkBox_allowCAN_freqChanges_clicked(bool checked);
 
+    void on_checkBox_extOut_0_clicked(bool checked);
+
+    void on_checkBox_extOut_1_clicked(bool checked);
+
+    void on_checkBox_extOut_2_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
 

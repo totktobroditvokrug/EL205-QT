@@ -204,8 +204,9 @@ void MainWindow::regDisplayTable()
 
              //   если это регистры статуса, выдаем в scaledValue двоичными тетрадами
                 if(regNumList[regNum].contains("STATUS", Qt::CaseSensitive)){
-                     scaledValue = QString::number(valueInt, 2).rightJustified(16, '0');
+                     scaledValue = QString::number(quint16(valueInt), 2).rightJustified(16, '0');
                      scaledValue.insert(4, " ").insert(9, " ").insert(14, " ");
+                     value = QString::number(quint16(valueInt), 10);
                 }
 
 

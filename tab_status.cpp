@@ -32,6 +32,10 @@ void MainWindow::initStatus()
     ui->textEdit_status_3->setReadOnly(true);
     ui->textEdit_status_flt->setReadOnly(true);
     ui->textEdit_status_5->setReadOnly(true);
+
+    ui->checkBox_extOut_0->setEnabled(true);
+    ui->checkBox_extOut_1->setEnabled(true);
+    ui->checkBox_extOut_2->setEnabled(true);
 }
 
 //---------- проверка статуса работы инвертора
@@ -867,4 +871,50 @@ void MainWindow::on_checkBox_allowCAN_freqChanges_clicked(bool checked)
 {
     if(checked) QMessageBox::warning(this, "Внимание","Изменение скорости CAN шины. Возможен конфлик скоростей и потеря связи.");
     else ui->comboBox_canFreqInv->setEnabled(false);
+}
+
+//
+void MainWindow::on_checkBox_extOut_0_clicked(bool checked)
+{
+    QString commandString;
+  //  ui->checkBox_pmmOn->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT0), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT0), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_extOut_1_clicked(bool checked)
+{
+    QString commandString;
+  //  ui->checkBox_pmmOn->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT1), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT1), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_extOut_2_clicked(bool checked)
+{
+    QString commandString;
+  //  ui->checkBox_pmmOn->setEnabled(false);
+    if(checked){
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT2), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+      //  ui->textEdit_commandCRC->append(commandString);
+    }
+    else{
+        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT2), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+     //   ui->textEdit_commandCRC->append(commandString);
+    }
+    writeSerialPort(commandString);
 }
