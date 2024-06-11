@@ -1683,14 +1683,14 @@
                 <number>5</number>
                </property>
                <item>
-                <widget class="QRadioButton" name="radioButton_27">
+                <widget class="QRadioButton" name="radioButton_trac">
                  <property name="text">
                   <string>Trac</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_26">
+                <widget class="QRadioButton" name="radioButton_subpump">
                  <property name="text">
                   <string>Subpump</string>
                  </property>
@@ -1712,7 +1712,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>350</width>
+                <width>355</width>
                 <height>50</height>
                </size>
               </property>
@@ -1722,58 +1722,42 @@
               <property name="alignment">
                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
               </property>
-              <widget class="QRadioButton" name="radioButton_expSPI">
-               <property name="geometry">
-                <rect>
-                 <x>12</x>
-                 <y>23</y>
-                 <width>46</width>
-                 <height>20</height>
-                </rect>
+              <layout class="QHBoxLayout" name="horizontalLayout_19">
+               <property name="topMargin">
+                <number>5</number>
                </property>
-               <property name="text">
-                <string>SPI</string>
+               <property name="bottomMargin">
+                <number>5</number>
                </property>
-              </widget>
-              <widget class="QRadioButton" name="radioButton_expOthers">
-               <property name="geometry">
-                <rect>
-                 <x>96</x>
-                 <y>23</y>
-                 <width>65</width>
-                 <height>20</height>
-                </rect>
-               </property>
-               <property name="text">
-                <string>Others</string>
-               </property>
-              </widget>
-              <widget class="QRadioButton" name="radioButton_exp485">
-               <property name="geometry">
-                <rect>
-                 <x>179</x>
-                 <y>23</y>
-                 <width>48</width>
-                 <height>20</height>
-                </rect>
-               </property>
-               <property name="text">
-                <string>485</string>
-               </property>
-              </widget>
-              <widget class="QRadioButton" name="radioButton_expLegacy">
-               <property name="geometry">
-                <rect>
-                 <x>263</x>
-                 <y>23</y>
-                 <width>66</width>
-                 <height>20</height>
-                </rect>
-               </property>
-               <property name="text">
-                <string>Legacy</string>
-               </property>
-              </widget>
+               <item>
+                <widget class="QRadioButton" name="radioButton_expLegacy">
+                 <property name="text">
+                  <string>Legacy</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_exp485">
+                 <property name="text">
+                  <string>485</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_expSPI">
+                 <property name="text">
+                  <string>SPI</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_expOthers">
+                 <property name="text">
+                  <string>Others</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
@@ -1896,15 +1880,22 @@
               <property name="bottomMargin">
                <number>4</number>
               </property>
-              <item row="1" column="0">
+              <item row="2" column="0">
                <widget class="QLabel" name="label_10">
                 <property name="text">
                  <string>CAN freq</string>
                 </property>
                </widget>
               </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="comboBox_canFreqInv"/>
+              </item>
               <item row="1" column="1">
-               <widget class="QComboBox" name="comboBox"/>
+               <widget class="QCheckBox" name="checkBox_allowCAN_freqChanges">
+                <property name="text">
+                 <string>Allow CAN freq changes</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>

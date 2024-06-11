@@ -4,6 +4,36 @@
 #include "iface.h"
 #include "stylehelper.h"
 
+
+//---------- проверка статуса работы инвертора
+void MainWindow::initStatus()
+{
+    IregInvStatus = NULL;
+    IregInvStatus_2 = NULL;
+    IregInvStatus_3 = NULL;
+    IregInvStatus_flt = NULL;
+    IregInvStatus_5 = NULL;
+
+    ui->checkBox_allowCAN_freqChanges->setChecked(false);
+
+    QStringList canFreqList;
+    canFreqList << "125" << "250";
+    ui->comboBox_canFreqInv->addItems(canFreqList);
+    ui->comboBox_canFreqInv->setEnabled(false);
+
+    ui->lineEdit_status->setReadOnly(true);
+    ui->lineEdit_status_2->setReadOnly(true);
+    ui->lineEdit_status_3->setReadOnly(true);
+    ui->lineEdit_status_flt->setReadOnly(true);
+    ui->lineEdit_status_5->setReadOnly(true);
+
+    ui->textEdit_status->setReadOnly(true);
+    ui->textEdit_status_2->setReadOnly(true);
+    ui->textEdit_status_3->setReadOnly(true);
+    ui->textEdit_status_flt->setReadOnly(true);
+    ui->textEdit_status_5->setReadOnly(true);
+}
+
 //---------- проверка статуса работы инвертора
 void MainWindow::checkStatus()
 {
@@ -18,16 +48,13 @@ void MainWindow::checkStatus()
 void MainWindow::checkInvStatus()
 {
     if(!regDataArray[RegnumClass::IREG_INV_STATUS].flagNewData) return;
+    regDataArray[RegnumClass::IREG_INV_STATUS].flagNewData = false;
  //   if(ui->tabWidget_registerWidget->currentIndex() != 6) return; // если виджет неактивен, статусы не анализируем
 
     QString currentStatus = "--> ";
     QString valueStatus = "-";
 
-    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS].value.Reg16;
-    if (IregInvStatus != NULL){
-        if(IregInvStatus == invStatus) return;
-    }
-    IregInvStatus = invStatus;
+    quint16 invStatus = quint16(regDataArray[RegnumClass::IREG_INV_STATUS].value.Reg16);
 
     valueStatus = QString::number(invStatus, 2).rightJustified(16, '0');
     valueStatus.insert(4, " ").insert(9, " ").insert(14, " ");
@@ -94,6 +121,11 @@ void MainWindow::checkInvStatus()
     if (invStatus & INV_STS_EXT_STP_BITS) currentStatus += ("Внешняя остановка; \n");
     if (invStatus & INV_STS_ERR_BITS) currentStatus += ("Остановлена запись архива; \n");
 
+    if (IregInvStatus != NULL){
+        if(IregInvStatus == invStatus) return;
+    }
+    IregInvStatus = invStatus;
+
     ui->textEdit_status->setText(currentStatus);
     ui->textEdit_invertorStatus->setText(currentStatus); // панель в регистрах
 }
@@ -101,14 +133,12 @@ void MainWindow::checkInvStatus()
 void MainWindow::checkInvStatus_2()
 {
     if(!regDataArray[RegnumClass::IREG_INV_STATUS2].flagNewData) return;
+    regDataArray[RegnumClass::IREG_INV_STATUS2].flagNewData = false;
+
     QString currentStatus = "--> ";
     QString valueStatus = "-";
 
-    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS2].value.Reg16;
-    if (IregInvStatus_2 != NULL){
-        if(IregInvStatus_2 == invStatus) return;
-    }
-    IregInvStatus_2 = invStatus;
+    quint16 invStatus = quint16(regDataArray[RegnumClass::IREG_INV_STATUS2].value.Reg16);
 
     valueStatus = QString::number(invStatus, 2).rightJustified(16, '0');
     valueStatus.insert(4, " ").insert(9, " ").insert(14, " ");
@@ -131,21 +161,23 @@ void MainWindow::checkInvStatus_2()
     if (invStatus & INV_STS2_I_LIM_ERR) currentStatus += ("Защита ПЧ по токоограничению; \n");
     if (invStatus & INV_STS2_FLSH_VAL_ERR) currentStatus += ("Ошибка диапазона уставок флеш; \n");
 
+    if (IregInvStatus_2 != NULL){
+        if(IregInvStatus_2 == invStatus) return;
+    }
+    IregInvStatus_2 = invStatus;
+
     ui->textEdit_status_2->setText(currentStatus);
 }
 
 void MainWindow::checkInvStatus_3()
 {
     if(!regDataArray[RegnumClass::IREG_INV_STATUS3].flagNewData) return;
+    regDataArray[RegnumClass::IREG_INV_STATUS3].flagNewData = false;
 
     QString currentStatus = "--> ";
     QString valueStatus = "-";
 
-    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS3].value.Reg16;
-    if (IregInvStatus_3 != NULL){
-        if(IregInvStatus_3 == invStatus) return;
-    }
-    IregInvStatus_3 = invStatus;
+    quint16 invStatus = quint16(regDataArray[RegnumClass::IREG_INV_STATUS3].value.Reg16);
 
     valueStatus = QString::number(invStatus, 2).rightJustified(16, '0');
     valueStatus.insert(4, " ").insert(9, " ").insert(14, " ");
@@ -292,8 +324,6 @@ void MainWindow::checkInvStatus_3()
       ui->radioButton_termosensorCritic->setChecked(true);
     }
 
-    ui->textEdit_status_3->setText(currentStatus);
-
     ui->groupBox_direction->setEnabled(true);
     ui->groupBox_motorType->setEnabled(true);
     ui->groupBox_PWM_Type->setEnabled(true);   
@@ -308,19 +338,24 @@ void MainWindow::checkInvStatus_3()
     ui->checkBox_useOutInductance->setEnabled(true);
     ui->checkBox_pmmOn->setEnabled(true);
     ui->checkBox_powerIsRMS->setEnabled(true);
+
+    if (IregInvStatus_3 != NULL){
+        if(IregInvStatus_3 == invStatus) return;
+    }
+    IregInvStatus_3 = invStatus;
+
+    ui->textEdit_status_3->setText(currentStatus);
 }
 
 void MainWindow::checkInvStatus_flt()
 {
     if(!regDataArray[RegnumClass::IREG_INV_FAULT].flagNewData) return;
+    regDataArray[RegnumClass::IREG_INV_FAULT].flagNewData = false;
+
     QString currentStatus = "--> ";
     QString valueStatus = "-";
 
-    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_FAULT].value.Reg16;
-    if (IregInvStatus_flt != NULL){
-        if(IregInvStatus_flt == invStatus) return;
-    }
-    IregInvStatus_flt = invStatus;
+    quint16 invStatus = quint16(regDataArray[RegnumClass::IREG_INV_FAULT].value.Reg16);
 
     valueStatus = QString::number(invStatus, 2).rightJustified(16, '0');
     valueStatus.insert(4, " ").insert(9, " ").insert(14, " ");
@@ -353,6 +388,10 @@ void MainWindow::checkInvStatus_flt()
     else ui->pushButton_rstFlt->setStyleSheet("color: green");
 
  //   ui->pushButton_rstFlt->setEnabled(true);
+    if (IregInvStatus_flt != NULL){
+        if(IregInvStatus_flt == invStatus) return;
+    }
+    IregInvStatus_flt = invStatus;
 
     ui->textEdit_status_flt->setText(currentStatus);
 }
@@ -360,37 +399,85 @@ void MainWindow::checkInvStatus_flt()
 void MainWindow::checkInvStatus_5()
 {
     if(!regDataArray[RegnumClass::IREG_INV_STATUS5].flagNewData) return;
+    regDataArray[RegnumClass::IREG_INV_STATUS5].flagNewData = false;
 
     QString currentStatus = "--> ";
     QString valueStatus = "-";
 
-    qint16 invStatus = regDataArray[RegnumClass::IREG_INV_STATUS5].value.Reg16;
-    if (IregInvStatus_5 != NULL){
-        if(IregInvStatus_5 == invStatus) return;
-    }
-    IregInvStatus_5 = invStatus;
+    quint16 invStatus = quint16(regDataArray[RegnumClass::IREG_INV_STATUS5].value.Reg16);
 
     valueStatus = QString::number(invStatus, 2).rightJustified(16, '0');
     valueStatus.insert(4, " ").insert(9, " ").insert(14, " ");
     ui->lineEdit_status_5->setText(valueStatus);
 
-    if (invStatus & STS5_EXP_LEGACY) currentStatus += ("Конфигурация платы расширения - LEGACY; \n");
-    if (invStatus & STS5_EXP_485) currentStatus += ("Конфигурация платы расширения - 485; \n");
-    if (invStatus & STS5_EXP_SPI) currentStatus += ("Конфигурация платы расширения - SPI; \n");
-    if (invStatus & STS5_EXP_OTHERS) currentStatus += ("Конфигурация платы расширения - OTHERS; \n");
+    int expType = (invStatus & STS5_EXP_CONF_2b);  // маска на два бита типа платы расширения
+    if (expType == STS5_EXP_LEGACY){
+      currentStatus += ("Конфигурация платы расширения - LEGACY; \n");
+      ui->radioButton_expLegacy->setChecked(true);
+    }
+    else ui->radioButton_expLegacy->setChecked(false);
+
+    if (expType == STS5_EXP_485){
+       currentStatus += ("Конфигурация платы расширения - 485; \n");
+       ui->radioButton_exp485->setChecked(true);
+    }
+    else ui->radioButton_exp485->setChecked(false);
+
+    if (expType == STS5_EXP_SPI){
+       currentStatus += ("Конфигурация платы расширения - SPI; \n");
+       ui->radioButton_expSPI->setChecked(true);
+    }
+    else ui->radioButton_expSPI->setChecked(false);
+
+    if (expType == STS5_EXP_OTHERS){
+        currentStatus += ("Конфигурация платы расширения - OTHERS; \n");
+        ui->radioButton_expOthers->setChecked(true);
+    }
+    else ui->radioButton_expOthers->setChecked(false);
+
     if (invStatus & STS5_FC_CONF0)  currentStatus += ("Бит конфигурации ПЧ - CONF0; \n");
     if (invStatus & STS5_FC_CONF1)  currentStatus += ("Бит конфигурации ПЧ - CONF1; \n");
     if (invStatus & STS5_FC_CONF2)  currentStatus += ("Бит конфигурации ПЧ - CONF2; \n");
     if (invStatus & STS5_FC_CONF3)  currentStatus += ("Бит конфигурации ПЧ - CONF3; \n");
     if (invStatus & STS5_FC_CONF4)  currentStatus += ("Бит конфигурации ПЧ - CONF4; \n");
     if (invStatus & STS5_FC_CONF5)  currentStatus += ("Бит конфигурации ПЧ - CONF5; \n");
-    if (invStatus & STS5_FC_SUBPUMP) currentStatus += ("Тип ПЧ - SUBPUMP; \n");
-    if (invStatus & STS5_FC_TRAC) currentStatus += ("Тип ПЧ - TRAC; \n");
-    if (invStatus & STS5_CAN_BDRT_250) currentStatus += ("Частота CAN шины - 250; \n");
-    else currentStatus += ("Частота CAN шины - 125; \n");
-    if (invStatus & STS5_EXP_CONF_2b)  currentStatus += ("Маска регистра STS5 - EXP_CONF_2b; \n");
-    if (invStatus & STS5_FC_CONF_6b) currentStatus += ("Маска регистра STS5 - FC_CONF_6b); \n");
-    if (invStatus & STS5_FC_TYPE_2b) currentStatus += ("Маска регистра STS5 - FC_TYPE_2b; \n");
+
+    int invType = (invStatus & STS5_FC_TYPE_2b);  // маска на два бита типа платы расширения
+
+    if (invType == STS5_FC_SUBPUMP){
+       currentStatus += ("Тип ПЧ - SUBPUMP; \n");
+       ui->radioButton_subpump->setChecked(true);
+    }
+    else ui->radioButton_subpump->setChecked(false);
+
+    if (invType == STS5_FC_TRAC){
+       currentStatus += ("Тип ПЧ - TRAC; \n");
+       ui->radioButton_trac->setChecked(true);
+    }
+    else ui->radioButton_trac->setChecked(false);
+
+    if (invStatus & STS5_CAN_BDRT_250){
+        ui->comboBox_canFreqInv->setCurrentIndex(1);
+        currentStatus += ("Частота CAN шины - 250; \n");
+    }
+    else{
+        currentStatus += ("Частота CAN шины - 125; \n");
+        ui->comboBox_canFreqInv->setCurrentIndex(0);
+    }
+
+//    if (invStatus & STS5_EXP_CONF_2b)  currentStatus += ("Маска регистра STS5 - EXP_CONF_2b; \n");
+//    if (invStatus & STS5_FC_CONF_6b) currentStatus += ("Маска регистра STS5 - FC_CONF_6b); \n");
+//    if (invStatus & STS5_FC_TYPE_2b) currentStatus += ("Маска регистра STS5 - FC_TYPE_2b; \n");
+
+    if(ui->checkBox_allowCAN_freqChanges->isChecked())  ui->comboBox_canFreqInv->setEnabled(true);
+
+    ui->groupBox_expBoard->setEnabled(true);
+    ui->groupBox_convType->setEnabled(true);
+
+    if (IregInvStatus_5 != NULL){
+        if(IregInvStatus_5 == invStatus) return;
+    }
+    IregInvStatus_5 = invStatus;
 
     ui->textEdit_status_5->setText(currentStatus);
 }
@@ -438,7 +525,6 @@ void MainWindow::on_pushButton_alarmInv_clicked()
     writeSerialPort(commandString);
 }
 
-
 void MainWindow::on_radioButton_directRotation_clicked(bool checked)
 {
     if(checked){
@@ -448,7 +534,6 @@ void MainWindow::on_radioButton_directRotation_clicked(bool checked)
         writeSerialPort(commandString);
     }
 }
-
 
 void MainWindow::on_radioButton_reversRotation_clicked(bool checked)
 {
@@ -510,7 +595,6 @@ void MainWindow::on_radioButton_PWM_OVER2_clicked(bool checked)
     }
 }
 
-
 void MainWindow::on_pushButton_rstFlt_clicked()
 {
 //    ui->pushButton_rstFlt->setEnabled(false);
@@ -549,8 +633,6 @@ void MainWindow::on_radioButton_resDempPower_clicked(bool checked)
         writeSerialPort(commandString);
     }
 }
-
-
 
 void MainWindow::on_radioButton_termosensorSingle_clicked(bool checked)
 {
@@ -703,4 +785,86 @@ void MainWindow::on_checkBox_pmmOn_clicked(bool checked)
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
+}
+
+
+
+void MainWindow::on_radioButton_expLegacy_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_expBoard->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_LEGACY_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_exp485_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_expBoard->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_485_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_expSPI_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_expBoard->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_SPI_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_expOthers_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_expBoard->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_OTHERS_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_trac_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_convType->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_FC_TRAC_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_subpump_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_convType->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_FC_SUBPUMP_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_comboBox_canFreqInv_currentIndexChanged(int index)
+{
+    ui->comboBox_canFreqInv->setEnabled(false);
+    quint16 commandCanFreqInv;
+    switch (index) {
+    case 0: commandCanFreqInv = INT_CTRL_SET_BDRT_125; break;
+    case 1: commandCanFreqInv = INT_CTRL_SET_BDRT_250; break;
+    default: commandCanFreqInv = INT_CTRL_SET_BDRT_250; break;
+    }
+    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(commandCanFreqInv), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+//     ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_allowCAN_freqChanges_clicked(bool checked)
+{
+    if(checked) QMessageBox::warning(this, "Внимание","Изменение скорости CAN шины. Возможен конфлик скоростей и потеря связи.");
+    else ui->comboBox_canFreqInv->setEnabled(false);
 }

@@ -62,11 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     // работа со статусом инвертора
-    IregInvStatus = NULL;
-    IregInvStatus_2 = NULL;
-    IregInvStatus_3 = NULL;
-    IregInvStatus_flt = NULL;
-    IregInvStatus_5 = NULL;
+    initStatus();
 
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
     ui->statusbar->showMessage("ver. 06-06-2024");
@@ -78,4 +74,3 @@ MainWindow::~MainWindow()
     serial->close(); // освободить порт при закрытии программы
     delete ui;
 }
-

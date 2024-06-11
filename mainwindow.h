@@ -171,6 +171,7 @@ private slots:
     void on_lineEdit_scalePlot_editingFinished();
 
     // работа со статусами инвертора
+    void initStatus();
     void checkStatus();
     void checkInvStatus();
     void checkInvStatus_2();
@@ -226,6 +227,22 @@ private slots:
 
     void on_checkBox_pmmOn_clicked(bool checked);
 
+    void on_radioButton_expLegacy_clicked(bool checked);
+
+    void on_radioButton_exp485_clicked(bool checked);
+
+    void on_radioButton_expSPI_clicked(bool checked);
+
+    void on_radioButton_expOthers_clicked(bool checked);
+
+    void on_radioButton_trac_clicked(bool checked);
+
+    void on_radioButton_subpump_clicked(bool checked);
+
+    void on_comboBox_canFreqInv_currentIndexChanged(int index);
+
+    void on_checkBox_allowCAN_freqChanges_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
 
@@ -257,10 +274,10 @@ private:
     QStringList testListRegister;
 
     // статусы инвертора
-    qint16 IregInvStatus;
-    qint16 IregInvStatus_2;
-    qint16 IregInvStatus_3;
-    qint16 IregInvStatus_flt;
-    qint16 IregInvStatus_5;
+    quint16 IregInvStatus;
+    quint16 IregInvStatus_2;
+    quint16 IregInvStatus_3;
+    quint16 IregInvStatus_flt;
+    quint16 IregInvStatus_5;
 };
 #endif // MAINWINDOW_H
