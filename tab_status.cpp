@@ -15,6 +15,7 @@ void MainWindow::initStatus()
     IregInvStatus_5 = NULL;
 
     ui->checkBox_allowCAN_freqChanges->setChecked(false);
+    ui->checkBox_allowCAN_freqChanges->setStyleSheet("color: red");
 
     QStringList canFreqList;
     canFreqList << "125" << "250";
@@ -164,6 +165,15 @@ void MainWindow::checkInvStatus_2()
     if (invStatus & INV_STS2_M_I2T_ERR) currentStatus += ("Быстрая токовая защита двигателя; \n");
     if (invStatus & INV_STS2_I_LIM_ERR) currentStatus += ("Защита ПЧ по токоограничению; \n");
     if (invStatus & INV_STS2_FLSH_VAL_ERR) currentStatus += ("Ошибка диапазона уставок флеш; \n");
+
+    currentStatus += "------ \n"; // агрегированные состояния
+
+    int fltFlsh = (invStatus & INV_STS2_FLSH_ERR_BITS); // маска на разрешенные фаулты
+    if(fltFlsh != 0){
+         currentStatus += ("Ошибка микросхемы флеш; \n");
+         ui->pushButton_flashErrClr->setStyleSheet("color: red");
+    }
+    else ui->pushButton_flashErrClr->setStyleSheet("color: green");
 
     if (IregInvStatus_2 != NULL){
         if(IregInvStatus_2 == invStatus) return;
@@ -439,15 +449,64 @@ void MainWindow::checkInvStatus_5()
     }
     else ui->radioButton_expOthers->setChecked(false);
 
-    if (invStatus & STS5_FC_CONF0)  currentStatus += ("Бит конфигурации ПЧ - CONF0; \n");
-    if (invStatus & STS5_FC_CONF1)  currentStatus += ("Бит конфигурации ПЧ - CONF1; \n");
-    if (invStatus & STS5_FC_CONF2)  currentStatus += ("Бит конфигурации ПЧ - CONF2; \n");
-    if (invStatus & STS5_FC_CONF3)  currentStatus += ("Бит конфигурации ПЧ - CONF3; \n");
-    if (invStatus & STS5_FC_CONF4)  currentStatus += ("Бит конфигурации ПЧ - CONF4; \n");
-    if (invStatus & STS5_FC_CONF5)  currentStatus += ("Бит конфигурации ПЧ - CONF5; \n");
+    int convType = ((invStatus & STS5_FC_CONF_6b) >> STS5_FC_CONF_LST_BIT);  // маска на 6 бит конструкции ЧРП
+    if (convType == FC_CONF_BASE){
+       currentStatus += ("Конфигурация ПЧ - BASE; \n");
+       ui->radioButton_baseConverter->setChecked(true);
+    }
+    else ui->radioButton_baseConverter->setChecked(true);
+    if (convType == FC_CONF_X1_ISING_RSING){
+        currentStatus += ("Конфигурация ПЧ - X1_ISING_RSING; \n");
+        ui->radioButton_ISING_RSING->setChecked(true);
+    }
+    else ui->radioButton_ISING_RSING->setChecked(false);
+    if (convType == FC_CONF_X1_ISING_RDOUB){
+       currentStatus += ("Конфигурация ПЧ - X1_ISING_RDOUB; \n");
+       ui->radioButton_ISING_RDOUB->setChecked(true);
+    }
+    else ui->radioButton_ISING_RDOUB->setChecked(false);
+    if (convType == FC_CONF_X1_IDOUB_RSING){
+        currentStatus += ("Конфигурация ПЧ - X1_IDOUB_RSING; \n");
+        ui->radioButton_IDOUB_RSING->setChecked(true);
+    }
+    else ui->radioButton_IDOUB_RSING->setChecked(false);
+    if (convType == FC_CONF_X1_IDOUB_RDOUB){
+        currentStatus += ("Конфигурация ПЧ - X1_IDOUB_RDOUB; \n");
+        ui->radioButton_IDOUB_RDOUB->setChecked(true);
+    }
+    else ui->radioButton_IDOUB_RDOUB->setChecked(false);
+    if (convType == FC_CONF_X1_ITRIP_RSING){
+        currentStatus += ("Конфигурация ПЧ - X1_ITRIP_RSING; \n");
+        ui->radioButton_ITRIP_RSING->setChecked(true);
+    }
+    else ui->radioButton_ITRIP_RSING->setChecked(false);
+    if (convType == FC_CONF_X1_ITRIP_RDOUB){
+        currentStatus += ("Конфигурация ПЧ - X1_ITRIP_RDOUB; \n");
+        ui->radioButton_ITRIP_RDOUB->setChecked(true);
+    }
+    else ui->radioButton_ITRIP_RDOUB->setChecked(false);
+    if (convType == FC_CONF_X1_IQUAD_RSING){
+         currentStatus += ("Конфигурация ПЧ - X1_IQUAD_RSING; \n");
+         ui->radioButton_IQUAD_RSING->setChecked(true);
+    }
+    else ui->radioButton_IQUAD_RSING->setChecked(false);
+    if (convType == FC_CONF_X1_IQUAD_RDOUB){
+        currentStatus += ("Конфигурация ПЧ - X1_IQUAD_RDOUB; \n");
+        ui->radioButton_IQUAD_RDOUB->setChecked(true);
+    }
+    else ui->radioButton_IQUAD_RDOUB->setChecked(false);
+    if (convType == FC_CONF_X2_IQUAD_RSING){
+        currentStatus += ("Конфигурация ПЧ - X2_IQUAD_RSING; \n");
+        ui->radioButton_IQUAD_RSING_2->setChecked(true);
+    }
+    else ui->radioButton_IQUAD_RSING_2->setChecked(false);
+    if (convType == FC_CONF_X2_IQUAD_RDOUB){
+        currentStatus += ("Конфигурация ПЧ - X2_IQUAD_RDOUB; \n");
+        ui->radioButton_IQUAD_RDOUB_2->setChecked(true);
+    }
+    else ui->radioButton_IQUAD_RDOUB_2->setChecked(false);
 
-    int invType = (invStatus & STS5_FC_TYPE_2b);  // маска на два бита типа платы расширения
-
+    int invType = (invStatus & STS5_FC_TYPE_2b);  // маска на два бита типа работы инвертора
     if (invType == STS5_FC_SUBPUMP){
        currentStatus += ("Тип ПЧ - SUBPUMP; \n");
        ui->radioButton_subpump->setChecked(true);
@@ -469,14 +528,12 @@ void MainWindow::checkInvStatus_5()
         ui->comboBox_canFreqInv->setCurrentIndex(0);
     }
 
-//    if (invStatus & STS5_EXP_CONF_2b)  currentStatus += ("Маска регистра STS5 - EXP_CONF_2b; \n");
-//    if (invStatus & STS5_FC_CONF_6b) currentStatus += ("Маска регистра STS5 - FC_CONF_6b); \n");
-//    if (invStatus & STS5_FC_TYPE_2b) currentStatus += ("Маска регистра STS5 - FC_TYPE_2b; \n");
-
+    // при запрете на изменение скорсти CAN не даем активность комбобоксу скоростей
     if(ui->checkBox_allowCAN_freqChanges->isChecked())  ui->comboBox_canFreqInv->setEnabled(true);
 
     ui->groupBox_expBoard->setEnabled(true);
     ui->groupBox_convType->setEnabled(true);
+    ui->groupBox_converterDesign->setEnabled(true);
 
     if (IregInvStatus_5 != NULL){
         if(IregInvStatus_5 == invStatus) return;
@@ -489,42 +546,48 @@ void MainWindow::checkInvStatus_5()
 
 void MainWindow::on_pushButton_startInv_panel_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_START), IREG_INV_CONTROL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INV_CTRL_START), IREG_INV_CONTROL)), 2).toHex();
   //  ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
 
 void MainWindow::on_pushButton_stopInv_panel_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_STOP), IREG_INV_CONTROL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INV_CTRL_STOP), IREG_INV_CONTROL)), 2).toHex();
 //    ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
 
 void MainWindow::on_pushButton_alarmInv_panel_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_ALARM), IREG_INV_CONTROL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INV_CTRL_ALARM), IREG_INV_CONTROL)), 2).toHex();
 //    ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
 
 void MainWindow::on_pushButton_startInv_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_START), IREG_INV_CONTROL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INV_CTRL_START), IREG_INV_CONTROL)), 2).toHex();
  //   ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
 
 void MainWindow::on_pushButton_stopInv_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_STOP), IREG_INV_CONTROL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INV_CTRL_STOP), IREG_INV_CONTROL)), 2).toHex();
 //    ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
 
 void MainWindow::on_pushButton_alarmInv_clicked()
 {
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_ALARM), IREG_INV_CONTROL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INV_CTRL_ALARM), IREG_INV_CONTROL)), 2).toHex();
  //   ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
@@ -533,7 +596,8 @@ void MainWindow::on_radioButton_directRotation_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_direction->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_RIGHT_DIRECTION), IREG_INV_CONTROL)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL_RIGHT_DIRECTION), IREG_INV_CONTROL)), 2).toHex();
     //    ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -543,7 +607,8 @@ void MainWindow::on_radioButton_reversRotation_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_direction->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_LEFT_DIRECTION), IREG_INV_CONTROL)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL_LEFT_DIRECTION), IREG_INV_CONTROL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -553,7 +618,8 @@ void MainWindow::on_radioButton_async_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_motorType->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_ASYN_MOTOR), IREG_INV_CONTROL)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL_ASYN_MOTOR), IREG_INV_CONTROL)), 2).toHex();
     //    ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -563,7 +629,8 @@ void MainWindow::on_radioButton_vent_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_motorType->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_VENT_MOTOR), IREG_INV_CONTROL)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL_VENT_MOTOR), IREG_INV_CONTROL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -573,7 +640,8 @@ void MainWindow::on_radioButton_PWM_SIN_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_PWM_Type->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_OVERPWM_OFF), IREG_INV_CONTROL)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL_OVERPWM_OFF), IREG_INV_CONTROL)), 2).toHex();
   //      ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -583,7 +651,8 @@ void MainWindow::on_radioButton_PWM_OVER1_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_PWM_Type->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_OVERPWM1_ON), IREG_INV_CONTROL)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL_OVERPWM1_ON), IREG_INV_CONTROL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -593,7 +662,8 @@ void MainWindow::on_radioButton_PWM_OVER2_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_PWM_Type->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_OVERPWM2_ON), IREG_INV_CONTROL)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL_OVERPWM2_ON), IREG_INV_CONTROL)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -603,7 +673,8 @@ void MainWindow::on_pushButton_rstFlt_clicked()
 {
 //    ui->pushButton_rstFlt->setEnabled(false);
 
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_FLT_CLR), IREG_INV_CONTROL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INV_CTRL_FLT_CLR), IREG_INV_CONTROL)), 2).toHex();
   //  ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
@@ -612,7 +683,8 @@ void MainWindow::on_radioButton_resDempAngle_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_resonansDemping->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_RES_ANGLE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL2_RES_ANGLE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -622,7 +694,8 @@ void MainWindow::on_radioButton_resDempTorque_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_resonansDemping->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_RES_TORQUE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL2_RES_TORQUE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -632,7 +705,8 @@ void MainWindow::on_radioButton_resDempPower_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_resonansDemping->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_RES_POWER), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL2_RES_POWER), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -642,7 +716,8 @@ void MainWindow::on_radioButton_termosensorSingle_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_termosensMode->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SINGLE_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SINGLE_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -652,7 +727,8 @@ void MainWindow::on_radioButton_termosensorCritic_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_termosensMode->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_CRITIC_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL2_DT_CRITIC_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -662,7 +738,8 @@ void MainWindow::on_radioButton_termosensorAll_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_termosensMode->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_ALL_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(INV_CTRL2_DT_ALL_MODE), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -676,11 +753,13 @@ void MainWindow::on_checkBox_harmonicAnalysis_clicked(bool checked)
     QString commandString;
     ui->checkBox_harmonicAnalysis->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_HARM_CALC_ON), IREG_INV_CONTROL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL_HARM_CALC_ON), IREG_INV_CONTROL)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL_HARM_CALC_OFF), IREG_INV_CONTROL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL_HARM_CALC_OFF), IREG_INV_CONTROL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -691,11 +770,13 @@ void MainWindow::on_checkBox_powerMonitor_clicked(bool checked)
     QString commandString;
     ui->checkBox_powerMonitor->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_PW_ERR_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_PW_ERR_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_PW_ERR_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_PW_ERR_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -706,11 +787,13 @@ void MainWindow::on_checkBox_currSensOnFilter_clicked(bool checked)
     QString commandString;
     ui->checkBox_currSensOnFilter->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SU_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SU_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SU_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_DT_SU_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -721,11 +804,13 @@ void MainWindow::on_checkBox_rationingTime_clicked(bool checked)
     QString commandString;
     ui->checkBox_rationingTime->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_NORM_MV_FREF_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_NORM_MV_FREF_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_NORM_MV_FREF_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_NORM_MV_FREF_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -736,11 +821,13 @@ void MainWindow::on_checkBox_enableZeroUdc_clicked(bool checked)
     QString commandString;
     ui->checkBox_enableZeroUdc->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_ZERO_UDROP_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_ZERO_UDROP_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_ZERO_UDROP_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_ZERO_UDROP_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -751,11 +838,13 @@ void MainWindow::on_checkBox_useOutInductance_clicked(bool checked)
     QString commandString;
     ui->checkBox_useOutInductance->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_LX_USE_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_LX_USE_ON), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INV_CTRL2_LX_USE_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INV_CTRL2_LX_USE_OFF), RegnumClass::IREG_INV_CTRL2)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -766,11 +855,13 @@ void MainWindow::on_checkBox_powerIsRMS_clicked(bool checked)
     QString commandString;
     ui->checkBox_powerIsRMS->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_RMS_POWER_ON), RegnumClass::IREG_CTRL3)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(CTRL3_RMS_POWER_ON), RegnumClass::IREG_CTRL3)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_RMS_POWER_OFF), RegnumClass::IREG_CTRL3)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(CTRL3_RMS_POWER_OFF), RegnumClass::IREG_CTRL3)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -781,11 +872,13 @@ void MainWindow::on_checkBox_pmmOn_clicked(bool checked)
     QString commandString;
     ui->checkBox_pmmOn->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_PMM_ON), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_PMM_ON), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_PMM_OFF), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_PMM_OFF), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -797,7 +890,8 @@ void MainWindow::on_radioButton_expLegacy_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_expBoard->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_LEGACY_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(CTRL3_EXP_LEGACY_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -807,7 +901,8 @@ void MainWindow::on_radioButton_exp485_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_expBoard->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_485_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(CTRL3_EXP_485_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -817,7 +912,8 @@ void MainWindow::on_radioButton_expSPI_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_expBoard->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_SPI_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(CTRL3_EXP_SPI_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -827,7 +923,8 @@ void MainWindow::on_radioButton_expOthers_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_expBoard->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_EXP_OTHERS_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(CTRL3_EXP_OTHERS_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -837,7 +934,8 @@ void MainWindow::on_radioButton_trac_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_convType->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_FC_TRAC_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(CTRL3_FC_TRAC_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -847,7 +945,8 @@ void MainWindow::on_radioButton_subpump_clicked(bool checked)
 {
     if(checked){
         ui->groupBox_convType->setEnabled(false);
-        QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(CTRL3_FC_SUBPUMP_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+        QString commandString = AddCRC((glueAdapterHeader() +
+                                glueString(changeHiLowBytes_uint(CTRL3_FC_SUBPUMP_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
    //     ui->textEdit_commandCRC->append(commandString);
         writeSerialPort(commandString);
     }
@@ -862,7 +961,8 @@ void MainWindow::on_comboBox_canFreqInv_currentIndexChanged(int index)
     case 1: commandCanFreqInv = INT_CTRL_SET_BDRT_250; break;
     default: commandCanFreqInv = INT_CTRL_SET_BDRT_250; break;
     }
-    QString commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(commandCanFreqInv), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(commandCanFreqInv), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
 //     ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }
@@ -879,11 +979,13 @@ void MainWindow::on_checkBox_extOut_0_clicked(bool checked)
     QString commandString;
   //  ui->checkBox_pmmOn->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT0), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT0), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT0), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT0), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -894,11 +996,13 @@ void MainWindow::on_checkBox_extOut_1_clicked(bool checked)
     QString commandString;
   //  ui->checkBox_pmmOn->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT1), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT1), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT1), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT1), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
     writeSerialPort(commandString);
@@ -909,12 +1013,156 @@ void MainWindow::on_checkBox_extOut_2_clicked(bool checked)
     QString commandString;
   //  ui->checkBox_pmmOn->setEnabled(false);
     if(checked){
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT2), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_SET_EXT_OUT2), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
       //  ui->textEdit_commandCRC->append(commandString);
     }
     else{
-        commandString = AddCRC((glueAdapterHeader() + glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT2), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+        commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_CLR_EXT_OUT2), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
      //   ui->textEdit_commandCRC->append(commandString);
     }
+    writeSerialPort(commandString);
+}
+
+
+// Настройка конструкции ЧРП
+
+void MainWindow::on_radioButton_baseConverter_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_BASE_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_ISING_RSING_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_ISING_RSING_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_ISING_RDOUB_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_ISING_RDOUB_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_IDOUB_RSING_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_IDOUB_RSING_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_IDOUB_RDOUB_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_IDOUB_RDOUB_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_ITRIP_RSING_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_ITRIP_RSING_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_ITRIP_RDOUB_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_ITRIP_RDOUB_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_IQUAD_RSING_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_IQUAD_RSING_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_IQUAD_RDOUB_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X1_IQUAD_RDOUB_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_IQUAD_RSING_2_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X2_IQUAD_RSING_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+void MainWindow::on_radioButton_IQUAD_RDOUB_2_clicked(bool checked)
+{
+    if(checked){
+        ui->groupBox_converterDesign->setEnabled(false);
+        QString commandString = AddCRC((glueAdapterHeader() +
+                glueString(changeHiLowBytes_uint(CTRL3_FC_X2_IQUAD_RDOUB_SET), RegnumClass::IREG_CTRL3)), 2).toHex();
+   //     ui->textEdit_commandCRC->append(commandString);
+        writeSerialPort(commandString);
+    }
+}
+
+// работа с флэш
+
+void MainWindow::on_pushButton_flashErrClr_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INT_CTRL_FLSH_ERR_CLR), IREG_INV_CONTROL)), 2).toHex();
+ //   ui->textEdit_commandCRC->append(commandString);
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_pushButton_flashWrAll_clicked()
+{
+    QString commandString = AddCRC((glueAdapterHeader() +
+                            glueString(changeHiLowBytes_uint(INT_CTRL_FLSH_WR_ALL), IREG_INV_CONTROL)), 2).toHex();
+ //   ui->textEdit_commandCRC->append(commandString);
     writeSerialPort(commandString);
 }

@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     initStatus();
 
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 06-06-2024");
+    ui->statusbar->showMessage("ver. 12-06-2024");
 
 }
 
@@ -74,4 +74,3 @@ MainWindow::~MainWindow()
     serial->close(); // освободить порт при закрытии программы
     delete ui;
 }
-

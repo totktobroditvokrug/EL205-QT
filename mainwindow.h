@@ -249,6 +249,34 @@ private slots:
 
     void on_checkBox_extOut_2_clicked(bool checked);
 
+    void on_radioButton_baseConverter_clicked(bool checked);
+
+    void on_radioButton_ISING_RSING_clicked(bool checked);
+
+    void on_radioButton_IQUAD_RDOUB_2_clicked(bool checked);
+
+    void on_radioButton_ISING_RDOUB_clicked(bool checked);
+
+
+
+    void on_radioButton_IDOUB_RSING_clicked(bool checked);
+
+    void on_radioButton_IDOUB_RDOUB_clicked(bool checked);
+
+    void on_radioButton_ITRIP_RSING_clicked(bool checked);
+
+    void on_radioButton_ITRIP_RDOUB_clicked(bool checked);
+
+    void on_radioButton_IQUAD_RSING_clicked(bool checked);
+
+    void on_radioButton_IQUAD_RDOUB_clicked(bool checked);
+
+    void on_radioButton_IQUAD_RSING_2_clicked(bool checked);
+
+    void on_pushButton_flashErrClr_clicked();
+
+    void on_pushButton_flashWrAll_clicked();
+
 private:
     Ui::MainWindow *ui;
 

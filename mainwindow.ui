@@ -66,7 +66,7 @@
              <x>0</x>
              <y>0</y>
              <width>1045</width>
-             <height>605</height>
+             <height>608</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -1913,79 +1913,79 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_17">
                <item row="0" column="0">
-                <widget class="QRadioButton" name="radioButton_4">
+                <widget class="QRadioButton" name="radioButton_baseConverter">
                  <property name="text">
                   <string>Base</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QRadioButton" name="radioButton_ISING_RSING">
-                 <property name="text">
-                  <string>ISING RSING</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QRadioButton" name="radioButton_IQUAD_RSING_2">
-                 <property name="text">
-                  <string>IQUAD RSING 2</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
+               <item row="4" column="0">
                 <widget class="QRadioButton" name="radioButton_ISING_RDOUB">
                  <property name="text">
-                  <string>ISING RDOUB</string>
+                  <string>ISING RDOUB x1</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
-                <widget class="QRadioButton" name="radioButton_IQUAD_RDOUB_2">
+               <item row="7" column="0">
+                <widget class="QRadioButton" name="radioButton_ITRIP_RSING">
                  <property name="text">
-                  <string>IQUAD RDOUB 2</string>
+                  <string>ITRIP RSING x1</string>
                  </property>
                 </widget>
                </item>
-               <item row="3" column="0">
-                <widget class="QRadioButton" name="radioButton_IDOUB_RSING">
+               <item row="6" column="1">
+                <widget class="QRadioButton" name="radioButton_IQUAD_RSING_2">
                  <property name="text">
-                  <string>IDOUB RSING</string>
+                  <string>IQUAD RSING x2</string>
                  </property>
                 </widget>
                </item>
-               <item row="3" column="1">
-                <widget class="QRadioButton" name="radioButton_IQUAD_RDOUB">
-                 <property name="text">
-                  <string>IQUAD RDOUB</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
+               <item row="6" column="0">
                 <widget class="QRadioButton" name="radioButton_IDOUB_RDOUB">
                  <property name="text">
-                  <string>IDOUB RDOUB</string>
+                  <string>IDOUB RDOUB x1</string>
                  </property>
                 </widget>
                </item>
                <item row="4" column="1">
                 <widget class="QRadioButton" name="radioButton_IQUAD_RSING">
                  <property name="text">
-                  <string>IQUAD RSING</string>
+                  <string>IQUAD RSING x1</string>
                  </property>
                 </widget>
                </item>
-               <item row="5" column="0">
-                <widget class="QRadioButton" name="radioButton_ITRIP_RSING">
+               <item row="7" column="1">
+                <widget class="QRadioButton" name="radioButton_IQUAD_RDOUB_2">
                  <property name="text">
-                  <string>ITRIP RSING</string>
+                  <string>IQUAD RDOUB x2</string>
                  </property>
                 </widget>
                </item>
                <item row="5" column="1">
+                <widget class="QRadioButton" name="radioButton_IQUAD_RDOUB">
+                 <property name="text">
+                  <string>IQUAD RDOUB x1</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QRadioButton" name="radioButton_IDOUB_RSING">
+                 <property name="text">
+                  <string>IDOUB RSING x1</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
                 <widget class="QRadioButton" name="radioButton_ITRIP_RDOUB">
                  <property name="text">
-                  <string>ITRIP RDOUB</string>
+                  <string>ITRIP RDOUB x1</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QRadioButton" name="radioButton_ISING_RSING">
+                 <property name="text">
+                  <string>ISING RSING x1</string>
                  </property>
                 </widget>
                </item>
