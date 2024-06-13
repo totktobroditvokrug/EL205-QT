@@ -31,7 +31,8 @@ SOURCES += \
     tab_plot.cpp \
     tab_register_list.cpp \
     tab_registers_table.cpp \
-    tab_status.cpp
+    tab_status.cpp \
+    tab_vector.cpp
 
 HEADERS += \
     adapter_commands.h \
@@ -41,7 +42,8 @@ HEADERS += \
     plot/qcustomplot.h \
     qpaintwidget.h \
     stylehelper.h \
-    tab_plot.h
+    tab_plot.h \
+    tab_vector.h
 
 FORMS += \
     mainwindow.ui

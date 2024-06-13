@@ -10,8 +10,12 @@ class QPaintWidget : public QWidget
     Q_OBJECT
 public:
     QPaintWidget(QWidget * parent = nullptr);
+    void drawScreen();
+    void drawUconv();
+    void drawIconv();
 protected:
     void paintEvent(QPaintEvent *);
+
 };
 
 #endif // QPAINTWIDGET_H
