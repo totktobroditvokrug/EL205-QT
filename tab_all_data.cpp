@@ -41,6 +41,7 @@ void MainWindow::readStream()
             sampleDisplayTable(); // вывод таблицы измерений
             displayHashID();  // вывод принятых пакетов по ID
             checkStatus(); // вывод статуса инвертора
+            checkVector(); // вывод векторов тока и напряжений
 
             if(bytesFromAdapter > 60) { // переделать под настоящие ответы по CAN
                ui->pushButton_setRegistersFromFile->setEnabled(true);

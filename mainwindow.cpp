@@ -64,8 +64,12 @@ MainWindow::MainWindow(QWidget *parent)
     // работа со статусом инвертора
     initStatus();
 
+    // работа с векторной диаграммой
+    connect(this, SIGNAL(sendUconv(int, int)), ui->widget_paintVector, SLOT(setUconv(int, int)));
+    connect(this, SIGNAL(sendIconv(int, int, int, int, int, int, int)), ui->widget_paintVector, SLOT(setIconv(int, int, int, int, int, int, int)));
+
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 12-06-2024");
+    ui->statusbar->showMessage("ver. 14-06-2024. Test vector!");
 
 }
 

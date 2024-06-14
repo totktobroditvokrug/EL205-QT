@@ -41,6 +41,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void sendUconv(int uConv, int uConvMax);  //  будем посылать для вектора значение напряжение
+    void sendIconv(int iA, int iB, int iC, int iMax, int phA, int phB, int phC);  //  будем посылать для вектора значения тока
+
 private slots:
     // настройка адаптера
     void initTabCan(); // уставки по умолчанию, активация кнопок
@@ -151,6 +155,8 @@ private slots:
     void on_pushButton_genFromEnum_clicked();
 
     // работа с графиками
+    void checkVector();
+
     void addGraph();
     void addPointToGraph();
     void on_pushButton_holdPlot_clicked();
@@ -206,7 +212,6 @@ private slots:
 
     void on_radioButton_resDempPower_clicked(bool checked);
 
-
     void on_radioButton_termosensorSingle_clicked(bool checked);
 
     void on_radioButton_termosensorCritic_clicked(bool checked);
@@ -256,8 +261,6 @@ private slots:
     void on_radioButton_IQUAD_RDOUB_2_clicked(bool checked);
 
     void on_radioButton_ISING_RDOUB_clicked(bool checked);
-
-
 
     void on_radioButton_IDOUB_RSING_clicked(bool checked);
 
