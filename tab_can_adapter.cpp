@@ -15,6 +15,8 @@ void MainWindow::on_pushButton_searchListPort_clicked() // список дост
 
     ui->listWidget_portInfo->clear();
     ui->comboBox_serialPort->clear();
+
+    int currentComboBoxNumber = 0;
     // Добавить все доступные последовательные устройства вComboBoxв
     for (const QSerialPortInfo &serialPortInfo : serialPortInfos)
     {
@@ -34,9 +36,32 @@ void MainWindow::on_pushButton_searchListPort_clicked() // список дост
 
        ui->comboBox_serialPort->addItem(list[0]);
        ui->listWidget_portInfo->addItem(list[0] + ": " + list[1]+ ": " + list[2]+ ": " + list[3]);
-//       qDebug() << "Description: " << list;
+     //  qDebug() << "serialNumber: " << list[3];
+       if (list[3].contains("EL205")){
+         ui->comboBox_serialPort->setCurrentIndex(currentComboBoxNumber);
+       }
+       currentComboBoxNumber++;
     }
 }
+
+void MainWindow::on_listWidget_portInfo_itemClicked(QListWidgetItem *item)
+{
+    QStringList separateNum = item->text().split(":", QString::SkipEmptyParts); // разделяем номер и имя
+    if (separateNum.size() < 1){
+      //  qDebug() << "Неверный формат списка ";
+        return;
+    }
+    QString nameComPort = separateNum[0].simplified();
+    int selectedIndex = ui->comboBox_serialPort->findText(nameComPort, Qt::MatchCaseSensitive);
+  //  qDebug() << "выбранный порт:" << nameComPort << "№" << selectedIndex;
+    ui->comboBox_serialPort->setCurrentIndex(selectedIndex);
+}
+
+//void MainWindow::on_listWidget_portInfo_itemClicked(QListWidgetItem *item)
+//{
+//   MainWindow::on_listWidget_portInfo_itemDoubleClicked(item);
+//}
+
 
 void MainWindow::initTabCan(){
 //    qDebug() << "инициализация комбо-боксов и кнопок;";

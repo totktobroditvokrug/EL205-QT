@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
 
+
+
     // объявление списка регистров и измерений с размерами, соответствующими enum
     regNumList = QVector<QString>(RegnumClass::IREG_INV_ALL_END_REGISTERS);
     sampleNumList = QVector<QString>(SampleCanIdClass::CAN_END_SAMPLE_ID);
@@ -18,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
 
     ui->setupUi(this);
+    setWindowTitle("FC connect");
 
     ui->tabWidget_registerWidget->setCurrentIndex(0); // окно при загрузке с настройками интерфейса
 
@@ -65,12 +68,11 @@ MainWindow::MainWindow(QWidget *parent)
     initStatus();
 
     // работа с векторной диаграммой
-    connect(this, SIGNAL(sendUconv(int, int)), ui->widget_paintVector, SLOT(setUconv(int, int)));
-    connect(this, SIGNAL(sendIconv(int, int, int, int, int, int, int)), ui->widget_paintVector, SLOT(setIconv(int, int, int, int, int, int, int)));
+//    connect(this, SIGNAL(sendUconv(int, int)), ui->widget_paintVector, SLOT(setUconv(int, int)));
+//    connect(this, SIGNAL(sendIconv(int, int, int, int, int, int, int)), ui->widget_paintVector, SLOT(setIconv(int, int, int, int, int, int, int)));
 
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 14-06-2024. Test vector!");
-
+    ui->statusbar->showMessage("ver. 17-06-2024");
 }
 
 MainWindow::~MainWindow()

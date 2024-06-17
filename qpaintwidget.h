@@ -11,8 +11,9 @@ class QPaintWidget : public QWidget
 public:
     QPaintWidget(QWidget * parent = nullptr);
 
-
-    int uconv(){ return _uConv; }
+    // сеттеры взаимодействия с главной формой
+    void setUconv(int uConv, int uConvMax);
+    void setIconv(int iA, int iB, int iC, int iMax, int phA, int phB, int phC);
 
     void drawScreen(QPainter*);
     void drawUconv(QPainter*);
@@ -31,8 +32,8 @@ private:
     int _phC;
 
 public slots:
-    void setUconv(int uConv, int uConvMax);
-    void setIconv(int iA, int iB, int iC, int iMax, int phA, int phB, int phC);
+ //   void setUconv(int uConv, int uConvMax);
+ //   void setIconv(int iA, int iB, int iC, int iMax, int phA, int phB, int phC);
 
 protected:
     void paintEvent(QPaintEvent *);

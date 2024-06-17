@@ -47,10 +47,10 @@ void MainWindow::checkVector(){
     ui->lineEdit_PhC->setText(ph_C);
 
 
-    emit sendUconv(Uconv, Umax); // эмиссия сигнала со значением напряжения
-    emit sendIconv(iA, iB, iC, iMax, phA, phB, phC);
+//    emit sendUconv(Uconv, Umax); // эмиссия сигнала со значением напряжения
+//    emit sendIconv(iA, iB, iC, iMax, phA, phB, phC);
+    ui->widget_paintVector->setUconv(Uconv, Umax);
+    ui->widget_paintVector->setIconv(iA, iB, iC, iMax, phA, phB, phC);
+    ui->widget_paintVector->repaint();
 
-   // ui->widget_paintVector->drawUconv(Uconv, Umax);
-     ui->widget_paintVector->repaint();
-   //  ui->widget_paintVector->drawScreen();
 }

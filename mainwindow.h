@@ -41,9 +41,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-signals:
-    void sendUconv(int uConv, int uConvMax);  //  будем посылать для вектора значение напряжение
-    void sendIconv(int iA, int iB, int iC, int iMax, int phA, int phB, int phC);  //  будем посылать для вектора значения тока
+//signals:
+//    void sendUconv(int uConv, int uConvMax);  //  будем посылать для вектора значение напряжение
+//    void sendIconv(int iA, int iB, int iC, int iMax, int phA, int phB, int phC);  //  будем посылать для вектора значения тока
 
 private slots:
     // настройка адаптера
@@ -279,6 +279,10 @@ private slots:
     void on_pushButton_flashErrClr_clicked();
 
     void on_pushButton_flashWrAll_clicked();
+
+//    void on_listWidget_portInfo_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_listWidget_portInfo_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
