@@ -49,8 +49,12 @@ void MainWindow::checkVector(){
 
 //    emit sendUconv(Uconv, Umax); // эмиссия сигнала со значением напряжения
 //    emit sendIconv(iA, iB, iC, iMax, phA, phB, phC);
-    ui->widget_paintVector->setUconv(Uconv, Umax);
-    ui->widget_paintVector->setIconv(iA, iB, iC, iMax, phA, phB, phC);
+    bool showUph = ui->checkBox_uPh->isChecked();
+    bool showUline = ui->checkBox_uLine->isChecked();
+    bool showI = ui->checkBox_i->isChecked();
+
+    ui->widget_paintVector->setUconv(Uconv, Umax, showUph, showUline);
+    ui->widget_paintVector->setIconv(iA, iB, iC, iMax, phA, phB, phC, showI);
     ui->widget_paintVector->repaint();
 
 }
