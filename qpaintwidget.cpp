@@ -20,8 +20,8 @@ QPaintWidget::QPaintWidget(QWidget * parent) : QWidget(parent)
     _iB = 0;
     _iC = 0;
     _iMax = 500;
-    _phA = 0;
-    _phB = 120;
+    _phA = 120;
+    _phB = 0;
     _phC = 240;
 }
 
@@ -96,11 +96,11 @@ void QPaintWidget::drawUconv(QPainter* PaintUconv){
     PaintUconv->translate(_center);
     QPoint vectorUa = lineVector(_uConv, _uConvMax, _maxRad, 0);
     PaintUconv->drawLine(_zero, vectorUa);
-    PaintUconv->drawText(vectorUa, " Ua");
+    PaintUconv->drawText(vectorUa, " Ub");
 
     QPoint vectorUb = lineVector(_uConv, _uConvMax, _maxRad, 120);
     PaintUconv->drawLine(_zero, vectorUb);
-    PaintUconv->drawText(vectorUb," Ub");
+    PaintUconv->drawText(vectorUb," Ua");
 
     QPoint vectorUc = lineVector(_uConv, _uConvMax, _maxRad, -120);
     PaintUconv->drawLine(_zero, vectorUc);
