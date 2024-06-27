@@ -36,7 +36,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>8</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_adapter">
        <attribute name="title">
@@ -1238,6 +1238,9 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_control">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <attribute name="title">
         <string>Control</string>
        </attribute>

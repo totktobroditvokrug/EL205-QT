@@ -522,6 +522,34 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 }
 
 
+// при перемещении слайдера нужно выводить текущее значение
+//void MainWindow::on_horizontalSlider_sliderMoved(int position)
+//{
+//    qDebug() << "перемещение слайдера:" << position;
+//    int regNum;
+//    switch (selectedComboBox) {
+//    case 1:{
+//        regNum = ui->comboBox_register_1->currentIndex();
+//   //     setSelectedRegisterSlider(regNum);
+//        ui->lineEdit_registerValue_1->setText(getRegisterInv(regNum, qint16(position)));
+//    }
+//    break;
+//    case 2: {
+//        regNum = ui->comboBox_register_2->currentIndex();
+//   //     setSelectedRegisterSlider(regNum);
+//        ui->lineEdit_registerValue_2->setText(getRegisterInv(regNum, qint16(position)));
+//    }
+//    break;
+//    case 3: {
+//        regNum = ui->comboBox_register_3->currentIndex();
+//    //    setSelectedRegisterSlider(regNum);
+//        ui->lineEdit_registerValue_3->setText(getRegisterInv(regNum, qint16(position)));
+//    }
+//    break;
+//    }
+//}
+
+
 // по сигналу отпускания слайдера делаем запись его значения в регистр
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
@@ -627,15 +655,15 @@ void MainWindow::getFreqInv(){
 
 //------ расчет значения регистра с учетом шкалы
 QString MainWindow::getRegisterInv(int regNum, qint16 valueInt){
-//    if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
-//        return MainWindow::scaledValue(valueInt, regDataArray[regNum].scale.Reg16, regDataArray[regNum].maxValue.Reg16);
-//     }
-//     return QString::number(valueInt, 10); // без учета шкалы
-    double scaledValueInt = regDataArray[regNum].regValueScaled;
-    int prec = 1;
-    if (scaledValueInt >= 1000) prec = 0;
-    if (scaledValueInt < 10) prec = 2;
-    return QString::number(scaledValueInt, 'f',  prec);
+    if((regDataArray[regNum].flagReg & IREGF_MAXVAL_PRESENT) && (regDataArray[regNum].flagReg & IREGF_SCALE_PRESENT) ){
+        return MainWindow::scaledValue(valueInt, regDataArray[regNum].scale.Reg16, regDataArray[regNum].maxValue.Reg16);
+     }
+     return QString::number(valueInt, 10); // без учета шкалы
+//    double scaledValueInt = regDataArray[regNum].regValueScaled;
+//    int prec = 1;
+//    if (scaledValueInt >= 1000) prec = 0;
+//    if (scaledValueInt < 10) prec = 2;
+//    return QString::number(scaledValueInt, 'f',  prec);
 }
 
 

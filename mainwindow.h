@@ -284,6 +284,8 @@ private slots:
 
     void on_listWidget_portInfo_itemClicked(QListWidgetItem *item);
 
+//    void on_horizontalSlider_sliderMoved(int position);
+
 private:
     Ui::MainWindow *ui;
 

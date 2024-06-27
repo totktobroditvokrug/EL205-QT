@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->listWidget_sampleNum->hide();
     ui->textEdit_selectedSampleNum->hide();
 
+    ui->tab_control->hide(); // скрыть вкладку-атавизм
+
     ui->label_selectAlias->setStyleSheet(StyleHelper::getRegistersStyle());
     ui->radioButton_registers->setStyleSheet(StyleHelper::getRadioButtonRegistersStyle());
     ui->label_selectAlias->setText("Selected registers");
@@ -72,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(this, SIGNAL(sendIconv(int, int, int, int, int, int, int)), ui->widget_paintVector, SLOT(setIconv(int, int, int, int, int, int, int)));
 
 //    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 17-06-2024");
+    ui->statusbar->showMessage("ver. 21-06-2024");
 }
 
 MainWindow::~MainWindow()
@@ -80,3 +82,4 @@ MainWindow::~MainWindow()
     serial->close(); // освободить порт при закрытии программы
     delete ui;
 }
+
