@@ -72,6 +72,10 @@
 // максимальный размер буфера осциллограммы
 const int PLOT_MAX_SIZE_ARR = 1000;
 
+
+// количество точек UF
+const int MAX_SIZE_UF = 7;
+
 class RegnumClass : public QObject
 {
  Q_OBJECT

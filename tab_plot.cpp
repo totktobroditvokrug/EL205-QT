@@ -112,12 +112,6 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_1->yAxis2->setLabel(regNumList[regNum_plot1[1]]);
 
     testListRegister.clear();
-//    for (int i = 0; i < regDataArray[regNum_plot1[0]].regTimeArr.size(); i++) {
-//        QString time = QString::number(quint32(regDataArray[regNum_plot1[0]].regTimeArr[i]), 10);
-//        QString value = QString::number(int(regDataArray[regNum_plot1[0]].regValueScaledArr[i]), 10);
-//        testListRegister.append(QString::number(i, 10) + ": " + time + ": " + value);
-//    }
-//    ui->textEdit_testRegister->setText(testListRegister.join('\n'));
 
     for(int i = 0; i < 2; i++){
         int regCounter = regDataArray[regNum_plot1[i]].counterRegPlot; // положение счетчика буфера парсинга данных

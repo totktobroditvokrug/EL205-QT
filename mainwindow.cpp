@@ -65,6 +65,9 @@ MainWindow::MainWindow(QWidget *parent)
     plot_1_isBusy = false;
     plot_2_isBusy = false;
 
+    addGraph_UF();
+//    createTableUF();
+
 
     // работа со статусом инвертора
     initStatus();
@@ -73,8 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(this, SIGNAL(sendUconv(int, int)), ui->widget_paintVector, SLOT(setUconv(int, int)));
 //    connect(this, SIGNAL(sendIconv(int, int, int, int, int, int, int)), ui->widget_paintVector, SLOT(setIconv(int, int, int, int, int, int, int)));
 
-//    currentTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
-    ui->statusbar->showMessage("ver. 21-06-2024");
+    ui->statusbar->showMessage("FC-connect 1.00");
 }
 
 MainWindow::~MainWindow()
@@ -82,4 +84,3 @@ MainWindow::~MainWindow()
     serial->close(); // освободить порт при закрытии программы
     delete ui;
 }
-

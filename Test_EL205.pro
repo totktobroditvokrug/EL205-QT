@@ -32,6 +32,7 @@ SOURCES += \
     tab_register_list.cpp \
     tab_registers_table.cpp \
     tab_status.cpp \
+    tab_uf.cpp \
     tab_vector.cpp
 
 HEADERS += \

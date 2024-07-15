@@ -286,12 +286,36 @@ private slots:
 
 //    void on_horizontalSlider_sliderMoved(int position);
 
+    // работа с таблицей UIF
+
+    void addGraph_UF();
+    void addPointUF();
+    void checkUF();
+
+    void on_table_UF_cellDoubleClicked(int row, int column);
+
+    void on_table_UF_cellChanged(int row, int column);
+
+    void on_lineEdit_f_nom_editingFinished();
+
+    void on_lineEdit_f_err_editingFinished();
+
+    void on_lineEdit_u_nom_editingFinished();
+
+    void on_lineEdit_ku_start_editingFinished();
+
+    void on_lineEdit_i_nom_editingFinished();
+
+    void on_lineEdit_ki_start_editingFinished();
+
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *serial;
     QTimer *timer;  // таймер опроса CAN адаптера
     QTimer *timerPlotter; // таймер вывода регистров на дисплей
+
+    QTimer *timerPlotterUF; // таймер вывода графика UIF
 
     QString workDirPath; //
     QVector<QString> regNumList; // формирование списка регистров

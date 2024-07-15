@@ -82,6 +82,7 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данныхlineEdit_freqPlot
 
     timerPlotter->start((ui->lineEdit_freqPlot->text().toInt())); // чтение данных
+    timerPlotterUF->start(1000);
 
     ui->pushButton_startInv->setEnabled(true);
     ui->pushButton_stopInv->setEnabled(true);
@@ -109,6 +110,7 @@ void MainWindow::on_pushButton_stopRead_clicked()
 {
     timer->stop();
     timerPlotter->stop();
+    timerPlotterUF->stop();
     emptyBufferCounter = 0; // запускать таймер проверки связи с нуля
     // разрешить менять настройки CAN
     ui->comboBox_canFreq->setEnabled(true);
