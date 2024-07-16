@@ -71,7 +71,7 @@ void MainWindow::addPointUF(){
     ui->widget_plot_UF->xAxis->setRange(0, maxFreq);
 
     ui->widget_plot_UF->yAxis->setRange(0, maxVlt + 10);
-    ui->widget_plot_UF->yAxis2->setRange(0, maxCurr +10);
+    ui->widget_plot_UF->yAxis2->setRange(0, maxCurr +20);
 
     ui->widget_plot_UF->replot();
 }
@@ -112,12 +112,13 @@ void MainWindow::on_table_UF_cellChanged(int row, int column)
 }
 
 void MainWindow::checkUF(){
-    if(!ui->lineEdit_f_nom->isModified()) ui->lineEdit_f_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_F_NOM].value.Reg16, 10));
-    if(!ui->lineEdit_f_err->isModified()) ui->lineEdit_f_err->setText(QString::number(regDataArray[RegnumClass::IREG_FREQ_ERROR].value.Reg16, 10));
-    if(!ui->lineEdit_u_nom->isModified()) ui->lineEdit_u_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_U_NOM].value.Reg16, 10));
-    if(!ui->lineEdit_ku_start->isModified()) ui->lineEdit_ku_start->setText(QString::number(regDataArray[RegnumClass::IREG_M_KU_START].value.Reg16, 10));
-    if(!ui->lineEdit_i_nom->isModified()) ui->lineEdit_i_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_I_NOM].value.Reg16, 10));
-    if(!ui->lineEdit_ki_start->isModified()) ui->lineEdit_ki_start->setText(QString::number(regDataArray[RegnumClass::IREG_M_KI_START].value.Reg16, 10));
+//    ui->lineEdit_f_nom->hasFocus()
+    if(!ui->lineEdit_f_nom->hasFocus())    ui->lineEdit_f_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_F_NOM].value.Reg16, 10));
+    if(!ui->lineEdit_f_err->hasFocus())    ui->lineEdit_f_err->setText(QString::number(regDataArray[RegnumClass::IREG_FREQ_ERROR].value.Reg16, 10));
+    if(!ui->lineEdit_u_nom->hasFocus())    ui->lineEdit_u_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_U_NOM].value.Reg16, 10));
+    if(!ui->lineEdit_ku_start->hasFocus()) ui->lineEdit_ku_start->setText(QString::number(regDataArray[RegnumClass::IREG_M_KU_START].value.Reg16, 10));
+    if(!ui->lineEdit_i_nom->hasFocus())    ui->lineEdit_i_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_I_NOM].value.Reg16, 10));
+    if(!ui->lineEdit_ki_start->hasFocus()) ui->lineEdit_ki_start->setText(QString::number(regDataArray[RegnumClass::IREG_M_KI_START].value.Reg16, 10));
 }
 
 void MainWindow::on_lineEdit_f_nom_editingFinished()
