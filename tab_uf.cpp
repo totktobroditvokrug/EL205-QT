@@ -27,6 +27,8 @@ void MainWindow::addGraph_UF(){
     ui->widget_plot_UF->yAxis2->setLabel("current");
 
     ui->widget_plot_UF->xAxis->setLabel("frequency");
+    ui->widget_plot_UF->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->widget_plot_UF->graph(1)->setScatterStyle(QCPScatterStyle::ssCircle);
 }
 
 void MainWindow::addPointUF(){
@@ -112,7 +114,6 @@ void MainWindow::on_table_UF_cellChanged(int row, int column)
 }
 
 void MainWindow::checkUF(){
-//    ui->lineEdit_f_nom->hasFocus()
     if(!ui->lineEdit_f_nom->hasFocus())    ui->lineEdit_f_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_F_NOM].value.Reg16, 10));
     if(!ui->lineEdit_f_err->hasFocus())    ui->lineEdit_f_err->setText(QString::number(regDataArray[RegnumClass::IREG_FREQ_ERROR].value.Reg16, 10));
     if(!ui->lineEdit_u_nom->hasFocus())    ui->lineEdit_u_nom->setText(QString::number(regDataArray[RegnumClass::IREG_M_U_NOM].value.Reg16, 10));

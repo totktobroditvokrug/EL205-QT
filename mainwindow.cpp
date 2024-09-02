@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(this, SIGNAL(sendUconv(int, int)), ui->widget_paintVector, SLOT(setUconv(int, int)));
 //    connect(this, SIGNAL(sendIconv(int, int, int, int, int, int, int)), ui->widget_paintVector, SLOT(setIconv(int, int, int, int, int, int, int)));
 
-    ui->statusbar->showMessage("FC-connect 1.00");
+    ui->statusbar->showMessage("FC-connect 1.01");
 }
 
 MainWindow::~MainWindow()

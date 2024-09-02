@@ -308,6 +308,10 @@ private slots:
 
     void on_lineEdit_ki_start_editingFinished();
 
+    void on_checkBox_pwmControl_clicked();
+
+    void on_checkBox_paramsOutChange_clicked();
+
 private:
     Ui::MainWindow *ui;
 

@@ -98,6 +98,9 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     ui->lineEdit_registerValue_2->setEnabled(true);
     ui->lineEdit_registerValue_3->setEnabled(true);
 
+    ui->groupBox_UF->setEnabled(true);
+    ui->table_UF->setEnabled(true);
+
    ui->statusbar->showMessage("Запущено чтение CAN");
 }
 
@@ -138,6 +141,9 @@ void MainWindow::on_pushButton_stopRead_clicked()
     ui->lineEdit_registerValue_1->setEnabled(false);
     ui->lineEdit_registerValue_2->setEnabled(false);
     ui->lineEdit_registerValue_3->setEnabled(false);
+
+    ui->groupBox_UF->setEnabled(false);
+    ui->table_UF->setEnabled(false);
 
     ui->statusbar->showMessage("Остановка чтения CAN");
 }

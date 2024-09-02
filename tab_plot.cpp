@@ -113,7 +113,7 @@ void MainWindow::addPointToGraph(){
 
     testListRegister.clear();
 
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 2; i++){ // вывод двух графиков на первом плоттере
         int regCounter = regDataArray[regNum_plot1[i]].counterRegPlot; // положение счетчика буфера парсинга данных
         if (regCounter > 0) regCounter--;
         double deltaTime = double(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]) - startTimeStamp;
@@ -135,7 +135,7 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_2->yAxis2->setRange(yAxis_4_min, yAxis_4);
     ui->widget_plot_2->yAxis2->setLabel(sampleNumList[sampleNum_plot2[1]]);
 
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 2; i++){ // вывод двух графиков на втором плоттере
         int sampleCounter = sampleDataArray[regNum_plot1[i]].counterSamplePlot; // положение счетчика буфера парсинга измерений
         if (sampleCounter > 0) sampleCounter--;
         int deltaTime = int(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]) - int(startTimeStamp); // goto поправил шкалу

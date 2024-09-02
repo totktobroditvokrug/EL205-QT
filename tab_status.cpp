@@ -528,6 +528,25 @@ void MainWindow::checkInvStatus_5()
         ui->comboBox_canFreqInv->setCurrentIndex(0);
     }
 
+    // изменение бита ШИМ STS5_PWM_CTRL
+    if (invStatus & STS5_PWM_CTRL){
+       currentStatus += ("Управление ШИМ включено; \n");
+      ui->checkBox_pwmControl->setChecked(true);
+    }
+    else ui->checkBox_pwmControl->setChecked(false);
+    ui->checkBox_pwmControl->setEnabled(true);
+
+    // изменение бита вывода параметров STS5_PARAMS_OUT_MODE
+    if (invStatus & STS5_PARAMS_OUT_MODE){
+        currentStatus += ("Параметры в сэмплах; \n");
+        ui->checkBox_paramsOutChange->setChecked(true);
+    }
+    else{
+        currentStatus += ("Параметры в регистрах; \n");
+        ui->checkBox_paramsOutChange->setChecked(false);
+    }
+    ui->checkBox_paramsOutChange->setEnabled(true);
+
     // при запрете на изменение скорсти CAN не даем активность комбобоксу скоростей
     if(ui->checkBox_allowCAN_freqChanges->isChecked())  ui->comboBox_canFreqInv->setEnabled(true);
 
@@ -883,6 +902,32 @@ void MainWindow::on_checkBox_pmmOn_clicked(bool checked)
     }
     writeSerialPort(commandString);
 }
+
+void MainWindow::on_checkBox_pwmControl_clicked()
+{
+   // qDebug() << "изменился чекбокс управления ШИМ"; // INT_CTRL_PWM_CTRL_CHANGE
+    QString commandString;
+    ui->checkBox_pwmControl->setEnabled(false);
+
+    // на любое изменение чекбокса пишем бит в регистр управления
+    commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(INT_CTRL_PWM_CTRL_CHANGE), RegnumClass::IREG_INV_INT_CTRL)), 2).toHex();
+
+    writeSerialPort(commandString);
+}
+
+void MainWindow::on_checkBox_paramsOutChange_clicked()
+{
+   // qDebug() << "изменился чекбокс управления параметрами"; // CTRL3_PARAMS_OUT_CHANGE
+    QString commandString;
+    ui->checkBox_paramsOutChange->setEnabled(false);
+    commandString = AddCRC((glueAdapterHeader() +
+                        glueString(changeHiLowBytes_uint(CTRL3_PARAMS_OUT_CHANGE), RegnumClass::IREG_CTRL3)), 2).toHex();
+
+    writeSerialPort(commandString);
+}
+
+
 
 
 

@@ -197,6 +197,8 @@
 /* Задать тип ПЧ */
 #define CTRL3_FC_TYPE_SET		(1 << 12)
 
+#define CTRL3_PARAMS_OUT_CHANGE  (1 << 15)
+
 /* Младший бит установки типа ПЧ */
 #define CTRL3_FC_TYPE_LST_BIT	13
 
@@ -667,6 +669,12 @@ typedef enum {
 /* Частота CAN шины */
 #define STS5_CAN_BDRT_250		(1 << 10)
 
+/* Режим вывода параметров */
+#define STS5_PARAMS_OUT_MODE  (1 << 11)
+
+/* Управление частотой ШИМ */
+#define STS5_PWM_CTRL      (1 << 12)
+
 /* Маска регистра STS5 */
 #define INV_STS5_MASK (	\
     STS5_EXP_CONF_2b |	\
@@ -696,8 +704,9 @@ typedef enum {
 /* Установить частоту CAN 250 кБит */
 #define INT_CTRL_SET_BDRT_250			(1 << 8)
 
-/* Произошел внешний ресет прокси */
-#define INT_CTRL_PROXY_EXT_RST			(1 << 9)
+/* Бит на переключение управления ШИМ на ходу */
+#define INT_CTRL_PWM_CTRL_CHANGE			(1 << 9)
+
 /* Произошел ресет прокси по ошибке CAN */
 #define INT_CTRL_PROXY_CANERR_RST		(1 << 10)
 /* Произошел авторесет прокси по потере связи */
