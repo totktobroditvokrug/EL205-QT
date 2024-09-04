@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDesktopWidget>
-// #include <QDateTime>
+
 #include "plot/qcustomplot.h"
 
 
@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     timer = new QTimer;
     connect(timer, SIGNAL(timeout()), this, SLOT(readStream()));
+
+    timerDate = new QTimer;
+    connect(timerDate, SIGNAL(timeout()), this, SLOT(readCurrentDate()));
 
     ui->setupUi(this);
     setWindowTitle("FC connect");
@@ -75,6 +78,9 @@ MainWindow::MainWindow(QWidget *parent)
     // работа с векторной диаграммой
 //    connect(this, SIGNAL(sendUconv(int, int)), ui->widget_paintVector, SLOT(setUconv(int, int)));
 //    connect(this, SIGNAL(sendIconv(int, int, int, int, int, int, int)), ui->widget_paintVector, SLOT(setIconv(int, int, int, int, int, int, int)));
+
+    timerDate->start(500); // обновляем дату два раза в секунду
+    numberOfRestartsStartTime = 0; // обнуляем количество перезапусков при переполнении метки времени адаптера
 
     ui->statusbar->showMessage("FC-connect 1.01");
 }

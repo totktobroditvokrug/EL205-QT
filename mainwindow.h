@@ -46,12 +46,14 @@ public:
 //    void sendIconv(int iA, int iB, int iC, int iMax, int phA, int phB, int phC);  //  будем посылать для вектора значения тока
 
 private slots:
+
+    QString readCurrentDate(); //  работа с текущим временем для плоттера
+
     // настройка адаптера
     void initTabCan(); // уставки по умолчанию, активация кнопок
     void on_pushButton_searchListPort_clicked();
     void on_pushButton_connect_clicked();
     void on_pushButton_disconnect_clicked();
-//    void on_pushButton_sendMessage_clicked();
 
     // чтение данных из CAN
     void on_pushButton_startRead_clicked(); // опрос в цикле таймера
@@ -320,6 +322,9 @@ private:
     QTimer *timerPlotter; // таймер вывода регистров на дисплей
 
     QTimer *timerPlotterUF; // таймер вывода графика UIF
+
+    QTimer *timerDate;  // таймер текущей даты
+    int numberOfRestartsStartTime;  // количество перезапусков при переполнении метки времени адаптера
 
     QString workDirPath; //
     QVector<QString> regNumList; // формирование списка регистров

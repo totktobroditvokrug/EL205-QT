@@ -3,17 +3,19 @@
 
 #include "tab_plot.h"
 
+#include <QDateTime>
+
 tab_plot::tab_plot()
 {
 
 }
 
 
-void MainWindow::addGraph(){
+void MainWindow::addGraph(){  // рисуем два плоттера с заготовками под два графика в каждом
     QStringList registersList = RegnumClass::regnumList();
     QStringList samplesList = SampleCanIdClass::fccanidList().mid(SampleCanIdClass::CAN_START_SAMPLE_ID);
     timerPlotter = new QTimer;
-    connect(timerPlotter, SIGNAL(timeout()), this, SLOT(addPointToGraph()));
+    connect(timerPlotter, SIGNAL(timeout()), this, SLOT(addPointToGraph()));  // счетчик вызова функции рисования графиков
 
     ui->widget_plot_1->addGraph();
     ui->widget_plot_1->addGraph(ui->widget_plot_1->xAxis, ui->widget_plot_1->yAxis2);
@@ -58,18 +60,20 @@ void MainWindow::addGraph(){
 }
 
 void MainWindow::addPointToGraph(){
-
     quint32 time_stamp_32 = regDataArray[RegnumClass::IREG_FREQ].time_stamp_32;
     if(quint32(startTimeStamp) == 0) {
         startTimeStamp = double(time_stamp_32); // стартовый отрезок времени с каждым запуском программы
         // qDebug() << "стартуем с отметки " << quint32(startTimeStamp);
-        QTimer::singleShot(5000, this, SLOT(init_scale()));
+        ui->label_restartTimeStartStamp->setText("set start time -");
+        ui->label_startTimeStamp->setText(QString::number(startTimeStamp, 'f', 0));
+        ui->label_numberOfRestarts->setText(QString::number(numberOfRestartsStartTime, 'f', 0));
+        QTimer::singleShot(5000, this, SLOT(init_scale()));  // если начали идти данные от адаптера, пробуем через 5 секунд поставить шкалы
         return;
     }
 
     if(ui->tabWidget_registerWidget->currentIndex() != 7){
-       // qDebug() << "графики не рисуем";
-       return; // если виджет неактивен, графики не рисуем
+        // qDebug() << "графики не рисуем";
+        return; // если виджет неактивен, графики не рисуем
     }
 
     if(plot_1_isBusy || plot_2_isBusy){ // проверка, что программа не запустится, если предыдущая не закончила
@@ -115,14 +119,27 @@ void MainWindow::addPointToGraph(){
 
     for(int i = 0; i < 2; i++){ // вывод двух графиков на первом плоттере
         int regCounter = regDataArray[regNum_plot1[i]].counterRegPlot; // положение счетчика буфера парсинга данных
-        if (regCounter > 0) regCounter--;
-        double deltaTime = double(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]) - startTimeStamp;
-        // qDebug() << "шкала времени. regCounter=" << regCounter << " deltaTime=" << deltaTime;
-        if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
+        if (regCounter > 0){ // если указанный регистр был получен адаптером, то обрабатываем его массив на выдачу
+            regCounter--;
+            double deltaTime = double(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]) - startTimeStamp;
+            //        qDebug() << "Регистры: шкала времени. regCounter=" << regCounter << " deltaTime=" << deltaTime;
+            if(deltaTime > 0){
+                startTimeStamp = startTimeStamp + deltaTime;  // на правой границе графиков - максимальное время
 
-        ui->widget_plot_1->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);
+            }
+            // при сбросе timestamp адаптера переключаем startTimeStamp на новое значение. Что делать с массивом? todo
+            if(deltaTime < -MAX_DELTA_TIME){
+                startTimeStamp = double(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]);
+                ui->label_restartTimeStartStamp->setText("restart time stamp -");
+                ui->label_numberOfRestarts->setText(QString::number(numberOfRestartsStartTime++, 'f', 0));
+            }
 
-        ui->widget_plot_1->graph(i)->setData(regDataArray[regNum_plot1[i]].regTimeArr, regDataArray[regNum_plot1[i]].regValueScaledArr, false);
+            ui->label_startTimeStamp->setText(QString::number(startTimeStamp, 'f', 0));
+
+            ui->widget_plot_1->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);
+
+            ui->widget_plot_1->graph(i)->setData(regDataArray[regNum_plot1[i]].regTimeArr, regDataArray[regNum_plot1[i]].regValueScaledArr, false);
+        }
     }
     ui->widget_plot_1->replot();
     // ui->widget_plot_1->update();
@@ -136,13 +153,24 @@ void MainWindow::addPointToGraph(){
     ui->widget_plot_2->yAxis2->setLabel(sampleNumList[sampleNum_plot2[1]]);
 
     for(int i = 0; i < 2; i++){ // вывод двух графиков на втором плоттере
-        int sampleCounter = sampleDataArray[regNum_plot1[i]].counterSamplePlot; // положение счетчика буфера парсинга измерений
-        if (sampleCounter > 0) sampleCounter--;
-        int deltaTime = int(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]) - int(startTimeStamp); // goto поправил шкалу
-        if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
+        int sampleCounter = sampleDataArray[sampleNum_plot2[i]].counterSamplePlot; // положение счетчика буфера парсинга измерений
+        if (sampleCounter > 0){ // если указанный сэмпл был получен адаптером, то обрабатываем его массив на выдачу
+            sampleCounter--;
+            double deltaTime = double(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]) - startTimeStamp; // goto поправил шкалу
+            //        qDebug() << "Сэмплы: шкала времени. sampleCounter=" << sampleCounter << " deltaTime=" << deltaTime;
+            if(deltaTime > 0) startTimeStamp = startTimeStamp + deltaTime;
+            // при сбросе timestamp адаптера переключаем startTimeStamp на новое значение. Что делать с массивом? todo
+            if(deltaTime < -MAX_DELTA_TIME){
+                startTimeStamp = double(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]);
+                ui->label_restartTimeStartStamp->setText("restart time stamp -");
+                ui->label_numberOfRestarts->setText(QString::number(numberOfRestartsStartTime++, 'f', 0));
+            }
 
-        ui->widget_plot_2->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);
-        ui->widget_plot_2->graph(i)->setData(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr, sampleDataArray[sampleNum_plot2[i]].sampleValueScaledArr, false);
+            ui->label_startTimeStamp->setText(QString::number(startTimeStamp, 'f', 0));
+
+            ui->widget_plot_2->xAxis->setRange(startTimeStamp - windowWide, startTimeStamp);
+            ui->widget_plot_2->graph(i)->setData(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr, sampleDataArray[sampleNum_plot2[i]].sampleValueScaledArr, false);
+        }
     }
 
     ui->widget_plot_2->replot();
@@ -245,22 +273,22 @@ void MainWindow::on_horizontalSlider_max_axis_4_valueChanged(int value)
 
 void MainWindow::on_lineEdit_yAxis_1_editingFinished()
 {
-  ui->horizontalSlider_max_axis_1->setValue(ui->lineEdit_yAxis_1->text().toInt());
+    ui->horizontalSlider_max_axis_1->setValue(ui->lineEdit_yAxis_1->text().toInt());
 }
 
 void MainWindow::on_lineEdit_yAxis_2_editingFinished()
 {
-  ui->horizontalSlider_max_axis_2->setValue(ui->lineEdit_yAxis_2->text().toInt());
+    ui->horizontalSlider_max_axis_2->setValue(ui->lineEdit_yAxis_2->text().toInt());
 }
 
 void MainWindow::on_lineEdit_yAxis_3_editingFinished()
 {
-  ui->horizontalSlider_max_axis_3->setValue(ui->lineEdit_yAxis_3->text().toInt());
+    ui->horizontalSlider_max_axis_3->setValue(ui->lineEdit_yAxis_3->text().toInt());
 }
 
 void MainWindow::on_lineEdit_yAxis_4_editingFinished()
 {
-  ui->horizontalSlider_max_axis_4->setValue(ui->lineEdit_yAxis_4->text().toInt());
+    ui->horizontalSlider_max_axis_4->setValue(ui->lineEdit_yAxis_4->text().toInt());
 }
 
 
@@ -290,4 +318,13 @@ void MainWindow::init_scale(){
 void MainWindow::on_lineEdit_freqPlot_editingFinished() // изментиь находу частоту обновления осциллограмм
 {
     timerPlotter->setInterval((ui->lineEdit_freqPlot->text().toInt()));
+}
+
+
+
+QString MainWindow::readCurrentDate()   // получить текущую дату для плоттера и вывести в окне плоттера
+{
+    QString currentDate = QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss");
+    ui->label_currentDate->setText(currentDate);
+    return currentDate;
 }

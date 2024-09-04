@@ -133,17 +133,14 @@ void handleAllStandartDataCan(
         if ((scaleSample16 == 0) || (maxSample16 == 0)) sampleDataArray[idWhole].sampleValueScaled = double(valueSample16); // NULL;
         else sampleDataArray[idWhole].sampleValueScaled = double(valueSample16) * double(scaleSample16) / double(maxSample16);
 
-        int counterSample = sampleDataArray[idWhole].counterSamplePlot;
+        int counterSample = sampleDataArray[idWhole].counterSamplePlot;  // при инициализации счетчик массива сэмплов =0
         if(counterSample < PLOT_MAX_SIZE_ARR){
             if(!sampleDataArray[idWhole].flagFullBuffer){
-                sampleDataArray[idWhole].sampleTimeArr.resize(counterSample + 1);
-                sampleDataArray[idWhole].sampleValueScaledArr.resize(counterSample + 1);
+                sampleDataArray[idWhole].sampleTimeArr.resize(counterSample + 1);  // массив значений сэмплов по оси Х
+                sampleDataArray[idWhole].sampleValueScaledArr.resize(counterSample + 1);  // массив значений сэмплов по оси У
             }
-            sampleDataArray[idWhole].sampleTimeArr[sampleDataArray[idWhole].counterSamplePlot] = double(time_stamp_32);
-            //  sampleDataArray[idWhole].sampleValueArr[sampleDataArray[idWhole].counterSamplePlot] = valueSample16;
-            sampleDataArray[idWhole].sampleValueScaledArr[sampleDataArray[idWhole].counterSamplePlot] =
-                    sampleDataArray[idWhole].sampleValueScaled;
-            //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];
+            sampleDataArray[idWhole].sampleTimeArr[counterSample] = double(time_stamp_32);
+            sampleDataArray[idWhole].sampleValueScaledArr[counterSample] = sampleDataArray[idWhole].sampleValueScaled;
             sampleDataArray[idWhole].counterSamplePlot++;
             if(sampleDataArray[idWhole].counterSamplePlot >= PLOT_MAX_SIZE_ARR){
                 sampleDataArray[idWhole].flagFullBuffer = true; // буфер заполнен полностью
@@ -183,13 +180,13 @@ void handleAllStandartDataCan(
 
 
             //------------------- формируем данные для плоттера ---------------
-            int counterReg = regDataArray[regNum].counterRegPlot;
+            int counterReg = regDataArray[regNum].counterRegPlot; // при инициализации =0
             if(counterReg < PLOT_MAX_SIZE_ARR){
                 if(!regDataArray[regNum].flagFullBuffer){
-                    regDataArray[regNum].regTimeArr.resize(counterReg + 1);
-                    regDataArray[regNum].regValueScaledArr.resize(counterReg + 1);
+                    regDataArray[regNum].regTimeArr.resize(counterReg + 1);  // массив значений регистров по оси Х
+                    regDataArray[regNum].regValueScaledArr.resize(counterReg + 1);  // массив значений регистров по оси У
                 }
-                regDataArray[regNum].regTimeArr[counterReg] = double(time_stamp_32);
+                regDataArray[regNum].regTimeArr[counterReg] = double(time_stamp_32);  // метка времени из программы парсинга
                 //   regDataArray[regNum].regValueArr[regDataArray[regNum].counterRegPlot] = valueReg16;
                 regDataArray[regNum].regValueScaledArr[counterReg] = regDataArray[regNum].regValueScaled;
                 //    qDebug() << regDataArray[regNum].regValue[regDataArray[regNum].counterRegPlot] << regDataArray[regNum].regTime[regDataArray[regNum].counterRegPlot];

@@ -79,10 +79,10 @@ void MainWindow::on_pushButton_startRead_clicked() // запуск циклич�
     ui->pushButton_startRead->setEnabled(false);
     ui->pushButton_disconnect->setEnabled(false);
 
-    timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данныхlineEdit_freqPlot
+    timer->start((ui->lineEdit_freqSampl->text().toInt())); // чтение данных по CAN с периодом lineEdit_freqSampl
 
-    timerPlotter->start((ui->lineEdit_freqPlot->text().toInt())); // чтение данных
-    timerPlotterUF->start(1000);
+    timerPlotter->start((ui->lineEdit_freqPlot->text().toInt())); // время обновление графиков из lineEdit_freqPlot
+    timerPlotterUF->start(1000);  // обновление графика U/f раз в секунду
 
     ui->pushButton_startInv->setEnabled(true);
     ui->pushButton_stopInv->setEnabled(true);
