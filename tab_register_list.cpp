@@ -38,8 +38,17 @@ void MainWindow::on_pushButton_workDir_clicked()
 {
     QString currentWorkDir = ui->lineEdit_workDir->text();
     workDirPath = QFileDialog::getExistingDirectory(nullptr, "Directory Dialog", currentWorkDir);
-    if(!workDirPath.isEmpty()) ui->lineEdit_workDir->setText(workDirPath);
+    if(!workDirPath.isEmpty()){
+      ui->lineEdit_workDir->setText(workDirPath);
+      
+      // !!!! вот на этом сеттере при вызове из другого файла падает !!!!
+  //     cfg->openConfigFile();
+      cfg->getWorkDir(workDirPath); // сохранить новое значение рабочей директории
+      
+      cfg->rewriteConfig();     // перезаписать файл конфигурации
+    }
     else workDirPath = currentWorkDir;
+
 }
 
 

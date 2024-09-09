@@ -29,6 +29,8 @@
 #include "adapter_commands.h"
 #include "iface.h"
 
+#include "configfile.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -316,6 +318,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    class ConfigFile *cfg;
 
     QSerialPort *serial;
     QTimer *timer;  // таймер опроса CAN адаптера

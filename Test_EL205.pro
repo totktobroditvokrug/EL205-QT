@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     adapter_commands.cpp \
+    configfile.cpp \
     iface.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
 
 HEADERS += \
     adapter_commands.h \
+    configfile.h \
     iface.h \
     invertor.h \
     mainwindow.h \

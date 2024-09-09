@@ -64,9 +64,9 @@ void MainWindow::addPointToGraph(){
     if(quint32(startTimeStamp) == 0) {
         startTimeStamp = double(time_stamp_32); // стартовый отрезок времени с каждым запуском программы
         // qDebug() << "стартуем с отметки " << quint32(startTimeStamp);
-        ui->label_restartTimeStartStamp->setText("set start time -");
+        ui->label_restartTimeStartStamp->setText("set start time");
         ui->label_startTimeStamp->setText(QString::number(startTimeStamp, 'f', 0));
-        ui->label_numberOfRestarts->setText(QString::number(numberOfRestartsStartTime, 'f', 0));
+      //  ui->label_numberOfRestarts->setText(QString::number(numberOfRestartsStartTime, 'f', 0));
         QTimer::singleShot(5000, this, SLOT(init_scale()));  // если начали идти данные от адаптера, пробуем через 5 секунд поставить шкалы
         return;
     }
@@ -130,7 +130,7 @@ void MainWindow::addPointToGraph(){
             // при сбросе timestamp адаптера переключаем startTimeStamp на новое значение. Что делать с массивом? todo
             if(deltaTime < -MAX_DELTA_TIME){
                 startTimeStamp = double(regDataArray[regNum_plot1[i]].regTimeArr[regCounter]);
-                ui->label_restartTimeStartStamp->setText("restart time stamp -");
+                ui->label_restartTimeStartStamp->setText("number of restarts -");
                 ui->label_numberOfRestarts->setText(QString::number(numberOfRestartsStartTime++, 'f', 0));
             }
 
@@ -162,7 +162,7 @@ void MainWindow::addPointToGraph(){
             // при сбросе timestamp адаптера переключаем startTimeStamp на новое значение. Что делать с массивом? todo
             if(deltaTime < -MAX_DELTA_TIME){
                 startTimeStamp = double(sampleDataArray[sampleNum_plot2[i]].sampleTimeArr[sampleCounter]);
-                ui->label_restartTimeStartStamp->setText("restart time stamp -");
+                ui->label_restartTimeStartStamp->setText("number of restarts -");
                 ui->label_numberOfRestarts->setText(QString::number(numberOfRestartsStartTime++, 'f', 0));
             }
 

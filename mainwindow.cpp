@@ -82,7 +82,12 @@ MainWindow::MainWindow(QWidget *parent)
     timerDate->start(500); // обновляем дату два раза в секунду
     numberOfRestartsStartTime = 0; // обнуляем количество перезапусков при переполнении метки времени адаптера
 
-    ui->statusbar->showMessage("FC-connect 1.01");
+    ui->statusbar->showMessage("FC-connect 1.02");
+
+    cfg = new ConfigFile; // !!!! Объявление класса из configfile.h  !!!!!
+    cfg->openConfigFile(); // Создание или открытие файла конфигурации
+    // cfg->setWorkDir(); // сохранить новое значение рабочей директории
+
 }
 
 MainWindow::~MainWindow()
